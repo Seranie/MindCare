@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">tutorial_menu</string>
+    <string name="openDrawerContentDesc">Open Drawer</string>
+    <string name="closeDrawerContentDesc">Close Drawer</string>
+</resources>

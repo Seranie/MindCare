@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/how_to_guide">
+
+    <fragment
+        android:id="@+id/how_to_guide"
+        android:name="com.example.tutorial_menu.How_to_guide"
+        android:label="how_to_guide" >
+        <action
+            android:id="@+id/action_how_to_guide_to_showcase_guide"
+            app:destination="@id/showcase_guide" />
+    </fragment>
+    <fragment
+        android:id="@+id/showcase_guide"
+        android:name="com.example.tutorial_menu.Showcase_guide"
+        android:label="showcase_guide" />
+</navigation>
