@@ -18,6 +18,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavHost;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -36,34 +40,26 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Sets toolbar as top app bar and enables drawer button
+        // Find Navigation Components
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
+        NavController navController = navHostFragment.getNavController();
+        DrawerLayout drawerLayout = findViewById(R.id.main);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+
+        //Set toolbar as default actionbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawerLayout = findViewById(R.id.main);
+        //Set up NavigationUI
+        //TODO change builder top-level destination
+        //Sets up whether drawer or up button will be displayed based on destination
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).setOpenableLayout(drawerLayout).build();
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,R.string.openDrawerContentDesc, R.string.closeDrawerContentDesc);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.setDrawerIndicatorEnabled(true);
-        toggle.syncState();
+        //Sets up toolbar navController such that title changes accordingly
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        //Sets up navigationView with navController to listen to menu events
+        NavigationUI.setupWithNavController(navigationView, navController);
 
-        //Sets navigationView listener on main activity
-//        NavHost navHost = findViewById(R.id.fragmentContainerView);
-//        NavController navController = navHost.getNavController();
-//        NavigationView navigationView = findViewById(R.id.navigation_view);
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                item.z`
-//                return true;
-//            }
-//        });
-
-
-        // Sets up fragments for use by viewpager
-//        ArrayList<Fragment> fragmentArray = new ArrayList<>();
-//        fragmentArray.add(new How_to_guide());
-//        fragmentArray.add(new Showcase_guide());
 
     }
 }
