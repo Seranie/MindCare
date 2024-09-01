@@ -6,11 +6,11 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import java.util.ArrayList;
 
-public class Guide_fragmentStateAdapter extends FragmentStateAdapter {
+public class GuideFragmentStateAdapter extends FragmentStateAdapter {
     // Adapter class to be used by the guide page for viewpager.
     private final ArrayList<Fragment> fragmentArray;
 
-    public Guide_fragmentStateAdapter(Fragment fragment, ArrayList<Fragment> fragmentArray){
+    public GuideFragmentStateAdapter(Fragment fragment, ArrayList<Fragment> fragmentArray){
         super(fragment);
         this.fragmentArray = fragmentArray;
     }

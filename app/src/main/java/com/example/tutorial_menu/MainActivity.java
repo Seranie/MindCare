@@ -28,6 +28,8 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    private AppBarConfiguration appBarConfiguration;
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Find Navigation Components
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
-        NavController navController = navHostFragment.getNavController();
+        navController = navHostFragment.getNavController();
         DrawerLayout drawerLayout = findViewById(R.id.main);
         NavigationView navigationView = findViewById(R.id.navigation_view);
 
@@ -51,15 +53,21 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Set up NavigationUI
-        //TODO change builder top-level destination
+        //TODO change builder top-level destination to include Guide page
         //Sets up whether drawer or up button will be displayed based on destination
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).setOpenableLayout(drawerLayout).build();
+        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).setOpenableLayout(drawerLayout).build();
 
         //Sets up toolbar navController such that title changes accordingly
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         //Sets up navigationView with navController to listen to menu events
+        //Menu item id's are linked to destination id's which serve as the basis for navigating click events in drawer
         NavigationUI.setupWithNavController(navigationView, navController);
 
+    }
 
+    @Override
+    public boolean onSupportNavigateUp(){
+        //Overrides default navigation button behavior and delegate to navController instead, else if navigateUp fails, use parent default method.
+        return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
     }
 }

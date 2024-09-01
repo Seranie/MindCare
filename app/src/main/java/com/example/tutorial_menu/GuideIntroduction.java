@@ -7,13 +7,13 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-public class How_to_guide extends Fragment {
-    public How_to_guide(){
-        super(R.layout.how_to_guide);
-    }
+public class GuideIntroduction extends Fragment {
+//    public GuideIntroduction(){
+//        super(R.layout.guide_introduction);
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.how_to_guide, container, false);
+        return inflater.inflate(R.layout.guide_introduction, container, false);
     }
 }

@@ -2,4 +2,6 @@
     <string name="app_name">tutorial_menu</string>
     <string name="openDrawerContentDesc">Open Drawer</string>
     <string name="closeDrawerContentDesc">Close Drawer</string>
+    <string name="guide_tab_introduction">Introduction</string>
+    <string name="guide_tab_showcase">Showcase</string>
 </resources>
