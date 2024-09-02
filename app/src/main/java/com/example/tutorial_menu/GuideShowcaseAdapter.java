@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class GuideShowcaseAdapter extends RecyclerView.Adapter<GuideShowcaseAdapter.ListItemHolder> {
+public class GuideShowcaseAdapter extends RecyclerView.Adapter<GuideShowcaseAdapter.GuideShowcaseViewHolder> {
     //Adapter for guide showcase's recycler view of cards.
     private final List<GuideShowcaseCard> cardList;
 
@@ -22,13 +22,13 @@ public class GuideShowcaseAdapter extends RecyclerView.Adapter<GuideShowcaseAdap
 
     @NonNull
     @Override
-    public GuideShowcaseAdapter.ListItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public GuideShowcaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.guide_showcase_card, parent, false);
-        return new ListItemHolder(view);
+        return new GuideShowcaseViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GuideShowcaseAdapter.ListItemHolder holder, int position) {
+    public void onBindViewHolder(@NonNull GuideShowcaseViewHolder holder, int position) {
         //gets the card at x position and updates the view with the card details
         GuideShowcaseCard card = cardList.get(position);
         holder.mImageView.setImageResource(card.getCardImage());
@@ -42,7 +42,7 @@ public class GuideShowcaseAdapter extends RecyclerView.Adapter<GuideShowcaseAdap
         return cardList.size();
     }
 
-    public class ListItemHolder extends RecyclerView.ViewHolder {
+    public class GuideShowcaseViewHolder extends RecyclerView.ViewHolder {
         //Holder retrieves and holds references to the card layout's UI elements.
         ImageView mImageView;
         TextView mCardTitle;
@@ -52,7 +52,7 @@ public class GuideShowcaseAdapter extends RecyclerView.Adapter<GuideShowcaseAdap
         Button mShowMe;
         Button mLearnMore;
 
-        public ListItemHolder(@NonNull View itemView) {
+        public GuideShowcaseViewHolder(@NonNull View itemView) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.showcase_card_image);
             mCardTitle = itemView.findViewById(R.id.showcase_card_title);

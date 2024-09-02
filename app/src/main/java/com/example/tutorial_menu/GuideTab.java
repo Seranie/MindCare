@@ -30,7 +30,7 @@ public class GuideTab extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState){
         //Create a list to house fragments that individually represent each tab of the guide.
         ArrayList<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(new GuideIntroduction());
+        fragmentList.add(new GuideDocs());
         fragmentList.add(new GuideShowcase());
 
         // Creates a new adapter to link the viewpager2 in guide_tab
