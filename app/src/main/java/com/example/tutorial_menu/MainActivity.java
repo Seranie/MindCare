@@ -53,9 +53,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Set up NavigationUI
-        //TODO change builder top-level destination to include Guide page
-        //Sets up whether drawer or up button will be displayed based on destination
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).setOpenableLayout(drawerLayout).build();
+        //Sets up home page and guide page as top-level destinations
+        appBarConfiguration = new AppBarConfiguration.Builder(R.id.guideTabFragment, R.id.homeTabFragment).setOpenableLayout(drawerLayout).build();
 
         //Sets up toolbar navController such that title changes accordingly
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);

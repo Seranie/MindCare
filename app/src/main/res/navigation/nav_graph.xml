@@ -2,24 +2,14 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/home2">
+    app:startDestination="@id/homeTabFragment">
 
     <fragment
-        android:id="@+id/how_to_guide"
-        android:name="com.example.tutorial_menu.GuideIntroduction"
-        android:label="how_to_guide" >
-    </fragment>
-
-    <fragment
-        android:id="@+id/showcase_guide"
-        android:name="com.example.tutorial_menu.GuideShowcase"
-        android:label="showcase_guide" />
-    <fragment
-        android:id="@+id/guideTab"
+        android:id="@+id/guideTabFragment"
         android:name="com.example.tutorial_menu.GuideTab"
-        android:label="GuideTab" />
+        android:label="Guide" />
     <fragment
-        android:id="@+id/home2"
+        android:id="@+id/homeTabFragment"
         android:name="com.example.tutorial_menu.Home"
         android:label="Home" />
 </navigation>

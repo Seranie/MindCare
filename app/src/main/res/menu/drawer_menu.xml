@@ -4,10 +4,10 @@
 
     <item
         android:title="Home"
-        android:id="@+id/home2" />
+        android:id="@+id/homeTabFragment" />
 
     <item android:title="Guide"
-        android:id="@+id/guideTab"/>
+        android:id="@+id/guideTabFragment"/>
 
 
 </menu>

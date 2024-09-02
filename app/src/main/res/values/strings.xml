@@ -4,4 +4,30 @@
     <string name="closeDrawerContentDesc">Close Drawer</string>
     <string name="guide_tab_introduction">Introduction</string>
     <string name="guide_tab_showcase">Showcase</string>
+    <string name="guide_showcase_start_showcase">Show Me</string>
+    <string name="guide_showcase_learn_more">Learn More</string>
+    
+    <string name="showcase_card1_title">Reminders</string>
+    <string name="showcase_card1_subtitle">Sets reminders that alert you</string>
+    <string name="showcase_card1_description">
+        Customize your reminders with this versatile tool that lets you set personalized alerts for appointments, events, medication timings, and more. Tailor notifications to your schedule, ensuring you never miss an important moment.
+    </string>
+
+    <string name="showcase_card2_title">Contacts</string>
+    <string name="showcase_card2_subtitle">Sets up contacts for easy access</string>
+    <string name="showcase_card2_description">
+        Add your contacts and assign photos to each one for easy access. Double-tap a contact\'s button to instantly place a call, making communication quick and personalized.
+    </string>
+
+    <string name="showcase_card3_title">Fences</string>
+    <string name="showcase_card3_subtitle">Set up geo-fences and receive alerts</string>
+    <string name="showcase_card3_description">
+        Caregivers can set geo-fences to monitor patient movements, receiving alerts if fences are crossed.\n
+        Patients can view the fences but not modify them, ensuring safety and peace of mind.
+    </string>
+
+    <string name="showcase_card4_title">Chat Buddy</string>
+    <string name="showcase_card4_subtitle">Talk with a friendly AI</string>
+    <string name="showcase_card4_description">Engage in daily banter or ask questions, making your interactions enjoyable and livening up the day.</string>
+
 </resources>
