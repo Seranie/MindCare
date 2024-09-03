@@ -1,9 +1,11 @@
 package com.example.tutorial_menu;
 
+import android.animation.ValueAnimator;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -50,12 +52,19 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
         LinearLayout mTitleLayout;
         CardView mCardView;
 
+        int mDescriptionLayoutHeight;
+
         public GuideDocsViewHolder(@NonNull View itemView) {
             super(itemView);
             mTitle = itemView.findViewById(R.id.guide_docs_title);
             mDescription = itemView.findViewById(R.id.guide_docs_description);
             mDropDownButton = itemView.findViewById(R.id.guide_docs_button);
             mDescriptionLayout = itemView.findViewById(R.id.guide_docs_description_layout);
+
+            //Get description layout's height then hide it
+            mDescriptionLayoutHeight = mDescriptionLayout.getMeasuredHeight();
+            mDescriptionLayout.setVisibility(View.GONE);
+
             mTitleLayout = itemView.findViewById(R.id.guide_docs_title_layout);
             mTitleLayout.setOnClickListener(this);
             mCardView = itemView.findViewById(R.id.guide_docs_card_view);
@@ -65,16 +74,44 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
         public void onClick(View view) {
             //Handler to display text description of the tool and flip the drop arrow
             boolean descriptionIsVisible;
+
             if (mDescriptionLayout.getVisibility() == View.GONE){
                 descriptionIsVisible = false;
             }
             else { descriptionIsVisible = true;}
-            mDescriptionLayout.setVisibility(descriptionIsVisible?View.GONE:View.VISIBLE);
+
+            if (descriptionIsVisible) {
+                collapseView();
+            } else {
+                expandView();
+            }
+
             mDropDownButton.setImageResource(descriptionIsVisible?R.drawable.arrow_drop_down:R.drawable.arrow_drop_up);
         }
 
-        private void expandView(View view){
-            
+        private void expandView(){
+            mDescriptionLayout.setVisibility(View.VISIBLE);
+            mDescriptionLayout.getLayoutParams().height = 0;
+            ValueAnimator animator = slideAnimator(0, mDescriptionLayoutHeight);
+            animator.start();
+        }
+
+        private void collapseView(){
+            ValueAnimator animator = slideAnimator(mDescriptionLayoutHeight, 0);
+            animator.start();
+            mDescriptionLayout.setVisibility(View.GONE);
+        }
+
+        private ValueAnimator slideAnimator(int start, int end){
+            ValueAnimator animator = ValueAnimator.ofInt(start, end).setDuration(300);
+//            animator.setInterpolator(new AccelerateDecelerateInterpolator());
+
+            animator.addUpdateListener(valueAnimator ->{
+                int value = (Integer) valueAnimator.getAnimatedValue();
+                mDescriptionLayout.getLayoutParams().height = value;
+                mDescriptionLayout.requestLayout();
+            });
+            return animator;
         }
     }
 }
