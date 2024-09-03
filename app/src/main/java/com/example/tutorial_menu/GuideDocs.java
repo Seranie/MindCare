@@ -26,22 +26,11 @@ public class GuideDocs extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState){
         //Create list of guide doc cards and add them to list to pass to adapter.
         List<GuideDocsCard> cardList = new ArrayList<>();
-        cardList.add(new GuideDocsCard(
-                R.string.docs_card1_title,
-                R.string.docs_card1_description
-        ));
-        cardList.add(new GuideDocsCard(
-                R.string.docs_card2_title,
-                R.string.docs_card2_description
-        ));
-        cardList.add(new GuideDocsCard(
-                R.string.docs_card3_title,
-                R.string.docs_card3_description
-        ));
-        cardList.add(new GuideDocsCard(
-                R.string.docs_card4_title,
-                R.string.docs_card4_description
-        ));
+        //TODO CHANGE
+        cardList.add(new GuideDocsCard(1));
+        cardList.add(new GuideDocsCard(2));
+        cardList.add(new GuideDocsCard(3));
+        cardList.add(new GuideDocsCard(4));
 
         //Create adapter
         //Set recyclerview layoutmanager and adapter.

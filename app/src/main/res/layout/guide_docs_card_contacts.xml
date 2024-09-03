@@ -34,7 +34,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.9"
                     android:gravity="center_vertical"
-                    android:text="Title"
+                    android:text="@string/docs_card2_title"
                     android:textSize="30sp" />
 
                 <ImageButton
@@ -54,7 +54,7 @@
             <LinearLayout
                 android:id="@+id/guide_docs_description_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:padding="8dp"
                 android:visibility="visible">
@@ -63,7 +63,7 @@
                     android:id="@+id/guide_docs_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut id semper sem. Suspendisse potenti. Duis risus sapien, porttitor nec sem sed, accumsan bibendum mi. Quisque enim urna, venenatis vel tempus at, consequat nec leo. Fusce nec bibendum ex. Sed diam arcu, interdum sed tincidunt non, mattis vitae mauris. Sed lectus neque, fermentum in tincidunt et, dignissim id arcu.  Nunc rutrum magna iaculis lorem auctor interdum. Nunc rutrum mauris mi. Mauris ultricies arcu sed sapien bibendum, iaculis blandit enim ultrices. Suspendisse commodo massa at maximus ultricies. Suspendisse nulla lectus, facilisis vel pretium non, malesuada non orci. Nunc tincidunt quam sit amet urna ornare scelerisque. Fusce faucibus et dui blandit tincidunt. Duis lacinia rutrum ante. Nam vestibulum eu lacus vitae egestas. Donec euismod posuere risus, id bibendum ante tincidunt sagittis. Vestibulum gravida sed libero vel imperdiet. Ut dolor diam, malesuada non fringilla non, aliquet vitae massa. Suspendisse feugiat, ipsum eget feugiat lacinia, dui urna hendrerit elit, nec luctus sem risus vitae ipsum. Nullam sapien tellus, condimentum lacinia mauris ac, fringilla feugiat orci. Aliquam non urna gravida, lobortis mi et, vulputate eros.  " />
+                    android:text="@string/docs_card2_description" />
             </LinearLayout>
         </LinearLayout>
 

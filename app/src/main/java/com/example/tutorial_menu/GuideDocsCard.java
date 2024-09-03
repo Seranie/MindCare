@@ -1,19 +1,13 @@
 package com.example.tutorial_menu;
 
 public class GuideDocsCard {
-    private int mTitle;
-    private int mDescription;
+    private int mGuideDocsCardType;
 
-    public GuideDocsCard(int title, int description){
-        this.mTitle = title;
-        this.mDescription = description;
+    public GuideDocsCard(int type){
+        mGuideDocsCardType = type;
     }
 
-    public int getTitle() {
-        return mTitle;
-    }
-
-    public int getDescription() {
-        return mDescription;
+    public int getGuideDocsCardType() {
+        return mGuideDocsCardType;
     }
 }

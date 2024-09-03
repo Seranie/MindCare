@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginTop="8dp"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/guide_docs_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/guide_docs_title_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#963434"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/guide_docs_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.9"
+                    android:gravity="center_vertical"
+                    android:text="@string/docs_card3_title"
+                    android:textSize="30sp" />
+
+                <ImageButton
+                    android:id="@+id/guide_docs_button"
+                    android:layout_width="17dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="0.1"
+                    android:adjustViewBounds="true"
+                    android:background="#00FFFFFF"
+                    android:clickable="false"
+                    android:cropToPadding="true"
+                    android:focusable="false"
+                    app:srcCompat="@drawable/arrow_drop_down" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/guide_docs_description_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/guide_docs_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/docs_card3_description" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
