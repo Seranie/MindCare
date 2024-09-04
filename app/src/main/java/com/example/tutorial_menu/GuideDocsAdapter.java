@@ -1,11 +1,14 @@
 package com.example.tutorial_menu;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.GuideDocsViewHolder> {
-    private List<GuideDocsCard> cardList;
+    private final List<GuideDocsCard> cardList;
 
     public GuideDocsAdapter(List<GuideDocsCard> cardList){
         this.cardList = cardList;
@@ -38,9 +41,6 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
     public GuideDocsAdapter.GuideDocsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         switch (viewType){
-            case 1:
-                view = inflateView(parent, R.layout.guide_docs_card_reminders);
-                break;
             case 2:
                 view = inflateView(parent, R.layout.guide_docs_card_contacts);
                 break;
@@ -50,6 +50,7 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
             case 4:
                 view = inflateView(parent, R.layout.guide_docs_card_chatbuddy);
                 break;
+            case 1:
             default:
                 view = inflateView(parent, R.layout.guide_docs_card_reminders);
                 break;
@@ -70,12 +71,14 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
         LinearLayout mDescriptionLayout;
         LinearLayout mTitleLayout;
         int mDescriptionLayoutHeight;
+        private boolean isAnimating = false;
 
         public GuideDocsViewHolder(@NonNull View itemView) {
             super(itemView);
             mDropDownButton = itemView.findViewById(R.id.guide_docs_button);
             mDescriptionLayout = itemView.findViewById(R.id.guide_docs_description_layout);
             mTitleLayout = itemView.findViewById(R.id.guide_docs_title_layout);
+
             //Sets onclick animation when clicking on the card title.
             mTitleLayout.setOnClickListener(this);
             mDescriptionLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -84,17 +87,23 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
                 public void onGlobalLayout() {
                     mDescriptionLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     mDescriptionLayoutHeight = mDescriptionLayout.getHeight();
-                    mDescriptionLayout.setVisibility(View.GONE);
+                    mDescriptionLayout.getLayoutParams().height = 0;
+                    mDescriptionLayout.requestLayout();
                 }
             });
         }
 
         @Override
         public void onClick(View view) {
-            //Handler to display text description of the tool and flip the drop arrow
+            //Display/hide text description of the tool and flip the drop arrow
+            if (isAnimating){
+                //if animation is playing ignore any additional clicks
+                return;
+            }
+
             boolean descriptionIsVisible;
 
-            descriptionIsVisible = mDescriptionLayout.getVisibility() == View.VISIBLE;
+            descriptionIsVisible = mDescriptionLayout.getHeight() == mDescriptionLayoutHeight;
 
             if (descriptionIsVisible) {
                 collapseView();
@@ -106,24 +115,45 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
         }
 
         private void expandView(){
-            mDescriptionLayout.setVisibility(View.VISIBLE);
             ValueAnimator animator = slideAnimator(0, mDescriptionLayoutHeight);
+            //add listener to ignore additional clicks during animation
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    isAnimating = true;
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    isAnimating = false;
+                }
+            });
             animator.start();
         }
 
         private void collapseView(){
             ValueAnimator animator = slideAnimator(mDescriptionLayoutHeight, 0);
+            //add listener to ignore additional clicks during animation
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    isAnimating = true;
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    isAnimating = false;
+                }
+            });
             animator.start();
-            mDescriptionLayout.setVisibility(View.GONE);
         }
 
         private ValueAnimator slideAnimator(int start, int end){
-            ValueAnimator animator = ValueAnimator.ofInt(start, end).setDuration(300);
-//            animator.setInterpolator(new AccelerateDecelerateInterpolator());
+            //ValueAnimator that animates between 0 and height of the expandable layout section
+            ValueAnimator animator = ValueAnimator.ofInt(start, end).setDuration(400);
 
             animator.addUpdateListener(valueAnimator ->{
-                int value = (Integer) valueAnimator.getAnimatedValue();
-                mDescriptionLayout.getLayoutParams().height = value;
+                mDescriptionLayout.getLayoutParams().height = (int) valueAnimator.getAnimatedValue();
                 mDescriptionLayout.requestLayout();
             });
             return animator;

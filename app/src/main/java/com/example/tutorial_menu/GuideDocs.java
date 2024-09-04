@@ -26,7 +26,6 @@ public class GuideDocs extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState){
         //Create list of guide doc cards and add them to list to pass to adapter.
         List<GuideDocsCard> cardList = new ArrayList<>();
-        //TODO CHANGE
         cardList.add(new GuideDocsCard(1));
         cardList.add(new GuideDocsCard(2));
         cardList.add(new GuideDocsCard(3));
