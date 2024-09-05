@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GuideShowcase extends Fragment {
+    private TabPositionViewModel viewModel;
+
+    public GuideShowcase(TabPositionViewModel viewModel){
+        this.viewModel = viewModel;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -53,7 +60,7 @@ public class GuideShowcase extends Fragment {
         //TODO add item animations
         RecyclerView recyclerView = view.findViewById(R.id.guide_showcase_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        GuideShowcaseAdapter guideShowcaseAdapter = new GuideShowcaseAdapter(cardList);
+        GuideShowcaseAdapter guideShowcaseAdapter = new GuideShowcaseAdapter(cardList, viewModel);
         recyclerView.setAdapter(guideShowcaseAdapter);
     }
 }

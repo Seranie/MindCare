@@ -31,38 +31,77 @@
     <string name="showcase_card4_description">Engage in daily banter or ask questions, making your interactions enjoyable and livening up the day.</string>
 
     <string name="docs_card1_title">Reminders</string>
-    <string name="docs_card1_description">
-        The reminders tool will help you create handy notes that alert you based on datetime set by you.\n\n
-
+    <string name="docs_card1_description1">
+        The reminders tool will help you create handy notes that alert you based on datetime set by you.
+    </string>
+    <string name="docs_card1_description2">
         On the reminders tool\'s home screen, you can select the group you want to view currently by selecting the appropriate icon with the group name underneath.\n
         Thereby, any reminders under the selected group will be displayed. Clicking on any of the reminders will allow you to edit them if necessary.\n
-        If you wish to delete any reminders that you have already done, you can simply click the empty circle next to the reminder.\n\n
-
+        If you wish to delete any reminders that you have already done, you can simply click the empty circle next to the reminder.
+    </string>
+    <string name="docs_card1_description3">
         When you start creating a new Reminder, you can choose to either select a pre-existing group or create a new one.\n
-        This is to provide a way to categorize each Reminder to tailor to your needs, allowing you to sort them accordingly as needed.\n\n
-
+        This is to provide a way to categorize each Reminder to tailor to your needs, allowing you to sort them accordingly as needed.
+    </string>
+    <string name="docs_card1_description4">
         The Title of the Reminder will be what is displayed on notifications as well as on the Reminders.\n
-        Subsequently, the Notes section allow you to input any additional information regarding the Reminder.\n\n
-
+        Subsequently, the Notes section allow you to input any additional information regarding the Reminder.
+    </string>
+    <string name="docs_card1_description5">
         The Schedule date indicates the deadline of the Reminder, which is the date that the Repeat interval will be based upon.\n
         An alert is triggered on the day of the Schedule date as well.\n\n
-
+    </string>
+    <string name="docs_card1_description6">
         The Reminders section allows you to add multiple date and time points, each of which will trigger an alert accordingly as well.\n
         These date/time points will be automatically re-calculated accordingly if the Reminder has a Repeat interval set.\n\n
-
+    </string>
+    <string name="docs_card1_description7">
         The Repeat section allows you to select the interval that the Reminder will repeat again based on the Schedule date.\n
         You can also create a customized repeat interval if necessary.\n\n
-
+    </string>
+    <string name="docs_card1_description8">
         The Ringtone section allows you to either turn on or off a ringtone that plays when the alert triggers.\n
         You can also set any .mp3 or .wav file from your system files as the ringtone.\n
-
     </string>
 
+
     <string name="docs_card2_title">Contacts</string>
-    <string name="docs_card2_description">CONTACTS</string>
+    <string name="docs_card2_description1">
+        The contacts tool allows you to set contacts that you can easily call by double-tapping the contact portraits.
+    </string>
+    <string name="docs_card2_description2">
+        Clicking on the "Choose Photo" allows you to set a photo from your phone gallery for the contact.
+    </string>
+    <string name="docs_card2_description3">
+        The name and phone number will be associated with the contact subsequently.
+    </string>
+    <string name="docs_card2_description4">
+        You can easily edit the contact if necessary by clicking on the "Edit Contact" option.
+    </string>
 
     <string name="docs_card3_title">Fences</string>
-    <string name="docs_card3_description">FENCES</string>
+    <string name="docs_card3_description1">
+        The fences tool allows a caregiver account to set up geo-fences with the linked patient, allowing alerts to be sent if the patient leaves the fence.\n
+        It requires the caregiver to link up with a patient first before it can be used.
+    </string>
+    <string name="docs_card3_description2">
+        The patients UID that is used for linking can be found in the hamburger menu.
+    </string>
+    <string name="docs_card3_description3">
+        The patient will receive an alert which can be accessed from the options menu.
+    </string>
+    <string name="docs_card3_description4">
+        By clicking on the alert, the patient can choose to either accept or decline the request.
+    </string>
+    <string name="docs_card3_description5">
+        Once linked, the caregiver can create a new fence by dragging on the map, and adjust the radius as well as add a tag name.
+    </string>
+    <string name="docs_card3_description6">
+        The caregiver can edit existing fences at anytime by clicking on the Options menu.
+    </string>
+    <string name="docs_card3_description7">
+        Note patients will not be able to edit fences, and can only see them.
+    </string>
 
     <string name="docs_card4_title">Chat Buddy</string>
     <string name="docs_card4_description">CHAT BUDDY</string>

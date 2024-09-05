@@ -3,6 +3,7 @@ package com.example.tutorial_menu;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +22,11 @@ import java.util.List;
 
 public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.GuideDocsViewHolder> {
     private final List<GuideDocsCard> cardList;
+    private final int cardNumber;
 
-    public GuideDocsAdapter(List<GuideDocsCard> cardList){
+    public GuideDocsAdapter(List<GuideDocsCard> cardList, int cardNumber){
         this.cardList = cardList;
+        this.cardNumber = cardNumber;
     }
 
 

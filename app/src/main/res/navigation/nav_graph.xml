@@ -12,4 +12,20 @@
         android:id="@+id/homeTabFragment"
         android:name="com.example.tutorial_menu.Home"
         android:label="Home" />
+    <fragment
+        android:id="@+id/guideDocs"
+        android:name="com.example.tutorial_menu.GuideDocs"
+        android:label="GuideDocs" >
+        <argument
+            android:name="cardNumber"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/guideShowcase"
+        android:name="com.example.tutorial_menu.GuideShowcase"
+        android:label="GuideShowcase" >
+        <action
+            android:id="@+id/action_guideShowcase_to_guideDocs"
+            app:destination="@id/guideDocs" />
+    </fragment>
 </navigation>

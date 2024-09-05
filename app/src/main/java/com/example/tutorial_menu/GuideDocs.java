@@ -35,7 +35,13 @@ public class GuideDocs extends Fragment {
         //Set recyclerview layoutmanager and adapter.
         RecyclerView recyclerView = view.findViewById(R.id.guide_docs_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        GuideDocsAdapter guideDocsAdapter = new GuideDocsAdapter(cardList);
+        Bundle args = getArguments();
+        int cardNumber;
+        if (args != null){
+             cardNumber= args.getInt("cardNumber", -1);
+        }
+        else {cardNumber = -1;}
+        GuideDocsAdapter guideDocsAdapter = new GuideDocsAdapter(cardList, cardNumber);
         recyclerView.setAdapter(guideDocsAdapter);
     }
 }
