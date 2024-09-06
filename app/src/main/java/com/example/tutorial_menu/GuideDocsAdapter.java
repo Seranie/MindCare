@@ -22,11 +22,9 @@ import java.util.List;
 
 public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.GuideDocsViewHolder> {
     private final List<GuideDocsCard> cardList;
-    private final int cardNumber;
 
-    public GuideDocsAdapter(List<GuideDocsCard> cardList, int cardNumber){
+    public GuideDocsAdapter(List<GuideDocsCard> cardList){
         this.cardList = cardList;
-        this.cardNumber = cardNumber;
     }
 
 
@@ -64,6 +62,7 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
     @Override
     public void onBindViewHolder(@NonNull GuideDocsAdapter.GuideDocsViewHolder holder, int position) {
         //Blank as card data is already present in individual layout files.
+        //Each individual card is it's own viewType as well, so no additional binding required.
     }
 
     @Override
@@ -94,6 +93,10 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
                     mDescriptionLayout.requestLayout();
                 }
             });
+        }
+
+        public LinearLayout getTitleLayout() {
+            return mTitleLayout;
         }
 
         @Override

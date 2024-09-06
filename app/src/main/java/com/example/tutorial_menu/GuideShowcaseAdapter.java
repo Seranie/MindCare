@@ -1,6 +1,5 @@
 package com.example.tutorial_menu;
 
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
 
@@ -80,12 +76,8 @@ public class GuideShowcaseAdapter extends RecyclerView.Adapter<GuideShowcaseAdap
                 case "show_me_button":
                     break;
                 case "learn_more_button":
-                    //navigate to docs and send bundle with position of the view, to correspond to which docs to open.
-                    Bundle bundle = new Bundle();
-                    //TODO add in adapterposition
-                    bundle.putInt("cardNumber", adapterPosition);
-                    //TODO CHANGE THIS SHIT
-                    tabPositionViewModel.setSelectedTab(0);
+                    //button switches tab from showcase to docs, and flashes the corresponding docs header to prompt click
+                    tabPositionViewModel.setTabPositionLiveData(adapterPosition);
                     break;
             }
         }

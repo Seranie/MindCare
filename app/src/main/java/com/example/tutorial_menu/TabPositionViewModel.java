@@ -4,13 +4,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class TabPositionViewModel extends ViewModel {
-    private final MutableLiveData<Integer> selectedTab = new MutableLiveData<Integer>();
+    //A viewmodel for determining tab position changes in GuideTab
+    private final MutableLiveData<TabPositionModel> TabPositionLiveData = new MutableLiveData<>();
 
-    public MutableLiveData<Integer> getSelectedTab() {
-        return selectedTab;
+
+    public MutableLiveData<TabPositionModel> getTabPositionLiveData() {
+        return TabPositionLiveData;
     }
 
-    public void setSelectedTab(int tabPosition){
-        selectedTab.setValue(tabPosition);
+    public void setTabPositionLiveData(int tabPosition){
+        TabPositionLiveData.setValue(new TabPositionModel(tabPosition));
     }
 }

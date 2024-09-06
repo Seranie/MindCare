@@ -63,7 +63,7 @@
                     android:id="@+id/guide_docs_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/docs_card2_description" />
+                    android:text="@string/docs_card2_description1" />
             </LinearLayout>
         </LinearLayout>
 
