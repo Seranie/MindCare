@@ -22,6 +22,8 @@ import java.util.List;
 
 public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.GuideDocsViewHolder> {
     private final List<GuideDocsCard> cardList;
+    private int expandedPosition = -1;
+    private int previousExpandedPosition = -1;
 
     public GuideDocsAdapter(List<GuideDocsCard> cardList){
         this.cardList = cardList;
@@ -61,8 +63,7 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
 
     @Override
     public void onBindViewHolder(@NonNull GuideDocsAdapter.GuideDocsViewHolder holder, int position) {
-        //Blank as card data is already present in individual layout files.
-        //Each individual card is it's own viewType as well, so no additional binding required.
+        holder.bind(position);
     }
 
     @Override
@@ -72,7 +73,7 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
         ImageButton mDropDownButton;
         LinearLayout mDescriptionLayout;
         LinearLayout mTitleLayout;
-        int mDescriptionLayoutHeight;
+//        int mDescriptionLayoutHeight;
         private boolean isAnimating = false;
 
         public GuideDocsViewHolder(@NonNull View itemView) {
@@ -88,7 +89,7 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
                 @Override
                 public void onGlobalLayout() {
                     mDescriptionLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    mDescriptionLayoutHeight = mDescriptionLayout.getHeight();
+//                    int mDescriptionLayoutHeight = mDescriptionLayout.getHeight();
                     mDescriptionLayout.getLayoutParams().height = 0;
                     mDescriptionLayout.requestLayout();
                 }
@@ -99,6 +100,12 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
             return mTitleLayout;
         }
 
+        public void bind(int position){
+            final boolean isExpanded = position == expandedPosition;
+            mDescriptionLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+            itemView.setActivated(isExpanded);
+        }
+
         @Override
         public void onClick(View view) {
             //Display/hide text description of the tool and flip the drop arrow
@@ -106,6 +113,15 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
                 //if animation is playing ignore any additional clicks
                 return;
             }
+
+            //Allow only 1 tab to expanded at one time.
+            previousExpandedPosition = expandedPosition;
+            expandedPosition = getAdapterPosition();
+
+            if (previousExpandedPosition != -1 && previousExpandedPosition != expandedPosition){
+                notifyItemChanged(previousExpandedPosition);
+            }
+            notifyItemChanged(expandedPosition);
 
             boolean descriptionIsVisible;
 

@@ -48,17 +48,17 @@ public class GuideDocs extends Fragment {
             recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
-                    //Ensure recyclerview is laid out first
+                    //Ensure recyclerview is laid out first then add delay to presses to ensure they are rendered on separate frames
                     recyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    //TODO viewholder might be null if another tab is already expanded and other viewholders are pushed off srcrenn
                     GuideDocsAdapter.GuideDocsViewHolder viewHolder = (GuideDocsAdapter.GuideDocsViewHolder) recyclerView.findViewHolderForAdapterPosition(tabPosition);
+                    LinearLayout titleLayout = viewHolder.getTitleLayout();
 
-                    //Add delay to ensure button press prompt is visible
                     recyclerView.postDelayed(()->{
-                        if (viewHolder != null) {
-                            //Flashes the title layout to prompt user to click on it
-                            LinearLayout titleLayout = viewHolder.getTitleLayout();
-                            titleLayout.setPressed(true);
-                            titleLayout.setPressed(false);
+                        if (titleLayout != null) {
+//                            titleLayout.setPressed(true);
+//                            titleLayout.setPressed(false);
+                            titleLayout.performClick();
                         };
                     }, 200);
                 }
