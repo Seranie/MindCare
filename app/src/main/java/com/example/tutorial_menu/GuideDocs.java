@@ -52,16 +52,24 @@ public class GuideDocs extends Fragment {
                     recyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     recyclerView.smoothScrollToPosition(tabPosition);
                     GuideDocsAdapter.GuideDocsViewHolder viewHolder = (GuideDocsAdapter.GuideDocsViewHolder) recyclerView.findViewHolderForAdapterPosition(tabPosition);
+                    LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
-                    //Add delay to ensure button press prompt is visible
-                    recyclerView.postDelayed(()->{
-                        if (viewHolder != null) {
-                            //Flashes the title layout to prompt user to click on it
-                            LinearLayout titleLayout = viewHolder.getTitleLayout();
-                            titleLayout.setPressed(true);
-                            titleLayout.setPressed(false);
-                        };
-                    }, 200);
+                    if (viewHolder != null) {
+                        if (layoutManager.findFirstVisibleItemPosition() <= tabPosition && layoutManager.findLastVisibleItemPosition() >= tabPosition){
+                            recyclerView.postDelayed(()->{
+                                LinearLayout titleLayout = viewHolder.getTitleLayout();
+                                titleLayout.setPressed(true);
+                                titleLayout.setPressed(false);
+                            }, 200);
+                        }
+                        else {
+                            recyclerView.postDelayed(()->{
+                                LinearLayout titleLayout = viewHolder.getTitleLayout();
+                                titleLayout.setPressed(true);
+                                titleLayout.setPressed(false);
+                            }, 800);
+                        }
+                    }
                 }
             });
         });
