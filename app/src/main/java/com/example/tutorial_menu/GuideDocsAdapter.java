@@ -22,8 +22,6 @@ import java.util.List;
 
 public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.GuideDocsViewHolder> {
     private final List<GuideDocsCard> cardList;
-    private int expandedPosition = -1;
-    private int previousExpandedPosition = -1;
 
     public GuideDocsAdapter(List<GuideDocsCard> cardList){
         this.cardList = cardList;
@@ -63,11 +61,8 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
 
     @Override
     public void onBindViewHolder(@NonNull GuideDocsAdapter.GuideDocsViewHolder holder, int position) {
-        if (holder.mDescriptionLayout.getVisibility() == View.VISIBLE){
-            int height = holder.mDescriptionLayout.getLayoutParams().height;
-            holder.setDescriptionLayoutHeight(height);
-        }
-        holder.bind(position);
+        //Blank as card data is already present in individual layout files.
+        //Each individual card is it's own viewType as well, so no additional binding required.
     }
 
     @Override
@@ -85,24 +80,23 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
             mDropDownButton = itemView.findViewById(R.id.guide_docs_button);
             mDescriptionLayout = itemView.findViewById(R.id.guide_docs_description_layout);
             mTitleLayout = itemView.findViewById(R.id.guide_docs_title_layout);
+
             //Sets onclick animation when clicking on the card title.
             mTitleLayout.setOnClickListener(this);
+            mDescriptionLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                //Obtains description layout's height
+                @Override
+                public void onGlobalLayout() {
+                    mDescriptionLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    mDescriptionLayoutHeight = mDescriptionLayout.getHeight();
+                    mDescriptionLayout.getLayoutParams().height = 0;
+                    mDescriptionLayout.requestLayout();
+                }
+            });
         }
 
         public LinearLayout getTitleLayout() {
             return mTitleLayout;
-        }
-
-        public void setDescriptionLayoutHeight(int mDescriptionLayoutHeight) {
-            this.mDescriptionLayoutHeight = mDescriptionLayoutHeight;
-        }
-
-        public void bind(int position){
-            final boolean isExpanded = position == expandedPosition;
-            if (position == previousExpandedPosition){
-                mTitleLayout.performClick();
-            }
-            itemView.setActivated(isExpanded);
         }
 
         @Override
@@ -111,14 +105,6 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
             if (isAnimating){
                 //if animation is playing ignore any additional clicks
                 return;
-            }
-
-            //Allow only 1 tab to expanded at one time.
-            previousExpandedPosition = expandedPosition;
-            expandedPosition = getAdapterPosition();
-
-            if (previousExpandedPosition != -1 && previousExpandedPosition != expandedPosition){
-                notifyItemChanged(previousExpandedPosition);
             }
 
             boolean descriptionIsVisible;
