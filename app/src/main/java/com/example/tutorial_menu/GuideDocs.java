@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -52,26 +53,26 @@ public class GuideDocs extends Fragment {
                     recyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     recyclerView.smoothScrollToPosition(tabPosition);
                     GuideDocsAdapter.GuideDocsViewHolder viewHolder = (GuideDocsAdapter.GuideDocsViewHolder) recyclerView.findViewHolderForAdapterPosition(tabPosition);
-                    LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
-                    if (viewHolder != null) {
-                        if (layoutManager.findFirstVisibleItemPosition() <= tabPosition && layoutManager.findLastVisibleItemPosition() >= tabPosition){
-                            recyclerView.postDelayed(()->{
-                                LinearLayout titleLayout = viewHolder.getTitleLayout();
-                                titleLayout.setPressed(true);
-                                titleLayout.setPressed(false);
-                            }, 200);
-                        }
-                        else {
-                            recyclerView.postDelayed(()->{
-                                LinearLayout titleLayout = viewHolder.getTitleLayout();
-                                titleLayout.setPressed(true);
-                                titleLayout.setPressed(false);
-                            }, 800);
-                        }
-                    }
+                    //Add delay to ensure button press prompt is visible
+                    recyclerView.addOnScrollListener();
                 }
             });
         });
+    }
+
+    private class CustomOnScrollListener extends RecyclerView.OnScrollListener{
+        private boolean isManualScroll = false;
+
+        @Override
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            if (isManualScroll)
+        }
+
+        @Override
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+        }
     }
 }
