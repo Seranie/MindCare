@@ -8,11 +8,13 @@
     android:layout_marginBottom="8dp"
     android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/guide_docs_card_view"
+        style="?attr/materialCardViewElevatedStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardElevation="4dp">
+        android:layout_margin="@dimen/guide_tab_card_margin">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,9 +66,44 @@
                     android:id="@+id/guide_docs_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/docs_card4_description" />
+                    android:text="@string/docs_card4_description1" />
+
+                <ImageView
+                    android:id="@+id/imageView22"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/chat_buddy_home_page" />
+
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/docs_card4_description2" />
+
+                <ImageView
+                    android:id="@+id/imageView24"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/edit_avatar_option" />
+
+                <ImageView
+                    android:id="@+id/imageView25"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/edit_avatar" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/docs_card4_description3" />
+
+                <ImageView
+                    android:id="@+id/imageView26"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/reset_chat_option" />
             </LinearLayout>
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

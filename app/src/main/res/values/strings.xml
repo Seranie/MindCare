@@ -70,13 +70,13 @@
         The contacts tool allows you to set contacts that you can easily call by double-tapping the contact portraits.
     </string>
     <string name="docs_card2_description2">
-        Clicking on the "Choose Photo" allows you to set a photo from your phone gallery for the contact.
+        Clicking on the \"Choose Photo\" allows you to set a photo from your phone gallery for the contact.
     </string>
     <string name="docs_card2_description3">
         The name and phone number will be associated with the contact subsequently.
     </string>
     <string name="docs_card2_description4">
-        You can easily edit the contact if necessary by clicking on the "Edit Contact" option.
+        You can easily edit the contact if necessary by clicking on the \"Edit Contact\" option.
     </string>
 
     <string name="docs_card3_title">Fences</string>
@@ -85,24 +85,37 @@
         It requires the caregiver to link up with a patient first before it can be used.
     </string>
     <string name="docs_card3_description2">
-        The patients UID that is used for linking can be found in the hamburger menu.
+        Linking can be done through the options menu.
     </string>
     <string name="docs_card3_description3">
-        The patient will receive an alert which can be accessed from the options menu.
+        The UID must be from a patient account, once confirmed, the patient will receive an invitation to be linked.
     </string>
     <string name="docs_card3_description4">
-        By clicking on the alert, the patient can choose to either accept or decline the request.
+        The patients UID that is used for linking can be found in the hamburger menu.
     </string>
     <string name="docs_card3_description5">
-        Once linked, the caregiver can create a new fence by dragging on the map, and adjust the radius as well as add a tag name.
+        The patient will receive an alert which can be accessed from the options menu. Any alerts if the patient leaves the fence is also displayed here.
     </string>
     <string name="docs_card3_description6">
-        The caregiver can edit existing fences at anytime by clicking on the Options menu.
+        By clicking on the alert, the patient can choose to either accept or decline the request.
     </string>
     <string name="docs_card3_description7">
-        Note patients will not be able to edit fences, and can only see them.
+        Once linked, the caregiver can create a new fence by clicking on the centre button, and customize by dragging on the map, adjusting the radius as well as adding a tag name.
+    </string>
+    <string name="docs_card3_description8">
+        The caregiver can edit existing fences at anytime by clicking on the \"Manage Fences\" menu.\n
+        Note patients will not be able to edit fences, and can only see them.\n
+        You can also click on the locations in order to jump to them on the map.
     </string>
 
     <string name="docs_card4_title">Chat Buddy</string>
-    <string name="docs_card4_description">CHAT BUDDY</string>
+    <string name="docs_card4_description1">
+        Chat buddy allows you to chat with a chat bot
+    </string>
+    <string name="docs_card4_description2">
+        You can set the avatar of the bot to any photo on your phone gallery.
+    </string>
+    <string name="docs_card4_description3">
+        You can also reset the chat if necessary.
+    </string>
 </resources>
