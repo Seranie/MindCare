@@ -51,28 +51,44 @@ public class GuideDocs extends Fragment {
                 public void onGlobalLayout() {
                     //Ensure recyclerview is laid out first
                     recyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    recyclerView.smoothScrollToPosition(tabPosition);
-                    GuideDocsAdapter.GuideDocsViewHolder viewHolder = (GuideDocsAdapter.GuideDocsViewHolder) recyclerView.findViewHolderForAdapterPosition(tabPosition);
+                    LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
-                    //Add delay to ensure button press prompt is visible
-                    recyclerView.addOnScrollListener();
+                    //If recycler item is already on screen, simply get the viewholder and perform click action
+                    if (layoutManager.findFirstVisibleItemPosition() <= tabPosition && tabPosition <= layoutManager.findLastVisibleItemPosition()) {
+                        GuideDocsAdapter.GuideDocsViewHolder viewHolder = (GuideDocsAdapter.GuideDocsViewHolder) recyclerView.findViewHolderForAdapterPosition(tabPosition);
+                        if (viewHolder != null) {
+                            recyclerView.postDelayed(() -> {
+                                LinearLayout titleLayout = viewHolder.getTitleLayout();
+                                titleLayout.setPressed(true);
+                                titleLayout.setPressed(false);
+                                titleLayout.performClick();
+                            }, 200);
+                        }
+                    } else {
+                        //Else if item is not already on screen, scroll to it, and when scroll ends, get the viewholder and perform click action
+                        recyclerView.smoothScrollToPosition(tabPosition);
+                        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                            @Override
+                            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                super.onScrollStateChanged(recyclerView, newState);
+                                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                                    //Remove to prevent scroll listener from constantly being called
+                                    recyclerView.removeOnScrollListener(this);
+                                    GuideDocsAdapter.GuideDocsViewHolder viewHolder = (GuideDocsAdapter.GuideDocsViewHolder) recyclerView.findViewHolderForAdapterPosition(tabPosition);
+                                    if (viewHolder != null) {
+                                        recyclerView.postDelayed(() -> {
+                                            LinearLayout titleLayout = viewHolder.getTitleLayout();
+                                            titleLayout.setPressed(true);
+                                            titleLayout.setPressed(false);
+                                            titleLayout.performClick();
+                                        }, 200);
+                                    }
+                                }
+                            }
+                        });
+                    }
                 }
             });
         });
-    }
-
-    private class CustomOnScrollListener extends RecyclerView.OnScrollListener{
-        private boolean isManualScroll = false;
-
-        @Override
-        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            if (isManualScroll)
-        }
-
-        @Override
-        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-        }
     }
 }

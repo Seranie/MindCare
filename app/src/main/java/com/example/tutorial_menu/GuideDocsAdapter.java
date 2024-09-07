@@ -22,6 +22,7 @@ import java.util.List;
 
 public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.GuideDocsViewHolder> {
     private final List<GuideDocsCard> cardList;
+    private GuideDocsViewHolder expandedViewHolder = null;
 
     public GuideDocsAdapter(List<GuideDocsCard> cardList){
         this.cardList = cardList;
@@ -111,13 +112,21 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
 
             descriptionIsVisible = mDescriptionLayout.getHeight() == mDescriptionLayoutHeight;
 
+            //Checks if there is a previously expanded view, and if so collapse it before expanding the currently clicked view.
+            //Also checks if the currently clicked view == to the previously clicked view, in which case will simply just collapse it.
             if (descriptionIsVisible) {
                 collapseView();
+                mDropDownButton.setImageResource(R.drawable.arrow_drop_down);
+                expandedViewHolder = null;
             } else {
+                if (expandedViewHolder != null && expandedViewHolder != this){
+                    expandedViewHolder.collapseView();
+                    expandedViewHolder.mDropDownButton.setImageResource(R.drawable.arrow_drop_down);
+                }
                 expandView();
+                mDropDownButton.setImageResource(R.drawable.arrow_drop_up);
+                expandedViewHolder = this;
             }
-
-            mDropDownButton.setImageResource(descriptionIsVisible?R.drawable.arrow_drop_down:R.drawable.arrow_drop_up);
         }
 
         private void expandView(){
