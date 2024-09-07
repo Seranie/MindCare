@@ -50,6 +50,7 @@ public class GuideDocs extends Fragment {
                 public void onGlobalLayout() {
                     //Ensure recyclerview is laid out first
                     recyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    recyclerView.smoothScrollToPosition(tabPosition);
                     GuideDocsAdapter.GuideDocsViewHolder viewHolder = (GuideDocsAdapter.GuideDocsViewHolder) recyclerView.findViewHolderForAdapterPosition(tabPosition);
 
                     //Add delay to ensure button press prompt is visible
