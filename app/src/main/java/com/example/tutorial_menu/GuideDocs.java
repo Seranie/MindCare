@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -54,36 +53,15 @@ public class GuideDocs extends Fragment {
                     recyclerView.smoothScrollToPosition(tabPosition);
                     GuideDocsAdapter.GuideDocsViewHolder viewHolder = (GuideDocsAdapter.GuideDocsViewHolder) recyclerView.findViewHolderForAdapterPosition(tabPosition);
 
-
-                    LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                    if (layoutManager.findFirstVisibleItemPosition() <= tabPosition && layoutManager.findLastVisibleItemPosition() >= tabPosition){
-                        recyclerView.postDelayed(()->{
-                            if (viewHolder != null) {
-                                //Flashes the title layout to prompt user to click on it
-                                LinearLayout titleLayout = viewHolder.getTitleLayout();
-                                titleLayout.performClick();
-                            };
-                        }, 200);
-                    }
-                    else{
-                        //Add delay to ensure button press prompt is visible
-                        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                            @Override
-                            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                                super.onScrollStateChanged(recyclerView, newState);
-                                if (newState == RecyclerView.SCROLL_STATE_IDLE){
-                                    recyclerView.postDelayed(()->{
-                                        Log.i("INFO","HI");
-                                        if (viewHolder != null) {
-                                            //Flashes the title layout to prompt user to click on it
-                                            LinearLayout titleLayout = viewHolder.getTitleLayout();
-                                            titleLayout.performClick();
-                                        };
-                                    }, 200);
-                                }
-                            }
-                        });
-                    }
+                    //Add delay to ensure button press prompt is visible
+                    recyclerView.postDelayed(()->{
+                        if (viewHolder != null) {
+                            //Flashes the title layout to prompt user to click on it
+                            LinearLayout titleLayout = viewHolder.getTitleLayout();
+                            titleLayout.setPressed(true);
+                            titleLayout.setPressed(false);
+                        };
+                    }, 200);
                 }
             });
         });
