@@ -21,8 +21,7 @@ public class GuideTab extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        view = inflater.inflate(R.layout.guide_tab, container, false);
-        return view;
+        return inflater.inflate(R.layout.guide_tab, container, false);
     }
 
     @Override

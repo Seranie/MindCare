@@ -1,20 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_tab_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView3"
+    <androidx.viewpager2.widget.ViewPager2
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottom_app_bar"
+        style="@style/Widget.Material3.BottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:fabAlignmentMode="center"
+        app:fabAnchorMode="cradle"
+        app:hideOnScroll="true"
+        app:paddingBottomSystemWindowInsets="false">
+
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00FFFFFF"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom_navigation_menu" />
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="176dp"
-        android:layout_marginTop="176dp"
-        android:text="home"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:contentDescription="Perform main action"
+        android:src="@drawable/contacts_icon"
+        app:layout_anchor="@id/bottom_app_bar"
+        app:layout_anchorGravity="center"
+        app:shapeAppearanceOverlay="@style/CustomFABShape" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 <!--TODO change to appropriate tool instead of generic home-->

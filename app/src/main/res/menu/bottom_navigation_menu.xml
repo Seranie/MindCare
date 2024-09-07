@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/reminders_tab"
+        android:icon="@drawable/reminders_icon"
+        android:title="Reminders"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/contacts_tab"
+        android:icon="@drawable/contacts_icon"
+        android:title="Contacts"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:title=""
+        app:showAsAction="always"
+        android:checkable="false"
+        android:checked="false"/>
+
+    <item
+        android:id="@+id/fences_tab"
+        android:icon="@drawable/fences_icon"
+        android:title="Fences"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/chat_buddy_tab"
+        android:icon="@drawable/chat_buddy_icon"
+        android:title="Chat Buddy"
+        app:showAsAction="ifRoom"/>
+</menu>

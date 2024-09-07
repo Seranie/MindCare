@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Define the shape appearance -->
+    <style name="CustomFABShape" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item> <!-- Adjust corner size as needed -->
+    </style>
+</resources>
