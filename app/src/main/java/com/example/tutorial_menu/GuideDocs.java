@@ -58,8 +58,9 @@ public class GuideDocs extends Fragment {
                         if (viewHolder != null) {
                             //Flashes the title layout to prompt user to click on it
                             LinearLayout titleLayout = viewHolder.getTitleLayout();
-                            titleLayout.setPressed(true);
-                            titleLayout.setPressed(false);
+//                            titleLayout.setPressed(true);
+//                            titleLayout.setPressed(false);
+                            titleLayout.performClick();
                         };
                     }, 200);
                 }
