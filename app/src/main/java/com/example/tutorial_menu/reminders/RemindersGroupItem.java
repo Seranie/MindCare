@@ -1,4 +1,4 @@
-package com.example.tutorial_menu;
+package com.example.tutorial_menu.reminders;
 
 import java.util.List;
 

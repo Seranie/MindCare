@@ -1,4 +1,4 @@
-package com.example.tutorial_menu;
+package com.example.tutorial_menu.reminders;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.tutorial_menu.R;
 
 import java.util.List;
 
@@ -35,10 +37,10 @@ public class RemindersGroupAdapter extends RecyclerView.Adapter<RemindersGroupAd
 
     @Override
     public int getItemCount() {
-        return 0;
+        return remindersGroupItems.size();
     }
 
-    class GroupItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class GroupItemViewHolder extends RecyclerView.ViewHolder{
         ImageView groupItemImage;
         TextView groupItemName;
 
@@ -46,12 +48,6 @@ public class RemindersGroupAdapter extends RecyclerView.Adapter<RemindersGroupAd
             super(itemView);
             groupItemImage = itemView.findViewById(R.id.group_item_image);
             groupItemName = itemView.findViewById(R.id.group_item_name);
-        }
-
-        @Override
-        public void onClick(View view) {
-            RemindersGroupItem remindersGroupItem = remindersGroupItems.get(getAdapterPosition());
-
         }
     }
 }

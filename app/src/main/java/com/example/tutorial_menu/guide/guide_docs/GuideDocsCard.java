@@ -1,4 +1,4 @@
-package com.example.tutorial_menu;
+package com.example.tutorial_menu.guide.guide_docs;
 
 public class GuideDocsCard {
     private int mGuideDocsCardType;

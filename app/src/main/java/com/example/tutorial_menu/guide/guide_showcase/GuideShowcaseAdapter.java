@@ -1,4 +1,4 @@
-package com.example.tutorial_menu;
+package com.example.tutorial_menu.guide.guide_showcase;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.tutorial_menu.R;
+import com.example.tutorial_menu.guide.TabPositionViewModel;
 
 import java.util.List;
 

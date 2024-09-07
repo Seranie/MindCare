@@ -1,4 +1,4 @@
-package com.example.tutorial_menu;
+package com.example.tutorial_menu.reminders;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +8,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tutorial_menu.R;
+
 import java.util.List;
 
 public class RemindersReminderAdapter extends RecyclerView.Adapter<RemindersReminderAdapter.ReminderItemViewHolder>{
-    //TODO incomplete class
+    //TODO incomplete adapter
     private List<RemindersReminderItem> remindersReminderItems;
 
     public RemindersReminderAdapter(List<RemindersReminderItem> remindersReminderItems){
@@ -20,6 +22,7 @@ public class RemindersReminderAdapter extends RecyclerView.Adapter<RemindersRemi
     }
 
     public void updateList(List<RemindersReminderItem> newReminders){
+        //TODO incomplete method to use for updating list based on which group is chosen
         remindersReminderItems = newReminders;
         notifyDataSetChanged();
     }

@@ -1,7 +1,6 @@
-package com.example.tutorial_menu;
+package com.example.tutorial_menu.guide.guide_docs;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.tutorial_menu.R;
+import com.example.tutorial_menu.guide.TabPositionViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +63,7 @@ public class GuideDocs extends Fragment {
                                 LinearLayout titleLayout = viewHolder.getTitleLayout();
                                 titleLayout.setPressed(true);
                                 titleLayout.setPressed(false);
-                                titleLayout.performClick();
+//                                titleLayout.performClick();
                             }, 200);
                         }
                     } else {
@@ -80,7 +82,7 @@ public class GuideDocs extends Fragment {
                                             LinearLayout titleLayout = viewHolder.getTitleLayout();
                                             titleLayout.setPressed(true);
                                             titleLayout.setPressed(false);
-                                            titleLayout.performClick();
+//                                            titleLayout.performClick();
                                         }, 200);
                                     }
                                 }

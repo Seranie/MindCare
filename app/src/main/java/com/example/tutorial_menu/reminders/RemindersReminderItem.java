@@ -1,6 +1,4 @@
-package com.example.tutorial_menu;
-
-import android.widget.TextView;
+package com.example.tutorial_menu.reminders;
 
 public class RemindersReminderItem {
     //TODO incomplete class, represents a single reminder in the reminders tool

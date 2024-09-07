@@ -8,18 +8,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.example.tutorial_menu.reminders.Reminders;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
-
-//TODO change to appropriate tool instead of a generic home
+//TODO change to viewpager
 public class Home extends Fragment{
-    private List<RemindersGroupItem> remindersGroupItems;
-    RecyclerView reminderItemsRecyclerView;
 
     @Nullable
     @Override
@@ -30,28 +27,19 @@ public class Home extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RecyclerView groupItemsRecyclerView = view.findViewById(R.id.reminders_group_recyclerview);
-        RecyclerView reminderItemsRecyclerView = view.findViewById(R.id.reminders_reminder_recyclerview);
 
-        //TODO will eventually change to using data dynamically called from user account's data in database
-        remindersGroupItems = new ArrayList<>();
-        RemindersReminderItem remindersReminderItem = new RemindersReminderItem();
-        remindersReminderItem.setTitle("Do something");
-        remindersReminderItem.setNote("On someday");
-        //TODO groups will also have data dynamically called from database
-        remindersGroupItems.add(new RemindersGroupItem(
-                R.drawable.chat_buddy_icon,
-                R.string.reminders_group_name
-        ));
+        //Fragment list to hold tool fragments
+        ArrayList<Fragment> fragmentList = new ArrayList<>();
+        Reminders remindersFragment = new Reminders();
 
-        List<RemindersReminderItem> remindersReminderItems = new ArrayList<>();
-        remindersReminderItems.add(remindersReminderItem);
+        //Add fragments to array
+        fragmentList.add(remindersFragment);
 
-        groupItemsRecyclerView.setAdapter(new RemindersGroupAdapter(remindersGroupItems));
-        groupItemsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        //Get viewpager2 and set adapter
+        ViewPager2 viewPager = view.findViewById(R.id.tools_view_pager);
+        ToolsFragmentStateAdapter toolsFragmentStateAdapter = new ToolsFragmentStateAdapter(this, fragmentList);
+        viewPager.setAdapter(toolsFragmentStateAdapter);
 
-        RemindersReminderAdapter remindersReminderAdapter = new RemindersReminderAdapter(remindersReminderItems);
-        reminderItemsRecyclerView.setAdapter(remindersReminderAdapter);
-        reminderItemsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
+
 }

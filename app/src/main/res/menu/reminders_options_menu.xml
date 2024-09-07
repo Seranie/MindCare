@@ -4,5 +4,5 @@
     <item
         android:id="@+id/sort_by_option"
         android:title="Sort by.."
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="collapseActionView" />
 </menu>

@@ -15,6 +15,7 @@
     <item
         android:title=""
         app:showAsAction="always"
+        android:enabled="false"
         android:checkable="false"
         android:checked="false"/>
 

@@ -1,22 +1,19 @@
-package com.example.tutorial_menu;
+package com.example.tutorial_menu.guide.guide_docs;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.tutorial_menu.R;
 
 import java.util.List;
 
@@ -28,6 +25,10 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
         this.cardList = cardList;
     }
 
+
+    public GuideDocsViewHolder getExpandedViewHolder() {
+        return expandedViewHolder;
+    }
 
     @Override
     public int getItemViewType(int position){

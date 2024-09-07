@@ -1,4 +1,4 @@
-package com.example.tutorial_menu;
+package com.example.tutorial_menu.guide;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
