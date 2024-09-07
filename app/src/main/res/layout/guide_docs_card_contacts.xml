@@ -3,15 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="12dp"
-    android:layout_marginTop="8dp"
     android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/guide_docs_card_view"
+        style="?attr/materialCardViewElevatedStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardElevation="4dp">
+        android:layout_marginVertical="@dimen/guide_tab_card_margin">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,7 +21,7 @@
                 android:id="@+id/guide_docs_title_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#963434"
+                android:background="?attr/colorSurfaceVariant"
                 android:clickable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:orientation="horizontal"
@@ -69,6 +68,8 @@
                     android:id="@+id/imageView8"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
+                    android:adjustViewBounds="true"
                     app:srcCompat="@drawable/contacts" />
 
                 <TextView
@@ -81,6 +82,8 @@
                     android:id="@+id/imageView9"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
+                    android:adjustViewBounds="true"
                     app:srcCompat="@drawable/choose_photo" />
 
                 <TextView
@@ -93,6 +96,8 @@
                     android:id="@+id/imageView10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
+                    android:adjustViewBounds="true"
                     app:srcCompat="@drawable/enter_name_and_phone_number" />
 
                 <TextView
@@ -105,15 +110,19 @@
                     android:id="@+id/imageView11"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
+                    android:adjustViewBounds="true"
                     app:srcCompat="@drawable/edit_contacts1" />
 
                 <ImageView
                     android:id="@+id/imageView12"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
+                    android:adjustViewBounds="true"
                     app:srcCompat="@drawable/edit_contacts2" />
             </LinearLayout>
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

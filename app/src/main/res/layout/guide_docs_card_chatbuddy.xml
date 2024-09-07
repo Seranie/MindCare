@@ -3,9 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="12dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
     android:orientation="vertical">
 
     <com.google.android.material.card.MaterialCardView
@@ -13,7 +10,7 @@
         style="?attr/materialCardViewElevatedStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/guide_tab_card_margin">
+        android:layout_marginVertical="@dimen/guide_tab_card_margin">
 
 
         <LinearLayout
@@ -25,7 +22,7 @@
                 android:id="@+id/guide_docs_title_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#963434"
+                android:background="?attr/colorSurfaceVariant"
                 android:clickable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:orientation="horizontal"
@@ -72,6 +69,8 @@
                     android:id="@+id/imageView22"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
+                    android:adjustViewBounds="true"
                     app:srcCompat="@drawable/chat_buddy_home_page" />
 
                 <TextView
@@ -84,12 +83,16 @@
                     android:id="@+id/imageView24"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
+                    android:adjustViewBounds="true"
                     app:srcCompat="@drawable/edit_avatar_option" />
 
                 <ImageView
                     android:id="@+id/imageView25"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
+                    android:adjustViewBounds="true"
                     app:srcCompat="@drawable/edit_avatar" />
 
                 <TextView
@@ -101,6 +104,8 @@
                     android:id="@+id/imageView26"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
+                    android:adjustViewBounds="true"
                     app:srcCompat="@drawable/reset_chat_option" />
             </LinearLayout>
         </LinearLayout>

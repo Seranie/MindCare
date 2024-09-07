@@ -3,15 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="12dp"
-    android:layout_marginTop="8dp"
     android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/guide_docs_card_view"
+        style="?attr/materialCardViewElevatedStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardElevation="4dp">
+        android:layout_marginVertical="@dimen/guide_tab_card_margin">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,7 +21,7 @@
                 android:id="@+id/guide_docs_title_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#963434"
+                android:background="?attr/colorSurfaceVariant"
                 android:clickable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:orientation="horizontal"
@@ -69,6 +68,7 @@
                     android:id="@+id/imageView13"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     app:srcCompat="@drawable/fences_home" />
 
                 <TextView
@@ -81,6 +81,7 @@
                     android:id="@+id/imageView14"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     app:srcCompat="@drawable/link_account_option" />
 
                 <TextView
@@ -93,6 +94,7 @@
                     android:id="@+id/imageView15"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     app:srcCompat="@drawable/link_account" />
 
                 <TextView
@@ -105,6 +107,7 @@
                     android:id="@+id/imageView16"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     app:srcCompat="@drawable/uid" />
 
                 <TextView
@@ -117,12 +120,14 @@
                     android:id="@+id/imageView17"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     app:srcCompat="@drawable/alerts_option" />
 
                 <ImageView
                     android:id="@+id/imageView18"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     app:srcCompat="@drawable/invitation" />
 
                 <TextView
@@ -135,6 +140,7 @@
                     android:id="@+id/imageView19"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     app:srcCompat="@drawable/invitation_request" />
 
                 <TextView
@@ -147,6 +153,7 @@
                     android:id="@+id/imageView20"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     app:srcCompat="@drawable/edit_fence" />
 
                 <TextView
@@ -159,16 +166,18 @@
                     android:id="@+id/imageView21"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     app:srcCompat="@drawable/manage_fences_option" />
 
                 <ImageView
                     android:id="@+id/imageView23"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     app:srcCompat="@drawable/manage_fences" />
 
             </LinearLayout>
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>
