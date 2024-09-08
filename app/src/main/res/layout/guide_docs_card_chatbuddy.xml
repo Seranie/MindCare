@@ -22,7 +22,7 @@
                 android:id="@+id/guide_docs_title_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?attr/colorSurfaceVariant"
+                android:background="?attr/colorPrimaryInverse"
                 android:clickable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:orientation="horizontal"
