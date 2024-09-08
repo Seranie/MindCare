@@ -10,17 +10,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true">
+<!--        <com.google.android.material.appbar.AppBarLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:fitsSystemWindows="true">-->
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/showcase_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize" />
+<!--            <com.google.android.material.appbar.MaterialToolbar-->
+<!--                android:id="@+id/showcase_toolbar"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="?attr/actionBarSize" />-->
 
-        </com.google.android.material.appbar.AppBarLayout>
+<!--        </com.google.android.material.appbar.AppBarLayout>-->
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -38,35 +38,35 @@
 
         </FrameLayout>
 
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/showcase_bottom_app_bar"
-            style="@style/Widget.Material3.BottomAppBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:fabAlignmentMode="center"
-            app:fabAnchorMode="cradle"
-            app:hideOnScroll="true"
-            app:paddingBottomSystemWindowInsets="false">
+<!--        <com.google.android.material.bottomappbar.BottomAppBar-->
+<!--            android:id="@+id/showcase_bottom_app_bar"-->
+<!--            style="@style/Widget.Material3.BottomAppBar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="bottom"-->
+<!--            app:fabAlignmentMode="center"-->
+<!--            app:fabAnchorMode="cradle"-->
+<!--            app:hideOnScroll="true"-->
+<!--            app:paddingBottomSystemWindowInsets="false">-->
 
 
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottom_navigation_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#00FFFFFF"
-                app:labelVisibilityMode="labeled"
-                app:menu="@menu/bottom_navigation_menu" />
-        </com.google.android.material.bottomappbar.BottomAppBar>
+<!--            <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--                android:id="@+id/bottom_navigation_view"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="#00FFFFFF"-->
+<!--                app:labelVisibilityMode="labeled"-->
+<!--                app:menu="@menu/bottom_navigation_menu" />-->
+<!--        </com.google.android.material.bottomappbar.BottomAppBar>-->
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="Perform main action"
-            android:src="@drawable/contacts_icon"
-            app:layout_anchor="@id/showcase_bottom_app_bar"
-            app:layout_anchorGravity="center"
-            app:shapeAppearanceOverlay="@style/CustomFABShape" />
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:contentDescription="Perform main action"-->
+<!--            android:src="@drawable/contacts_icon"-->
+<!--            app:layout_anchor="@id/showcase_bottom_app_bar"-->
+<!--            app:layout_anchorGravity="center"-->
+<!--            app:shapeAppearanceOverlay="@style/CustomFABShape" />-->
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

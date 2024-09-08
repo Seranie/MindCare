@@ -19,6 +19,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.tutorial_menu.reminders.Reminders;
+import com.example.tutorial_menu.showcases.ChatbuddyHomePageShowcase;
+import com.example.tutorial_menu.showcases.ContactsHomePageShowcase;
+import com.example.tutorial_menu.showcases.FencesHomePageShowcase;
 import com.example.tutorial_menu.showcases.RemindersHomePageShowCase;
 import com.example.tutorial_menu.showcases.ShowcaseFragment;
 import com.google.android.material.navigation.NavigationView;
@@ -38,27 +41,38 @@ public class ShowcaseActivity extends AppCompatActivity {
             return insets;
         });
 
-        Toolbar toolbar = findViewById(R.id.showcase_toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.showcase_toolbar);
+//        setSupportActionBar(toolbar);
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.showcase_fragment_container);
         navController = navHostFragment.getNavController();
         DrawerLayout drawerLayout = findViewById(R.id.showcase_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).setOpenableLayout(drawerLayout).build();
 
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController((NavigationView) findViewById(R.id.showcase_navigation_view), navController);
+//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+//        NavigationUI.setupWithNavController((NavigationView) findViewById(R.id.showcase_navigation_view), navController);
 
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         int fragmentId = getIntent().getExtras().getInt("fragment_id");
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        Fragment currentFragment = null;
+
         switch (fragmentId){
             case 0:
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                Fragment currentFragment = new RemindersHomePageShowCase();
-                transaction.replace(R.id.showcase_fragment_container, currentFragment).commit();
-
+                currentFragment = new RemindersHomePageShowCase();
+                break;
+            case 1:
+                currentFragment = new ContactsHomePageShowcase();
+                break;
+            case 2:
+                currentFragment = new FencesHomePageShowcase();
+                break;
+            case 3:
+                currentFragment = new ChatbuddyHomePageShowcase();
+                break;
         }
+        transaction.replace(R.id.showcase_fragment_container, currentFragment).commit();
 
     }
 
