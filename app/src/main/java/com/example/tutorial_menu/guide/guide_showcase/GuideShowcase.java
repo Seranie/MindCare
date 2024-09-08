@@ -31,7 +31,7 @@ public class GuideShowcase extends Fragment {
         List<GuideShowcaseCard> cardList = new ArrayList<>();
         //TODO change drawable to tool representations
         cardList.add(new GuideShowcaseCard(
-                R.drawable.cat1,
+                R.drawable.reminders_card_image,
                 R.string.showcase_card1_title,
                 R.string.showcase_card1_subtitle,
                 R.string.showcase_card1_description

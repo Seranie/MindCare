@@ -3,49 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
+        style="?attr/materialCardViewElevatedStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/guide_showcase_card_margin">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:padding="14dp">
 
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/showcase_card_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
+                android:cropToPadding="true"
+                android:elevation="@dimen/guide_showcase_image_elevation"
+                android:padding="@dimen/guide_showcase_image_padding"
                 app:layout_constraintBottom_toTopOf="@+id/showcase_card_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.031"
+                app:shapeAppearanceOverlay="@style/customImageShape"
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-            <TextView
-                android:id="@+id/showcase_card_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="TextView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/showcase_card_subtitle" />
-
-            <TextView
-                android:id="@+id/showcase_card_subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:text="TextView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/showcase_card_title" />
 
             <TextView
                 android:id="@+id/showcase_card_title"
@@ -54,33 +42,64 @@
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="56dp"
                 android:text="TextView"
+                android:textAppearance="@style/TextAppearance.Material3.HeadlineLarge"
                 app:layout_constraintBottom_toTopOf="@+id/showcase_card_subtitle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/showcase_card_image" />
 
-            <Button
-                android:id="@+id/showcase_card_learn_more"
+            <TextView
+                android:id="@+id/showcase_card_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:tag="learn_more_button"
-                android:text="@string/guide_showcase_learn_more"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/showcase_card_show_me_button" />
+                android:layout_marginTop="16dp"
+                android:text="TextView"
+                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.006"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/showcase_card_title" />
 
-            <Button
-                android:id="@+id/showcase_card_show_me_button"
+            <TextView
+                android:id="@+id/showcase_card_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="TextView"
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.006"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/showcase_card_subtitle" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/showcase_card_learn_more"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="29dp"
-                android:tag="show_me_button"
-                android:text="@string/guide_showcase_start_showcase"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:tag="learn_more_button"
+                android:text="@string/guide_showcase_learn_more"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/showcase_card_description" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/showcase_card_show_me_button"
+                style="@style/Widget.Material3.Button.IconButton.Filled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="152dp"
+                android:layout_marginTop="29dp"
+                android:tag="show_me_button"
+                android:text="@string/guide_showcase_start_showcase"
+                app:icon="@drawable/start_showcase_icon"
+                app:iconPadding="@dimen/guide_showcase_icon_padding"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/showcase_card_learn_more"
+                app:layout_constraintTop_toBottomOf="@+id/showcase_card_description" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

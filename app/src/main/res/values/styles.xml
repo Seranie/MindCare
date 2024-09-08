@@ -17,4 +17,9 @@
         <item name="android:layout_height">10dp</item>
     </style>
 
+    <style name="customImageShape" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">5%</item>
+    </style>
+
 </resources>

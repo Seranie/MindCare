@@ -10,7 +10,7 @@
         style="?attr/materialCardViewElevatedStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/guide_tab_card_margin">
+        android:layout_margin="@dimen/guide_docs_card_margin">
 
 
         <LinearLayout
@@ -63,7 +63,7 @@
                     android:id="@+id/guide_docs_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:padding="@dimen/guide_docs_innertext_padding"
                     android:text="@string/docs_card4_description1"
                     android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
@@ -71,17 +71,17 @@
                     android:id="@+id/imageView22"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
+                    android:layout_marginVertical="@dimen/guide_docs_image_margin"
                     android:adjustViewBounds="true"
                     android:cropToPadding="true"
-                    android:padding="@dimen/guide_tab_image_padding"
+                    android:padding="@dimen/guide_docs_image_padding"
                     app:srcCompat="@drawable/chat_buddy_home_page" />
 
                 <TextView
                     android:id="@+id/textView19"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:padding="@dimen/guide_docs_innertext_padding"
                     android:text="@string/docs_card4_description2"
                     android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
@@ -89,26 +89,26 @@
                     android:id="@+id/imageView24"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
+                    android:layout_marginVertical="@dimen/guide_docs_image_margin"
                     android:adjustViewBounds="true"
                     android:cropToPadding="true"
-                    android:padding="@dimen/guide_tab_image_padding"
+                    android:padding="@dimen/guide_docs_image_padding"
                     app:srcCompat="@drawable/edit_avatar_option" />
 
                 <ImageView
                     android:id="@+id/imageView25"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
+                    android:layout_marginVertical="@dimen/guide_docs_image_margin"
                     android:adjustViewBounds="true"
                     android:cropToPadding="true"
-                    android:padding="@dimen/guide_tab_image_padding"
+                    android:padding="@dimen/guide_docs_image_padding"
                     app:srcCompat="@drawable/edit_avatar" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:padding="@dimen/guide_docs_innertext_padding"
                     android:text="@string/docs_card4_description3"
                     android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
@@ -116,10 +116,10 @@
                     android:id="@+id/imageView26"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/guide_tab_image_margin"
+                    android:layout_marginVertical="@dimen/guide_docs_image_margin"
                     android:adjustViewBounds="true"
                     android:cropToPadding="true"
-                    android:padding="@dimen/guide_tab_image_padding"
+                    android:padding="@dimen/guide_docs_image_padding"
                     app:srcCompat="@drawable/reset_chat_option" />
             </LinearLayout>
         </LinearLayout>
