@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.tutorial_menu.reminders.Reminders;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 
 import java.util.ArrayList;
 
@@ -39,6 +41,7 @@ public class Home extends Fragment{
         ViewPager2 viewPager = view.findViewById(R.id.tools_view_pager);
         ToolsFragmentStateAdapter toolsFragmentStateAdapter = new ToolsFragmentStateAdapter(this, fragmentList);
         viewPager.setAdapter(toolsFragmentStateAdapter);
+
 
     }
 
