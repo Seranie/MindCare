@@ -13,18 +13,16 @@ import smartdevelop.ir.eram.showcaseviewlib.config.DismissType;
 import smartdevelop.ir.eram.showcaseviewlib.config.Gravity;
 
 public abstract class ShowcaseFragment extends Fragment {
-    Context context;
-    View view;
+
 
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.view = view;
     }
 
 
-    public void makeShowcase(View view, String title, String description){
+    public void makeShowcase(Context context, View view, String title, String description){
         new GuideView.Builder(context)
                 .setTitle(title)
                 .setContentText(description)
@@ -36,6 +34,7 @@ public abstract class ShowcaseFragment extends Fragment {
                 .build()
                 .show();
     }
+
 
     public abstract void startShowcase();
 }

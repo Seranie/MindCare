@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.tutorial_menu.showcases.Reminders;
+import com.example.tutorial_menu.reminders.Reminders;
 
 import java.util.ArrayList;
 

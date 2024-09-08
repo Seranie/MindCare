@@ -1,10 +1,8 @@
 package com.example.tutorial_menu;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -13,12 +11,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.tutorial_menu.reminders.Reminders;
+import com.example.tutorial_menu.showcases.RemindersHomePageShowCase;
 import com.example.tutorial_menu.showcases.ShowcaseFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -49,18 +50,13 @@ public class ShowcaseActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController((NavigationView) findViewById(R.id.showcase_navigation_view), navController);
 
 
-
+        FragmentManager fragmentManager = getSupportFragmentManager();
         int fragmentId = getIntent().getExtras().getInt("fragment_id");
         switch (fragmentId){
             case 0:
-                navController.navigate(R.id.reminders);
-                navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
-                    @Override
-                    public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
-                        startShowcaseOnFragment(navHostFragment, R.id.reminders);
-
-                    }
-                });
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                Fragment currentFragment = new RemindersHomePageShowCase();
+                transaction.replace(R.id.showcase_fragment_container, currentFragment).commit();
 
         }
 

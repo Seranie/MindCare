@@ -1,4 +1,4 @@
-package com.example.tutorial_menu.showcases;
+package com.example.tutorial_menu.reminders;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,15 +16,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tutorial_menu.R;
-import com.example.tutorial_menu.reminders.RemindersGroupAdapter;
-import com.example.tutorial_menu.reminders.RemindersGroupItem;
-import com.example.tutorial_menu.reminders.RemindersReminderAdapter;
-import com.example.tutorial_menu.reminders.RemindersReminderItem;
+import com.example.tutorial_menu.showcases.ShowcaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Reminders extends ShowcaseFragment{
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
+
+public class Reminders extends ShowcaseFragment {
     RecyclerView reminderItemsRecyclerView;
 
     @Nullable
@@ -78,11 +78,47 @@ public class Reminders extends ShowcaseFragment{
             }
         });
 
+//        makeShowcase(getContext(), view.findViewById(R.id.reminders_group_recyclerview), "Groups", "Here you can choose the groups you want to see reminders for.");
+//        makeShowcase(getContext(), view.findViewById(R.id.reminders_reminder_recyclerview), "Reminders", "Here you can either click on the reminders to edit them or click the circle to complete them");
+
+//        TapTargetSequence sequence = new TapTargetSequence(getActivity())
+//                .targets(
+//                    TapTarget.forView(groupItemsRecyclerView, "Hi").cancelable(false),
+//                    TapTarget.forView(reminderItemsRecyclerView, "BYE").cancelable(false)
+//                )
+//                .listener(new TapTargetSequence.Listener(){
+//                    @Override
+//                    public void onSequenceFinish() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSequenceCanceled(TapTarget lastTarget) {
+//                        ;
+//                    }
+//                });
+//        sequence.start();
+
+
+        ShowcaseConfig config = new ShowcaseConfig();
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this.getActivity(), "reminders_home_page_showcase");
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(groupItemsRecyclerView, "IS A BUTTON", "SOMTHING");
+        sequence.addSequenceItem(reminderItemsRecyclerView, "HELLO", "BINGUS");
+
+        sequence.start();
     }
 
     @Override
     public void startShowcase() {
-        makeShowcase(view.findViewById(R.id.reminders_group_recyclerview), "Reycler", "Description");
+        ;
     }
 
 }

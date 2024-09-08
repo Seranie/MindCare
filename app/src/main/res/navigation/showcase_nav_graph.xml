@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/reminders"
-        android:name="com.example.tutorial_menu.showcases.Reminders"
+        android:name="com.example.tutorial_menu.reminders.Reminders"
         android:label="Reminders" />
     <fragment
         android:id="@+id/guideShowcase2"
