@@ -1,5 +1,6 @@
 package com.example.tutorial_menu;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
         //Menu item id's are linked to destination id's which serve as the basis for navigating click events in drawer
         NavigationUI.setupWithNavController(navigationView, navController);
 
+
+        switchToShowcase(0);
+
     }
 
     @Override
@@ -69,4 +73,13 @@ public class MainActivity extends AppCompatActivity {
         //Overrides default navigation button behavior and delegate to navController instead, else if navigateUp fails, use parent default method.
         return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
     }
+
+    public void switchToShowcase(int fragmentId){
+        Intent intent = new Intent(this, ShowcaseActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("fragment_id", fragmentId);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
 }
