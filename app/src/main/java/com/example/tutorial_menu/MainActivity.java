@@ -2,6 +2,7 @@ package com.example.tutorial_menu;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowInsets;
@@ -17,6 +18,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavHost;
 import androidx.navigation.Navigation;
@@ -64,7 +67,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
 
-        switchToShowcase(0);
+        //Create viewmodel and pass to showcase tab's recyclerview items TODO
+        ShowcaseChangeViewModel model = new ViewModelProvider(this).get(ShowcaseChangeViewModel.class);
+        Log.i("INFO1", String.valueOf(model));
+        model.getShowcaseChangeId().observe(this, id -> {
+            switchToShowcase(id);
+        });
+        //Switch based on viewModel data
+
 
     }
 

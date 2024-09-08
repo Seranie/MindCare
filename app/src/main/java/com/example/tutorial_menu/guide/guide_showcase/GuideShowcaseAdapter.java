@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tutorial_menu.R;
+import com.example.tutorial_menu.ShowcaseChangeViewModel;
 import com.example.tutorial_menu.guide.TabPositionViewModel;
 
 import java.util.List;
@@ -19,10 +20,12 @@ public class GuideShowcaseAdapter extends RecyclerView.Adapter<GuideShowcaseAdap
     //Adapter for guide showcase's recycler view of cards.
     private final List<GuideShowcaseCard> cardList;
     private final TabPositionViewModel tabPositionViewModel;
+    private final ShowcaseChangeViewModel showcaseViewModel;
 
-    public GuideShowcaseAdapter(List<GuideShowcaseCard> cardList, TabPositionViewModel tabPositionViewModel){
+    public GuideShowcaseAdapter(List<GuideShowcaseCard> cardList, TabPositionViewModel tabPositionViewModel, ShowcaseChangeViewModel showcaseViewModel){
         this.cardList = cardList;
         this.tabPositionViewModel = tabPositionViewModel;
+        this.showcaseViewModel = showcaseViewModel;
     }
 
     @NonNull
@@ -77,6 +80,7 @@ public class GuideShowcaseAdapter extends RecyclerView.Adapter<GuideShowcaseAdap
 
             switch ((String) view.getTag()){
                 case "show_me_button":
+                    showcaseViewModel.setShowcaseChangeId(adapterPosition);
                     break;
                 case "learn_more_button":
                     //button switches tab from showcase to docs, and flashes the corresponding docs header to prompt click

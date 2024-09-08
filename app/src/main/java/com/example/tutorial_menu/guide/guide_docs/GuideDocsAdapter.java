@@ -76,6 +76,7 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
         LinearLayout mTitleLayout;
         int mDescriptionLayoutHeight;
         private boolean isAnimating = false;
+        private boolean isCurrentlyExpanded = false;
 
         public GuideDocsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -95,6 +96,10 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
                     mDescriptionLayout.requestLayout();
                 }
             });
+        }
+
+        public boolean getIsCurrentlyExpanded(){
+            return isCurrentlyExpanded;
         }
 
         public LinearLayout getTitleLayout() {
@@ -117,14 +122,17 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
             //Also checks if the currently clicked view == to the previously clicked view, in which case will simply just collapse it.
             if (descriptionIsVisible) {
                 collapseView();
+                isCurrentlyExpanded = false;
                 mDropDownButton.setImageResource(R.drawable.arrow_drop_down);
                 expandedViewHolder = null;
             } else {
                 if (expandedViewHolder != null && expandedViewHolder != this){
                     expandedViewHolder.collapseView();
+                    expandedViewHolder.isCurrentlyExpanded = false;
                     expandedViewHolder.mDropDownButton.setImageResource(R.drawable.arrow_drop_down);
                 }
                 expandView();
+                isCurrentlyExpanded = true;
                 mDropDownButton.setImageResource(R.drawable.arrow_drop_up);
                 expandedViewHolder = this;
             }

@@ -74,6 +74,8 @@ public class ShowcaseActivity extends AppCompatActivity {
         }
         transaction.replace(R.id.showcase_fragment_container, currentFragment).commit();
 
+
+
     }
 
     @Override
@@ -96,15 +98,13 @@ public class ShowcaseActivity extends AppCompatActivity {
 //                .show();
 //    }
 //
-    private void startShowcaseOnFragment(NavHostFragment fragment, int fragmentId){
-        if (fragment != null){
+//    private void startShowcaseOnFragment(NavHostFragment fragment, int fragmentId){
+//        if (fragment != null){
 //            ShowcaseFragment showcaseFragment = (ShowcaseFragment) fragment.getChildFragmentManager().getPrimaryNavigationFragment();
 //            Log.i("INFO",String.valueOf(showcaseFragment));
 //            if (showcaseFragment != null){
 //                showcaseFragment.startShowcase();
 //                Log.i("INFO","HI");
 //            }
-        }
-
-    }
+//        }
 }

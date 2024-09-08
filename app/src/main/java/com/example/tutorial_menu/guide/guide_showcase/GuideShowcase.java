@@ -1,6 +1,7 @@
 package com.example.tutorial_menu.guide.guide_showcase;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tutorial_menu.R;
+import com.example.tutorial_menu.ShowcaseChangeViewModel;
 import com.example.tutorial_menu.guide.TabPositionViewModel;
 
 import java.util.ArrayList;
@@ -54,11 +56,14 @@ public class GuideShowcase extends Fragment {
         ));
 
         //Set up recyclerview with the adapter and use linearlayout for scrolling
+
+        ShowcaseChangeViewModel showcaseViewModel = new ViewModelProvider(getParentFragment().getActivity()).get(ShowcaseChangeViewModel.class);
+        TabPositionViewModel tabPositionViewModel = new ViewModelProvider(getParentFragment()).get(TabPositionViewModel.class);
+
         //TODO add item animations
         RecyclerView recyclerView = view.findViewById(R.id.guide_showcase_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        TabPositionViewModel viewModel = new ViewModelProvider(getParentFragment()).get(TabPositionViewModel.class);
-        GuideShowcaseAdapter guideShowcaseAdapter = new GuideShowcaseAdapter(cardList, viewModel);
+        GuideShowcaseAdapter guideShowcaseAdapter = new GuideShowcaseAdapter(cardList, tabPositionViewModel, showcaseViewModel);
         recyclerView.setAdapter(guideShowcaseAdapter);
     }
 }

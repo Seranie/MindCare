@@ -63,7 +63,9 @@ public class GuideDocs extends Fragment {
                                 LinearLayout titleLayout = viewHolder.getTitleLayout();
                                 titleLayout.setPressed(true);
                                 titleLayout.setPressed(false);
-//                                titleLayout.performClick();
+                                if (!viewHolder.getIsCurrentlyExpanded()){
+                                    titleLayout.performClick();
+                                }
                             }, 200);
                         }
                     } else {
@@ -82,7 +84,9 @@ public class GuideDocs extends Fragment {
                                             LinearLayout titleLayout = viewHolder.getTitleLayout();
                                             titleLayout.setPressed(true);
                                             titleLayout.setPressed(false);
-//                                            titleLayout.performClick();
+                                            if (!viewHolder.getIsCurrentlyExpanded()){
+                                                titleLayout.performClick();
+                                            }
                                         }, 200);
                                     }
                                 }

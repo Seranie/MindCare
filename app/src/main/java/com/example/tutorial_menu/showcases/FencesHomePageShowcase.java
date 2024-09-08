@@ -36,7 +36,23 @@ public class FencesHomePageShowcase extends Fragment {
                                 "Click this to start making a new contact",
                                 "Okay"
                         ).transparentTarget(true)
-                ).continueOnCancel(true);
+                ).continueOnCancel(true)
+                .listener(new TapTargetSequence.Listener() {
+                    @Override
+                    public void onSequenceFinish() {
+                        getActivity().finish();
+                    }
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+
+                    }
+                });
 
         sequence.start();
     }

@@ -46,7 +46,7 @@ public class RemindersHomePageShowCase extends Fragment {
                 .listener(new TapTargetSequence.Listener() {
                     @Override
                     public void onSequenceFinish() {
-                        getParentFragmentManager().beginTransaction().replace(R.id.showcase_fragment_container, new ChatbuddyHomePageShowcase()).commit();
+                        getActivity().finish();
                     }
 
                     @Override

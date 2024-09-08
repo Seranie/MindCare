@@ -65,18 +65,18 @@ public class Reminders extends ShowcaseFragment {
         reminderItemsRecyclerView.setAdapter(new RemindersReminderAdapter(remindersReminderItems));
         reminderItemsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        MenuHost menuHost = requireActivity();
-        menuHost.addMenuProvider(new MenuProvider() {
-            @Override
-            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menuInflater.inflate(R.menu.reminders_options_menu, menu);
-            }
-
-            @Override
-            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                return false;
-            }
-        });
+//        MenuHost menuHost = requireActivity();
+//        menuHost.addMenuProvider(new MenuProvider() {
+//            @Override
+//            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+//                menuInflater.inflate(R.menu.reminders_options_menu, menu);
+//            }
+//
+//            @Override
+//            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+//                return false;
+//            }
+//        });
 
 //        makeShowcase(getContext(), view.findViewById(R.id.reminders_group_recyclerview), "Groups", "Here you can choose the groups you want to see reminders for.");
 //        makeShowcase(getContext(), view.findViewById(R.id.reminders_reminder_recyclerview), "Reminders", "Here you can either click on the reminders to edit them or click the circle to complete them");
