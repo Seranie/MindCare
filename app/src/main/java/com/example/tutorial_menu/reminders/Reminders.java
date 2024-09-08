@@ -17,11 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tutorial_menu.R;
+import com.example.tutorial_menu.ShowcaseActivity;
+import com.example.tutorial_menu.ShowcaseFragmentCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Reminders extends Fragment {
+public class Reminders extends Fragment implements ShowcaseFragmentCallback {
     RecyclerView reminderItemsRecyclerView;
 
     @Nullable
@@ -75,6 +77,6 @@ public class Reminders extends Fragment {
             }
         });
 
-
     }
+
 }

@@ -1,6 +1,8 @@
 package com.example.tutorial_menu;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
@@ -10,6 +12,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -17,6 +20,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.tutorial_menu.reminders.Reminders;
 import com.google.android.material.navigation.NavigationView;
+
+import smartdevelop.ir.eram.showcaseviewlib.GuideView;
+import smartdevelop.ir.eram.showcaseviewlib.config.DismissType;
+import smartdevelop.ir.eram.showcaseviewlib.config.Gravity;
 
 public class ShowcaseActivity extends AppCompatActivity {
     private NavController navController;
@@ -61,5 +68,27 @@ public class ShowcaseActivity extends AppCompatActivity {
     }
 
 
-
+//    public static void makeShowcase(Context context, View view){
+//        new GuideView.Builder(context)
+//                .setTitle("Guide Title Text")
+//                .setContentText("Guide Description Text\n .....Guide Description Text\n .....Guide Description Text .....")
+//                .setGravity(Gravity.auto) //optional
+//                .setDismissType(DismissType.anywhere) //optional - default DismissType.targetView
+//                .setTargetView(view)
+//                .setContentTextSize(12)//optional
+//                .setTitleTextSize(14)//optional
+//                .build()
+//                .show();
+//    }
+//
+//    private void startShowcaseOnFragment(int fragmentId){
+//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.showcase_fragment_container);
+//        if (fragment != null){
+//            Fragment showcaseFragment = fragment.getChildFragmentManager().findFragmentById(fragmentId);
+//            if (showcaseFragment != null){
+//                showcaseFragment.onShowcaseViewCreated();
+//            }
+//        }
+//
+//    }
 }
