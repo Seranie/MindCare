@@ -35,8 +35,8 @@
         The reminders tool will help you create handy notes that alert you based on datetime set by you.
     </string>
     <string name="docs_card1_description2">
-        On the reminders tool\'s home screen, you can select the group you want to view currently by selecting the appropriate icon with the group name underneath.\n
-        Thereby, any reminders under the selected group will be displayed. Clicking on any of the reminders will allow you to edit them if necessary.\n
+        On the reminders tool\'s home screen, you can select the group you want to view currently by selecting the appropriate icon with the group name underneath.
+        Thereby, any reminders under the selected group will be displayed. Clicking on any of the reminders will allow you to edit them if necessary.
         If you wish to delete any reminders that you have already done, you can simply click the empty circle next to the reminder.
     </string>
     <string name="docs_card1_description3">

@@ -10,7 +10,7 @@
         style="?attr/materialCardViewElevatedStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginVertical="@dimen/guide_tab_card_margin">
+        android:layout_margin="@dimen/guide_tab_card_margin">
 
 
         <LinearLayout

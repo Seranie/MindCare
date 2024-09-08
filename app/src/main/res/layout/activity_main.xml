@@ -20,7 +20,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="#A82525" />
+                android:background="?attr/colorSurface" />
 
 
         </com.google.android.material.appbar.AppBarLayout>
