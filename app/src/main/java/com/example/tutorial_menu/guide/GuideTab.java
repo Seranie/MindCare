@@ -36,8 +36,8 @@ public class GuideTab extends Fragment {
         ArrayList<Fragment> fragmentList = new ArrayList<>();
         GuideDocs guideDocsFragment = new GuideDocs();
         GuideShowcase guideShowcaseFragment = new GuideShowcase();
-        fragmentList.add(guideDocsFragment);
         fragmentList.add(guideShowcaseFragment);
+        fragmentList.add(guideDocsFragment);
 
         // Creates a new adapter to link the viewpager2 in guide_tab
         ViewPager2 viewPager2 = view.findViewById(R.id.guide_view_pager);
@@ -47,7 +47,7 @@ public class GuideTab extends Fragment {
         //Set up titles for each tab
         ArrayList<String> tabTitles = new ArrayList<>();
         tabTitles.add(getString(R.string.guide_tab_introduction));
-        tabTitles.add(getString(R.string.guide_tab_showcase));
+        tabTitles.add(getString(R.string.guide_tab_howto));
 
         //Creates a tablayoutmediator to link the tabs with the VP2
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {tab.setText(tabTitles.get(position));}).attach();

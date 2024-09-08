@@ -27,26 +27,27 @@
                 android:orientation="horizontal"
                 android:padding="8dp">
 
-                <TextView
-                    android:id="@+id/guide_docs_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.9"
-                    android:gravity="center_vertical"
-                    android:text="@string/docs_card2_title"
-                    android:textSize="30sp" />
-
                 <ImageButton
                     android:id="@+id/guide_docs_button"
-                    android:layout_width="17dp"
-                    android:layout_height="45dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="0.1"
                     android:adjustViewBounds="true"
                     android:background="#00FFFFFF"
                     android:clickable="false"
                     android:cropToPadding="true"
                     android:focusable="false"
+                    android:scaleType="fitCenter"
                     app:srcCompat="@drawable/arrow_drop_down" />
+
+                <TextView
+                    android:id="@+id/guide_docs_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.9"
+                    android:text="@string/docs_card2_title"
+                    android:textAppearance="@style/TextAppearance.Material3.DisplayLarge"
+                    android:textSize="30sp" />
 
             </LinearLayout>
 

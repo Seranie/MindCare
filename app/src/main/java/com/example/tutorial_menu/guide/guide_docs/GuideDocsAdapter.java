@@ -123,22 +123,20 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
             if (descriptionIsVisible) {
                 collapseView();
                 isCurrentlyExpanded = false;
-                mDropDownButton.setImageResource(R.drawable.arrow_drop_down);
                 expandedViewHolder = null;
             } else {
                 if (expandedViewHolder != null && expandedViewHolder != this){
                     expandedViewHolder.collapseView();
                     expandedViewHolder.isCurrentlyExpanded = false;
-                    expandedViewHolder.mDropDownButton.setImageResource(R.drawable.arrow_drop_down);
                 }
                 expandView();
-                isCurrentlyExpanded = true;
-                mDropDownButton.setImageResource(R.drawable.arrow_drop_up);
-                expandedViewHolder = this;
             }
         }
 
         private void expandView(){
+            isCurrentlyExpanded = true;
+            mDropDownButton.setImageResource(R.drawable.arrow_drop_up);
+            expandedViewHolder = this;
             ValueAnimator animator = slideAnimator(0, mDescriptionLayoutHeight);
             //add listener to ignore additional clicks during animation
             animator.addListener(new AnimatorListenerAdapter() {
@@ -156,6 +154,7 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
         }
 
         private void collapseView(){
+            mDropDownButton.setImageResource(R.drawable.arrow_drop_down);
             ValueAnimator animator = slideAnimator(mDescriptionLayoutHeight, 0);
             //add listener to ignore additional clicks during animation
             animator.addListener(new AnimatorListenerAdapter() {

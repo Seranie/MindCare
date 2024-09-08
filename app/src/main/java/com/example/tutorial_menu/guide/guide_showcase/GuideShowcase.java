@@ -37,19 +37,19 @@ public class GuideShowcase extends Fragment {
                 R.string.showcase_card1_description
         ));
         cardList.add(new GuideShowcaseCard(
-                R.drawable.doge,
+                R.drawable.contacts_card_image,
                 R.string.showcase_card2_title,
                 R.string.showcase_card2_subtitle,
                 R.string.showcase_card2_description
         ));
         cardList.add(new GuideShowcaseCard(
-                R.drawable.deer,
+                R.drawable.fences_card_image,
                 R.string.showcase_card3_title,
                 R.string.showcase_card3_subtitle,
                 R.string.showcase_card3_description
         ));
         cardList.add(new GuideShowcaseCard(
-                R.drawable.seal,
+                R.drawable.chatbuddy_card_image,
                 R.string.showcase_card4_title,
                 R.string.showcase_card4_subtitle,
                 R.string.showcase_card4_description

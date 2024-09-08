@@ -3,6 +3,7 @@
     <dimen name="guide_docs_image_margin">12dp</dimen>
     <dimen name="guide_docs_image_padding">8dp</dimen>
     <dimen name="guide_docs_card_margin">8dp</dimen>
+    <dimen name="guide_docs_card_title_width"></dimen>
     <dimen name="guide_docs_innertext_padding">8dp</dimen>
 
     <dimen name="guide_showcase_card_margin">8dp</dimen>
