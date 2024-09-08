@@ -62,7 +62,9 @@
                     android:id="@+id/guide_docs_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/docs_card2_description1" />
+                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:text="@string/docs_card2_description1"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <ImageView
                     android:id="@+id/imageView8"
@@ -70,13 +72,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="@dimen/guide_tab_image_padding"
                     app:srcCompat="@drawable/contacts" />
 
                 <TextView
                     android:id="@+id/textView9"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/docs_card2_description2" />
+                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:text="@string/docs_card2_description2"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <ImageView
                     android:id="@+id/imageView9"
@@ -84,13 +90,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="@dimen/guide_tab_image_padding"
                     app:srcCompat="@drawable/choose_photo" />
 
                 <TextView
                     android:id="@+id/textView10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/docs_card2_description3" />
+                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:text="@string/docs_card2_description3"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <ImageView
                     android:id="@+id/imageView10"
@@ -98,13 +108,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="@dimen/guide_tab_image_padding"
                     app:srcCompat="@drawable/enter_name_and_phone_number" />
 
                 <TextView
                     android:id="@+id/textView11"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/docs_card2_description4" />
+                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:text="@string/docs_card2_description4"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <ImageView
                     android:id="@+id/imageView11"
@@ -112,6 +126,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="@dimen/guide_tab_image_padding"
                     app:srcCompat="@drawable/edit_contacts1" />
 
                 <ImageView
@@ -120,6 +136,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="@dimen/guide_tab_image_padding"
                     app:srcCompat="@drawable/edit_contacts2" />
             </LinearLayout>
         </LinearLayout>

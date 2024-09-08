@@ -63,13 +63,17 @@
                     android:id="@+id/guide_docs_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/docs_card1_description1" />
+                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:text="@string/docs_card1_description1"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <TextView
                     android:id="@+id/textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/docs_card1_description2" />
+                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:text="@string/docs_card1_description2"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <ImageView
                     android:id="@+id/imageView"
@@ -77,13 +81,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="@dimen/guide_tab_image_padding"
                     android:src="@drawable/home_page" />
 
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/docs_card1_description3" />
+                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:text="@string/docs_card1_description3"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <ImageView
                     android:id="@+id/imageView4"
@@ -91,13 +99,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="@dimen/guide_tab_image_padding"
                     app:srcCompat="@drawable/choose_group" />
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/docs_card1_description4" />
+                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:text="@string/docs_card1_description4"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <ImageView
                     android:id="@+id/imageView2"
@@ -105,13 +117,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="@dimen/guide_tab_image_padding"
                     app:srcCompat="@drawable/title" />
 
                 <TextView
                     android:id="@+id/textView5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/docs_card1_description5" />
+                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:text="@string/docs_card1_description5"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <ImageView
                     android:id="@+id/imageView3"
@@ -119,13 +135,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="@dimen/guide_tab_image_padding"
                     app:srcCompat="@drawable/schedule" />
 
                 <TextView
                     android:id="@+id/textView6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/docs_card1_description6" />
+                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:text="@string/docs_card1_description6"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <ImageView
                     android:id="@+id/imageView5"
@@ -133,13 +153,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="@dimen/guide_tab_image_padding"
                     app:srcCompat="@drawable/reminders" />
 
                 <TextView
                     android:id="@+id/textView7"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/docs_card1_description7" />
+                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:text="@string/docs_card1_description7"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <ImageView
                     android:id="@+id/imageView6"
@@ -147,13 +171,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="@dimen/guide_tab_image_padding"
                     app:srcCompat="@drawable/repeat" />
 
                 <TextView
                     android:id="@+id/textView8"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/docs_card1_description8" />
+                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:text="@string/docs_card1_description8"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <ImageView
                     android:id="@+id/imageView7"
@@ -161,6 +189,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="@dimen/guide_tab_image_padding"
                     app:srcCompat="@drawable/ringtone" />
 
             </LinearLayout>

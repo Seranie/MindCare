@@ -63,7 +63,9 @@
                     android:id="@+id/guide_docs_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/docs_card4_description1" />
+                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:text="@string/docs_card4_description1"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <ImageView
                     android:id="@+id/imageView22"
@@ -71,13 +73,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="@dimen/guide_tab_image_padding"
                     app:srcCompat="@drawable/chat_buddy_home_page" />
 
                 <TextView
                     android:id="@+id/textView19"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/docs_card4_description2" />
+                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:text="@string/docs_card4_description2"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <ImageView
                     android:id="@+id/imageView24"
@@ -85,6 +91,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="@dimen/guide_tab_image_padding"
                     app:srcCompat="@drawable/edit_avatar_option" />
 
                 <ImageView
@@ -93,12 +101,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="@dimen/guide_tab_image_padding"
                     app:srcCompat="@drawable/edit_avatar" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/docs_card4_description3" />
+                    android:padding="@dimen/guide_tab_innertext_padding"
+                    android:text="@string/docs_card4_description3"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <ImageView
                     android:id="@+id/imageView26"
@@ -106,6 +118,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/guide_tab_image_margin"
                     android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="@dimen/guide_tab_image_padding"
                     app:srcCompat="@drawable/reset_chat_option" />
             </LinearLayout>
         </LinearLayout>

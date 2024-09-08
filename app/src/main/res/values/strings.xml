@@ -40,28 +40,28 @@
         If you wish to delete any reminders that you have already done, you can simply click the empty circle next to the reminder.
     </string>
     <string name="docs_card1_description3">
-        When you start creating a new Reminder, you can choose to either select a pre-existing group or create a new one.\n
+        When you start creating a new Reminder, you can choose to either select a pre-existing group or create a new one.
         This is to provide a way to categorize each Reminder to tailor to your needs, allowing you to sort them accordingly as needed.
     </string>
     <string name="docs_card1_description4">
-        The Title of the Reminder will be what is displayed on notifications as well as on the Reminders.\n
+        The Title of the Reminder will be what is displayed on notifications as well as on the Reminders.
         Subsequently, the Notes section allow you to input any additional information regarding the Reminder.
     </string>
     <string name="docs_card1_description5">
-        The Schedule date indicates the deadline of the Reminder, which is the date that the Repeat interval will be based upon.\n
-        An alert is triggered on the day of the Schedule date as well.\n\n
+        The Schedule date indicates the deadline of the Reminder, which is the date that the Repeat interval will be based upon.
+        An alert is triggered on the day of the Schedule date as well.
     </string>
     <string name="docs_card1_description6">
-        The Reminders section allows you to add multiple date and time points, each of which will trigger an alert accordingly as well.\n
-        These date/time points will be automatically re-calculated accordingly if the Reminder has a Repeat interval set.\n\n
+        The Reminders section allows you to add multiple date and time points, each of which will trigger an alert accordingly as well.
+        These date/time points will be automatically re-calculated accordingly if the Reminder has a Repeat interval set.
     </string>
     <string name="docs_card1_description7">
-        The Repeat section allows you to select the interval that the Reminder will repeat again based on the Schedule date.\n
-        You can also create a customized repeat interval if necessary.\n\n
+        The Repeat section allows you to select the interval that the Reminder will repeat again based on the Schedule date.
+        You can also create a customized repeat interval if necessary.
     </string>
     <string name="docs_card1_description8">
-        The Ringtone section allows you to either turn on or off a ringtone that plays when the alert triggers.\n
-        You can also set any .mp3 or .wav file from your system files as the ringtone.\n
+        The Ringtone section allows you to either turn on or off a ringtone that plays when the alert triggers.
+        You can also set any .mp3 or .wav file from your system files as the ringtone.
     </string>
 
 
@@ -81,7 +81,7 @@
 
     <string name="docs_card3_title">Fences</string>
     <string name="docs_card3_description1">
-        The fences tool allows a caregiver account to set up geo-fences with the linked patient, allowing alerts to be sent if the patient leaves the fence.\n
+        The fences tool allows a caregiver account to set up geo-fences with the linked patient, allowing alerts to be sent if the patient leaves the fence.
         It requires the caregiver to link up with a patient first before it can be used.
     </string>
     <string name="docs_card3_description2">
@@ -103,8 +103,8 @@
         Once linked, the caregiver can create a new fence by clicking on the centre button, and customize by dragging on the map, adjusting the radius as well as adding a tag name.
     </string>
     <string name="docs_card3_description8">
-        The caregiver can edit existing fences at anytime by clicking on the \"Manage Fences\" menu.\n
-        Note patients will not be able to edit fences, and can only see them.\n
+        The caregiver can edit existing fences at anytime by clicking on the \"Manage Fences\" menu.
+        Note patients will not be able to edit fences, and can only see them.
         You can also click on the locations in order to jump to them on the map.
     </string>
 
