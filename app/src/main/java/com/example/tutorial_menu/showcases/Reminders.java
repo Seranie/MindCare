@@ -1,4 +1,4 @@
-package com.example.tutorial_menu.reminders;
+package com.example.tutorial_menu.showcases;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,18 +12,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tutorial_menu.R;
-import com.example.tutorial_menu.ShowcaseActivity;
-import com.example.tutorial_menu.ShowcaseFragmentCallback;
+import com.example.tutorial_menu.reminders.RemindersGroupAdapter;
+import com.example.tutorial_menu.reminders.RemindersGroupItem;
+import com.example.tutorial_menu.reminders.RemindersReminderAdapter;
+import com.example.tutorial_menu.reminders.RemindersReminderItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Reminders extends Fragment implements ShowcaseFragmentCallback {
+public class Reminders extends ShowcaseFragment{
     RecyclerView reminderItemsRecyclerView;
 
     @Nullable
@@ -77,6 +78,11 @@ public class Reminders extends Fragment implements ShowcaseFragmentCallback {
             }
         });
 
+    }
+
+    @Override
+    public void startShowcase() {
+        makeShowcase(view.findViewById(R.id.reminders_group_recyclerview), "Reycler", "Description");
     }
 
 }

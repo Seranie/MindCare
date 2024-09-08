@@ -2,18 +2,22 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/showcase_nav_graph"
-    app:startDestination="@id/home2">
+    app:startDestination="@id/showcasePlaceholderFragment">
 
     <fragment
         android:id="@+id/reminders"
-        android:name="com.example.tutorial_menu.reminders.Reminders"
+        android:name="com.example.tutorial_menu.showcases.Reminders"
         android:label="Reminders" />
     <fragment
         android:id="@+id/guideShowcase2"
         android:name="com.example.tutorial_menu.guide.guide_showcase.GuideShowcase"
         android:label="GuideShowcase" />
     <fragment
-        android:id="@+id/home2"
-        android:name="com.example.tutorial_menu.Home"
-        android:label="Home" />
+        android:id="@+id/showcasePlaceholderFragment"
+        android:name="com.example.tutorial_menu.showcases.ShowcasePlaceholderFragment"
+        android:label="ShowcasePlaceholderFragment" >
+        <action
+            android:id="@+id/action_showcasePlaceholderFragment_to_reminders"
+            app:destination="@id/reminders" />
+    </fragment>
 </navigation>

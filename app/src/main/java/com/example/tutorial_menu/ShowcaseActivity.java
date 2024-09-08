@@ -1,10 +1,10 @@
 package com.example.tutorial_menu;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -14,16 +14,13 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.tutorial_menu.reminders.Reminders;
+import com.example.tutorial_menu.showcases.ShowcaseFragment;
 import com.google.android.material.navigation.NavigationView;
-
-import smartdevelop.ir.eram.showcaseviewlib.GuideView;
-import smartdevelop.ir.eram.showcaseviewlib.config.DismissType;
-import smartdevelop.ir.eram.showcaseviewlib.config.Gravity;
 
 public class ShowcaseActivity extends AppCompatActivity {
     private NavController navController;
@@ -57,6 +54,14 @@ public class ShowcaseActivity extends AppCompatActivity {
         switch (fragmentId){
             case 0:
                 navController.navigate(R.id.reminders);
+                navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+                    @Override
+                    public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
+                        startShowcaseOnFragment(navHostFragment, R.id.reminders);
+
+                    }
+                });
+
         }
 
     }
@@ -81,14 +86,15 @@ public class ShowcaseActivity extends AppCompatActivity {
 //                .show();
 //    }
 //
-//    private void startShowcaseOnFragment(int fragmentId){
-//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.showcase_fragment_container);
-//        if (fragment != null){
-//            Fragment showcaseFragment = fragment.getChildFragmentManager().findFragmentById(fragmentId);
+    private void startShowcaseOnFragment(NavHostFragment fragment, int fragmentId){
+        if (fragment != null){
+//            ShowcaseFragment showcaseFragment = (ShowcaseFragment) fragment.getChildFragmentManager().getPrimaryNavigationFragment();
+//            Log.i("INFO",String.valueOf(showcaseFragment));
 //            if (showcaseFragment != null){
-//                showcaseFragment.onShowcaseViewCreated();
+//                showcaseFragment.startShowcase();
+//                Log.i("INFO","HI");
 //            }
-//        }
-//
-//    }
+        }
+
+    }
 }
