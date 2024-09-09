@@ -125,5 +125,24 @@
     <string name="reminders_reminder_note">Remember something</string>
 
 
+    <string name="reminders_showcase_options_title">Options</string>
+    <string name="reminders_showcase_options_description">You can sort reminders by creation or due date here</string>
+    <string name="reminders_showcase_fab_title">Create Reminder</string>
+    <string name="reminders_showcase_fab_description">Click here to create a new reminder and set it up</string>
+    
+    <string name="fences_showcase_options_title">Options</string>
+    <string name="fences_showcase_options_description">You can edit fences, link a patient account, or check alerts here</string>
+    <string name="fences_showcase_fab_title">Create Fence</string>
+    <string name="fences_showcase_fab_description">Click here to create a new fence and set it up</string>
+
+    <string name="contacts_showcase_options_title">Options</string>
+    <string name="contacts_showcase_options_description">You can edit your existing contacts here</string>
+    <string name="contacts_showcase_fab_title">Add Contact</string>
+    <string name="contacts_showcase_fab_description">Click here to add a new contact</string>
+
+    <string name="chatbuddy_showcase_options_title">Options</string>
+    <string name="chatbuddy_showcase_options_description">You can change the avatar and reset the chat here</string>
+    <string name="chatbuddy_showcase_fab_title">Send Message</string>
+    <string name="chatbuddy_showcase_fab_description">Click here to send a message</string>
 
 </resources>

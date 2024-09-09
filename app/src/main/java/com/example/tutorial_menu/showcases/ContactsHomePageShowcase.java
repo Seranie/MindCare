@@ -30,13 +30,13 @@ public class ContactsHomePageShowcase extends Fragment {
                 .targets(
                         TapTarget.forView(
                                 view.findViewById(R.id.contacts_home_page_showcase_options),
-                                "This is the options menu where you can sort contacts.",
-                                "Okay"
+                                getResources().getString(R.string.contacts_showcase_options_title),
+                                getResources().getString(R.string.contacts_showcase_options_description)
                         ).transparentTarget(true),
                         TapTarget.forView(
                                 view.findViewById(R.id.contacts_home_page_showcase_fab),
-                                "Click this to start making a new contact",
-                                "Okay"
+                                getResources().getString(R.string.contacts_showcase_fab_title),
+                                getResources().getString(R.string.contacts_showcase_fab_description)
                         ).transparentTarget(true)
                 )
                 .continueOnCancel(true)

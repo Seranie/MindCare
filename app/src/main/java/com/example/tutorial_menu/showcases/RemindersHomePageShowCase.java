@@ -33,13 +33,13 @@ public class RemindersHomePageShowCase extends Fragment {
                 .targets(
                         TapTarget.forView(
                                 view.findViewById(R.id.reminders_home_page_showcase_options),
-                                "This is the options menu where you can sort contacts.",
-                                "Okay"
+                                getResources().getString(R.string.reminders_showcase_options_title),
+                                getResources().getString(R.string.reminders_showcase_options_description)
                         ).transparentTarget(true),
                         TapTarget.forView(
                                 view.findViewById(R.id.reminders_home_page_showcase_fab),
-                                "Click this to start a new reminder",
-                                "Okay"
+                                getResources().getString(R.string.reminders_showcase_fab_title),
+                                getResources().getString(R.string.reminders_showcase_fab_description)
                         ).transparentTarget(true)
                 )
                 .continueOnCancel(true)
