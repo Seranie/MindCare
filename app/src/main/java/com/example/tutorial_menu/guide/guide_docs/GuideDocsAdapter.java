@@ -3,6 +3,10 @@ package com.example.tutorial_menu.guide.guide_docs;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.content.Context;
+import android.media.AudioAttributes;
+import android.media.SoundPool;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +24,27 @@ import java.util.List;
 public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.GuideDocsViewHolder> {
     private final List<GuideDocsCard> cardList;
     private GuideDocsViewHolder expandedViewHolder = null;
+    private SoundPool soundPool;
 
-    public GuideDocsAdapter(List<GuideDocsCard> cardList){
+
+    private final int MAX_STREAMS = 5;
+    private final float LEFT_VOLUME = 1.0f;
+    private final float RIGHT_VOLUME = 1.0f;
+    private final int PRIORITY = 0;
+    private final int LOOP = 0;
+    private final float RATE = 1.0f;
+    private int soundId;
+
+    public GuideDocsAdapter(List<GuideDocsCard> cardList, Context context){
         this.cardList = cardList;
+        soundPool = new SoundPool.Builder()
+                .setAudioAttributes(new AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                        .build())
+                .setMaxStreams(MAX_STREAMS)
+                .build();
+        soundId = soundPool.load(context, R.raw.expand_click, 1);
     }
 
 
@@ -78,6 +100,7 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
         private boolean isAnimating = false;
         private boolean isCurrentlyExpanded = false;
 
+
         public GuideDocsViewHolder(@NonNull View itemView) {
             super(itemView);
             mDropDownButton = itemView.findViewById(R.id.guide_docs_button);
@@ -108,6 +131,8 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
 
         @Override
         public void onClick(View view) {
+            Log.i("INFO", String.valueOf(soundId));
+            soundPool.play(soundId, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY, LOOP, RATE);
             //Display/hide text description of the tool and flip the drop arrow
             if (isAnimating){
                 //if animation is playing ignore any additional clicks

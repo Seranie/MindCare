@@ -40,7 +40,7 @@ public class GuideDocs extends Fragment {
         //Set recyclerview layoutmanager and adapter.
         recyclerView = view.findViewById(R.id.guide_docs_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        GuideDocsAdapter guideDocsAdapter = new GuideDocsAdapter(cardList);
+        GuideDocsAdapter guideDocsAdapter = new GuideDocsAdapter(cardList, getContext());
         recyclerView.setAdapter(guideDocsAdapter);
 
         TabPositionViewModel tabPositionViewModel = new ViewModelProvider(getParentFragment()).get(TabPositionViewModel.class);

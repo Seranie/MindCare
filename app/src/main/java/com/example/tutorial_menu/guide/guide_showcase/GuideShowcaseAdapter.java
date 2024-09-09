@@ -1,5 +1,8 @@
 package com.example.tutorial_menu.guide.guide_showcase;
 
+import android.content.Context;
+import android.media.AudioAttributes;
+import android.media.SoundPool;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +24,29 @@ public class GuideShowcaseAdapter extends RecyclerView.Adapter<GuideShowcaseAdap
     private final List<GuideShowcaseCard> cardList;
     private final TabPositionViewModel tabPositionViewModel;
     private final ShowcaseChangeViewModel showcaseViewModel;
+    private SoundPool soundPool;
+    private int soundId;
 
-    public GuideShowcaseAdapter(List<GuideShowcaseCard> cardList, TabPositionViewModel tabPositionViewModel, ShowcaseChangeViewModel showcaseViewModel){
+    private final int MAX_STREAMS = 5;
+    private final float LEFT_VOLUME = 1.0f;
+    private final float RIGHT_VOLUME = 1.0f;
+    private final int PRIORITY = 0;
+    private final int LOOP = 0;
+    private final float RATE = 1.0f;
+
+    public GuideShowcaseAdapter(List<GuideShowcaseCard> cardList, TabPositionViewModel tabPositionViewModel, ShowcaseChangeViewModel showcaseViewModel, Context context){
         this.cardList = cardList;
         this.tabPositionViewModel = tabPositionViewModel;
         this.showcaseViewModel = showcaseViewModel;
+        soundPool = new SoundPool.Builder()
+                .setAudioAttributes(
+                    new AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                            .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                            .build()
+                ).setMaxStreams(MAX_STREAMS)
+                .build();
+        soundId = soundPool.load(context, R.raw.show_me_click, 1);
     }
 
     @NonNull
@@ -80,6 +101,7 @@ public class GuideShowcaseAdapter extends RecyclerView.Adapter<GuideShowcaseAdap
 
             switch ((String) view.getTag()){
                 case "show_me_button":
+                    soundPool.play(soundId, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY, LOOP, RATE);
                     showcaseViewModel.setShowcaseChangeId(adapterPosition);
                     break;
                 case "learn_more_button":

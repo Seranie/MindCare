@@ -1,7 +1,6 @@
 package com.example.tutorial_menu.guide.guide_showcase;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +20,12 @@ import java.util.List;
 public class GuideShowcase extends Fragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.guide_showcase, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState){
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         //Create a list of Card objects, each card will represent each tool available in the app
         List<GuideShowcaseCard> cardList = new ArrayList<>();
         //TODO change drawable to tool representations
@@ -63,7 +62,7 @@ public class GuideShowcase extends Fragment {
         //TODO add item animations
         RecyclerView recyclerView = view.findViewById(R.id.guide_showcase_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        GuideShowcaseAdapter guideShowcaseAdapter = new GuideShowcaseAdapter(cardList, tabPositionViewModel, showcaseViewModel);
+        GuideShowcaseAdapter guideShowcaseAdapter = new GuideShowcaseAdapter(cardList, tabPositionViewModel, showcaseViewModel, getContext());
         recyclerView.setAdapter(guideShowcaseAdapter);
     }
 }

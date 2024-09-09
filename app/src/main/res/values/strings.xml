@@ -22,7 +22,7 @@
     <string name="showcase_card3_title">Fences</string>
     <string name="showcase_card3_subtitle">Set up geo-fences and receive alerts</string>
     <string name="showcase_card3_description">
-        Caregivers can set geo-fences to monitor patient movements, receiving alerts if fences are crossed.\n
+        Caregivers can set geo-fences to monitor patient movements, receiving alerts if fences are crossed.
         Patients can view the fences but not modify them, ensuring safety and peace of mind.
     </string>
 
