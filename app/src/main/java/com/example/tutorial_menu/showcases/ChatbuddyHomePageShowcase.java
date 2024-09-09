@@ -42,7 +42,7 @@ public class ChatbuddyHomePageShowcase extends Fragment {
                 .listener(new TapTargetSequence.Listener() {
                     @Override
                     public void onSequenceFinish() {
-                        getActivity().finish();
+                        getActivity().finishAfterTransition();
                     }
 
                     @Override

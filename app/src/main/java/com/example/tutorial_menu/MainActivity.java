@@ -1,7 +1,11 @@
 package com.example.tutorial_menu;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        getWindow().setEnterTransition( new Fade());
+        getWindow().setExitTransition( new Fade());
 
         // Find Navigation Components
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
@@ -89,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putInt("fragment_id", fragmentId);
         intent.putExtras(bundle);
-        startActivity(intent);
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 
 }

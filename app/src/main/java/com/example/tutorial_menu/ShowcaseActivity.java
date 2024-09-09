@@ -1,6 +1,8 @@
 package com.example.tutorial_menu;
 
 import android.os.Bundle;
+import android.transition.Explode;
+import android.transition.Fade;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
@@ -40,6 +42,8 @@ public class ShowcaseActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        getWindow().setEnterTransition( new Fade());
+        getWindow().setExitTransition( new Fade());
 
 //        Toolbar toolbar = findViewById(R.id.showcase_toolbar);
 //        setSupportActionBar(toolbar);
