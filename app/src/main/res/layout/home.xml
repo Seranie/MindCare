@@ -20,7 +20,8 @@
         app:fabAlignmentMode="center"
         app:fabAnchorMode="cradle"
         app:hideOnScroll="true"
-        app:paddingBottomSystemWindowInsets="false">
+        app:paddingBottomSystemWindowInsets="false"
+        android:layout_marginBottom="?attr/actionBarSize">
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView

@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.tutorial_menu.placeholder_fragments.PlaceholderFragment;
 import com.example.tutorial_menu.reminders.Reminders;
 
 import java.util.ArrayList;
@@ -30,10 +31,17 @@ public class Home extends Fragment{
 
         //Fragment list to hold tool fragments
         ArrayList<Fragment> fragmentList = new ArrayList<>();
-        Reminders remindersFragment = new Reminders();
+        PlaceholderFragment remindersFragment = new PlaceholderFragment().setText("Reminders");
+        PlaceholderFragment contactsFragment = new PlaceholderFragment().setText("Contacts");
+        PlaceholderFragment fencesFragment = new PlaceholderFragment().setText("Fences");
+        PlaceholderFragment chatBuddyFragment = new PlaceholderFragment().setText("Chat Buddy");
+
 
         //Add fragments to array
         fragmentList.add(remindersFragment);
+        fragmentList.add(contactsFragment);
+        fragmentList.add(fencesFragment);
+        fragmentList.add(chatBuddyFragment);
 
         //Get viewpager2 and set adapter
         ViewPager2 viewPager = view.findViewById(R.id.tools_view_pager);
