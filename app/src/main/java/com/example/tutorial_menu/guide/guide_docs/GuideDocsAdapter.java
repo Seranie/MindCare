@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,9 +37,10 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
     private final float RATE = 1.0f;
     private int soundId;
 
-    LinearLayoutManager layoutManager;
+    NestedScrollView scrollView;
 
-    public GuideDocsAdapter(List<GuideDocsCard> cardList, Context context, LinearLayoutManager layoutManager){
+
+    public GuideDocsAdapter(List<GuideDocsCard> cardList, Context context, NestedScrollView scrollView){
         this.cardList = cardList;
         soundPool = new SoundPool.Builder()
                 .setAudioAttributes(new AudioAttributes.Builder()
@@ -48,7 +50,7 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
                 .setMaxStreams(MAX_STREAMS)
                 .build();
         soundId = soundPool.load(context, R.raw.expand_click, 1);
-        this.layoutManager = layoutManager;
+        this.scrollView = scrollView;
     }
 
 
@@ -177,7 +179,7 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     isAnimating = false;
-                    layoutManager.scrollToPositionWithOffset(0, mDescriptionLayoutHeight);
+                    scrollView.smoothScrollTo(0,0);
                 }
             });
             animator.start();
@@ -196,7 +198,6 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     isAnimating = false;
-//                    layoutManager.scrollToPositionWithOffset(0,0);
                 }
             });
             animator.start();

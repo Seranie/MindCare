@@ -8,6 +8,7 @@ import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,7 +42,7 @@ public class GuideDocs extends Fragment {
         recyclerView = view.findViewById(R.id.guide_docs_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        GuideDocsAdapter guideDocsAdapter = new GuideDocsAdapter(cardList, getContext(), layoutManager);
+        GuideDocsAdapter guideDocsAdapter = new GuideDocsAdapter(cardList, getContext(), view.findViewById(R.id.guide_docs_scroll_view));
         recyclerView.setAdapter(guideDocsAdapter);
 
         TabPositionViewModel tabPositionViewModel = new ViewModelProvider(getParentFragment()).get(TabPositionViewModel.class);

@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/guide_docs_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
