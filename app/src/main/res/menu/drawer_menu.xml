@@ -2,17 +2,19 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group>
+    <group android:id="@+id/drawer_home_menu">
         <item
             android:title="@string/drawer_menu_home"
             android:id="@+id/homeTabFragment"
             android:icon="@drawable/drawer_home_icon"/>
     </group>
 
-    <item
-        android:title="@string/drawer_menu_guide"
-        android:id="@+id/guideTabFragment"
-        android:icon="@drawable/drawer_guide_icon"/>
+    <group android:id="@+id/drawer_guide_menu">
+        <item
+            android:title="@string/drawer_menu_guide"
+            android:id="@+id/guideTabFragment"
+            android:icon="@drawable/drawer_guide_icon"/>
+    </group>
 
 
 </menu>
