@@ -39,8 +39,9 @@ public class GuideDocs extends Fragment {
         //Create adapter
         //Set recyclerview layoutmanager and adapter.
         recyclerView = view.findViewById(R.id.guide_docs_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        GuideDocsAdapter guideDocsAdapter = new GuideDocsAdapter(cardList, getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        GuideDocsAdapter guideDocsAdapter = new GuideDocsAdapter(cardList, getContext(), layoutManager);
         recyclerView.setAdapter(guideDocsAdapter);
 
         TabPositionViewModel tabPositionViewModel = new ViewModelProvider(getParentFragment()).get(TabPositionViewModel.class);
@@ -53,7 +54,6 @@ public class GuideDocs extends Fragment {
                 public void onGlobalLayout() {
                     //Ensure recyclerview is laid out first
                     recyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
                     //If recycler item is already on screen, simply get the viewholder and perform click action
                     if (layoutManager.findFirstVisibleItemPosition() <= tabPosition && tabPosition <= layoutManager.findLastVisibleItemPosition()) {
