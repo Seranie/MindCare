@@ -6,15 +6,15 @@
 
     <fragment
         android:id="@+id/reminders"
-        android:name="com.example.tutorial_menu.reminders.Reminders"
+        android:name="com.example.mind_care.reminders.Reminders"
         android:label="Reminders" />
     <fragment
         android:id="@+id/guideShowcase2"
-        android:name="com.example.tutorial_menu.guide.guide_showcase.GuideShowcase"
+        android:name="com.example.mind_care.guide.guide_showcase.GuideShowcase"
         android:label="GuideShowcase" />
     <fragment
         android:id="@+id/showcasePlaceholderFragment"
-        android:name="com.example.tutorial_menu.showcases.ShowcasePlaceholderFragment"
+        android:name="com.example.mind_care.showcases.ShowcasePlaceholderFragment"
         android:label="ShowcasePlaceholderFragment" >
         <action
             android:id="@+id/action_showcasePlaceholderFragment_to_reminders"

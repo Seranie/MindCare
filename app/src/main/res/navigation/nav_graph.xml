@@ -6,15 +6,15 @@
 
     <fragment
         android:id="@+id/guideTabFragment"
-        android:name="com.example.tutorial_menu.guide.GuideTab"
+        android:name="com.example.mind_care.guide.GuideTab"
         android:label="Guide" />
     <fragment
         android:id="@+id/homeTabFragment"
-        android:name="com.example.tutorial_menu.Home"
+        android:name="com.example.mind_care.Home"
         android:label="Home" />
     <fragment
         android:id="@+id/guideDocs"
-        android:name="com.example.tutorial_menu.guide.guide_docs.GuideDocs"
+        android:name="com.example.mind_care.guide.guide_docs.GuideDocs"
         android:label="GuideDocs" >
         <argument
             android:name="cardNumber"
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/guideShowcase"
-        android:name="com.example.tutorial_menu.guide.guide_showcase.GuideShowcase"
+        android:name="com.example.mind_care.guide.guide_showcase.GuideShowcase"
         android:label="GuideShowcase" >
         <action
             android:id="@+id/action_guideShowcase_to_guideDocs"
