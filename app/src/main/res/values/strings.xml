@@ -132,6 +132,17 @@
     <string name="reminders_showcase_options_description">You can sort reminders by creation or due date here</string>
     <string name="reminders_showcase_fab_title">Create Reminder</string>
     <string name="reminders_showcase_fab_description">Click here to create a new reminder and set it up</string>
+
+    <string name="reminders_new_reminder_new_group_title">Create A New Group</string>
+    <string name="reminders_new_reminder_new_group_description">Click here to create a new group, note reminders must belong to a group.</string>
+    <string name="reminders_new_reminder_schedule_title">Schedule deadline</string>
+    <string name="reminders_new_reminder_schedule_description">Click here to set the deadline whereby you will receive an alert</string>
+    <string name="reminders_new_reminder_reminder_title">Add a new reminder date</string>
+    <string name="reminders_new_reminder_reminder_description">This date/time will alert you before the deadline</string>
+    <string name="reminders_new_reminder_set_repeat_title">Repeat interval</string>
+    <string name="reminders_new_reminder_set_repeat_description">This interval will help you set a new reminder when this reminder\'s deadline is up</string>
+    <string name="reminders_new_reminder_set_ringtone_title">Set ringtone</string>
+    <string name="reminders_new_reminder_set_ringtone_description">Select ringtone, on/off sound alerts here</string>
     
     <string name="fences_showcase_options_title">Options</string>
     <string name="fences_showcase_options_description">You can edit fences, link a patient account, or check alerts here</string>
@@ -147,5 +158,8 @@
     <string name="chatbuddy_showcase_options_description">You can change the avatar and reset the chat here</string>
     <string name="chatbuddy_showcase_fab_title">Send Message</string>
     <string name="chatbuddy_showcase_fab_description">Click here to send a message</string>
+
+
+
 
 </resources>

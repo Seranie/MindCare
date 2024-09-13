@@ -1,4 +1,4 @@
-package com.example.tutorial_menu.showcases;
+package com.example.tutorial_menu.showcases.fences;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

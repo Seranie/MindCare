@@ -1,13 +1,11 @@
 package com.example.tutorial_menu;
 
 import android.os.Bundle;
-import android.transition.Explode;
 import android.transition.Fade;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -15,18 +13,17 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.tutorial_menu.reminders.Reminders;
-import com.example.tutorial_menu.showcases.ChatbuddyHomePageShowcase;
-import com.example.tutorial_menu.showcases.ContactsHomePageShowcase;
-import com.example.tutorial_menu.showcases.FencesHomePageShowcase;
-import com.example.tutorial_menu.showcases.RemindersHomePageShowCase;
-import com.example.tutorial_menu.showcases.ShowcaseFragment;
-import com.google.android.material.navigation.NavigationView;
+import com.example.tutorial_menu.showcases.ShowcaseViewmodel;
+import com.example.tutorial_menu.showcases.chatbuddy.ChatbuddyHomePageShowcase;
+import com.example.tutorial_menu.showcases.contacts.ContactsHomePageShowcase;
+import com.example.tutorial_menu.showcases.fences.FencesHomePageShowcase;
+import com.example.tutorial_menu.showcases.reminders.RemindersHomePageShowcase;
 
 public class ShowcaseActivity extends AppCompatActivity {
     private NavController navController;
@@ -45,38 +42,41 @@ public class ShowcaseActivity extends AppCompatActivity {
         getWindow().setEnterTransition( new Fade());
         getWindow().setExitTransition( new Fade());
 
-//        Toolbar toolbar = findViewById(R.id.showcase_toolbar);
-//        setSupportActionBar(toolbar);
-
+        //set up navigationUI
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.showcase_fragment_container);
         navController = navHostFragment.getNavController();
         DrawerLayout drawerLayout = findViewById(R.id.showcase_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).setOpenableLayout(drawerLayout).build();
 
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-//        NavigationUI.setupWithNavController((NavigationView) findViewById(R.id.showcase_navigation_view), navController);
 
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        int fragmentId = getIntent().getExtras().getInt("fragment_id");
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        Fragment currentFragment = null;
+        ShowcaseViewmodel viewModel = new ViewModelProvider(this).get(ShowcaseViewmodel.class);
 
+        //Swap initial starting fragment based on button that triggered it
+        int fragmentId = getIntent().getExtras().getInt("fragment_id");
         switch (fragmentId){
             case 0:
-                currentFragment = new RemindersHomePageShowCase();
+                viewModel.setCurrentFragment(new RemindersHomePageShowcase());
                 break;
             case 1:
-                currentFragment = new ContactsHomePageShowcase();
+                viewModel.setCurrentFragment(new ContactsHomePageShowcase());
                 break;
             case 2:
-                currentFragment = new FencesHomePageShowcase();
+                viewModel.setCurrentFragment(new FencesHomePageShowcase());
                 break;
             case 3:
-                currentFragment = new ChatbuddyHomePageShowcase();
+                viewModel.setCurrentFragment(new ChatbuddyHomePageShowcase());
                 break;
         }
-        transaction.replace(R.id.showcase_fragment_container, currentFragment).commit();
+
+        // Setup viewmodel to observe of fragment changes and swap container accordingly
+        viewModel.getCurrentFragment().observe(this, fragment -> {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.showcase_fragment_container, fragment);
+            fragmentTransaction.commit();
+        });
+
 
 
 

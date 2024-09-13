@@ -1,4 +1,4 @@
-package com.example.tutorial_menu.showcases;
+package com.example.tutorial_menu.showcases.reminders;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,16 +8,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.tutorial_menu.R;
+import com.example.tutorial_menu.showcases.ShowcaseViewmodel;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
-
-public class RemindersHomePageShowCase extends Fragment {
+public class RemindersHomePageShowcase extends Fragment {
 
     @Nullable
     @Override
@@ -46,7 +44,8 @@ public class RemindersHomePageShowCase extends Fragment {
                 .listener(new TapTargetSequence.Listener() {
                     @Override
                     public void onSequenceFinish() {
-                        getActivity().finishAfterTransition();
+                        ShowcaseViewmodel viewModel = new ViewModelProvider(getActivity()).get(ShowcaseViewmodel.class);
+                        viewModel.setCurrentFragment(new RemindersCreateNewReminderShowcase());
                     }
 
                     @Override
