@@ -1,4 +1,4 @@
-package com.example.mind_care.reminders;
+package com.example.mind_care.home.reminders.model;
 
 public class RemindersReminderItem {
     //TODO incomplete class, represents a single reminder in the reminders tool

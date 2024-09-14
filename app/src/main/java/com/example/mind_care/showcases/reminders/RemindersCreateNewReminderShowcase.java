@@ -19,7 +19,7 @@ public class RemindersCreateNewReminderShowcase extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.reminders_create_reminder_page, container, false);
+        return inflater.inflate(R.layout.reminders_create_reminder_page_showcase, container, false);
     }
 
     @Override

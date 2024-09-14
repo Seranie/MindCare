@@ -28,4 +28,8 @@
             android:id="@+id/action_guideShowcase_to_guideDocs"
             app:destination="@id/guideDocs" />
     </fragment>
+    <fragment
+        android:id="@+id/createNewReminderFragment"
+        android:name="com.example.mind_care.home.reminders.fragment.CreateNewReminderFragment"
+        android:label="CreateNewReminderFragment" />
 </navigation>

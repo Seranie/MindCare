@@ -1,4 +1,4 @@
-package com.example.mind_care.reminders;
+package com.example.mind_care.home.reminders.model;
 
 import java.util.List;
 

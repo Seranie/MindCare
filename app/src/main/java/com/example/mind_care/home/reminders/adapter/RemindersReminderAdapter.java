@@ -1,4 +1,4 @@
-package com.example.mind_care.reminders;
+package com.example.mind_care.home.reminders.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mind_care.R;
+import com.example.mind_care.home.reminders.model.RemindersReminderItem;
 
 import java.util.List;
 

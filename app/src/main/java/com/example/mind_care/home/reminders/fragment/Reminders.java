@@ -1,6 +1,7 @@
-package com.example.mind_care.reminders;
+package com.example.mind_care.home.reminders.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +12,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mind_care.R;
-import com.example.mind_care.showcases.ShowcaseFragment;
+import com.example.mind_care.home.BaseTools;
+import com.example.mind_care.home.reminders.adapter.RemindersGroupAdapter;
+import com.example.mind_care.home.reminders.adapter.RemindersReminderAdapter;
+import com.example.mind_care.home.reminders.model.RemindersGroupItem;
+import com.example.mind_care.home.reminders.model.RemindersReminderItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
-import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
-
-public class Reminders extends ShowcaseFragment {
+public class Reminders extends BaseTools {
     RecyclerView reminderItemsRecyclerView;
+    FabListener fabListener;
 
     @Nullable
     @Override
@@ -31,10 +34,11 @@ public class Reminders extends ShowcaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        fabListener = (FabListener) getParentFragment();
 
         //Get recycler views
         RecyclerView groupItemsRecyclerView = view.findViewById(R.id.reminders_group_recyclerview);
-        RecyclerView reminderItemsRecyclerView = view.findViewById(R.id.reminders_reminder_recyclerview);
+        RecyclerView reminderItemsRecyclerView = view.findViewById(R.id.reminders_items_recyclerview);
 
         //Create arrays to hold reminder groups and a temporary reminder list as well
         //TODO reminder list will change to be gotten from database instead in the future
@@ -52,7 +56,6 @@ public class Reminders extends ShowcaseFragment {
                 R.drawable.chat_buddy_icon,
                 R.string.reminders_group_name
         ));
-
 
         groupItemsRecyclerView.setAdapter(new RemindersGroupAdapter(remindersGroupItems));
         groupItemsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -73,47 +76,14 @@ public class Reminders extends ShowcaseFragment {
 //            }
 //        });
 
-//        makeShowcase(getContext(), view.findViewById(R.id.reminders_group_recyclerview), "Groups", "Here you can choose the groups you want to see reminders for.");
-//        makeShowcase(getContext(), view.findViewById(R.id.reminders_reminder_recyclerview), "Reminders", "Here you can either click on the reminders to edit them or click the circle to complete them");
-
-//        TapTargetSequence sequence = new TapTargetSequence(getActivity())
-//                .targets(
-//                    TapTarget.forView(groupItemsRecyclerView, "Hi").cancelable(false),
-//                    TapTarget.forView(reminderItemsRecyclerView, "BYE").cancelable(false)
-//                )
-//                .listener(new TapTargetSequence.Listener(){
-//                    @Override
-//                    public void onSequenceFinish() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onSequenceCanceled(TapTarget lastTarget) {
-//                        ;
-//                    }
-//                });
-//        sequence.start();
-
-
-        ShowcaseConfig config = new ShowcaseConfig();
-
-        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this.getActivity(), "reminders_home_page_showcase");
-        sequence.setConfig(config);
-
-        sequence.addSequenceItem(groupItemsRecyclerView, "IS A BUTTON", "SOMTHING");
-        sequence.addSequenceItem(reminderItemsRecyclerView, "HELLO", "BINGUS");
-
-        sequence.start();
     }
 
     @Override
-    public void startShowcase() {
-        ;
+    public void onResume() {
+        super.onResume();
+        fabListener.setFabImage(R.drawable.reminders_icon);
+        Log.i("INFO", String.valueOf(fabListener));
+        //on click navigate to some other destination
+        fabListener.setOnFabClickedDestination(R.id.createNewReminderFragment);
     }
-
 }
