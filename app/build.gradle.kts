@@ -1,13 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.example.tutorial_menu"
+    namespace = "com.example.mind_care"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.tutorial_menu"
+        applicationId = "com.example.mind_care"
         minSdk = 28
         targetSdk = 34
         versionCode = 1
@@ -32,7 +33,8 @@ android {
 }
 
 dependencies {
-
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.ui.auth)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

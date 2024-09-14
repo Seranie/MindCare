@@ -20,6 +20,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "tutorial_menu"
+rootProject.name = "mind_care"
 include(":app")
  

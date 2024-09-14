@@ -1,4 +1,4 @@
-package com.example.mind_care;
+package com.example.mind_care.showcases;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;

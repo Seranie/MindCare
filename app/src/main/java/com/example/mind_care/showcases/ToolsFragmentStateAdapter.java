@@ -1,4 +1,4 @@
-package com.example.mind_care;
+package com.example.mind_care.showcases;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

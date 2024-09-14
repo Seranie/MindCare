@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mind_care.R;
-import com.example.mind_care.ShowcaseChangeViewModel;
+import com.example.mind_care.showcases.ShowcaseChangeViewModel;
 import com.example.mind_care.guide.TabPositionViewModel;
 
 import java.util.List;

@@ -10,7 +10,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.mind_care.home.ViewpagerNavigationMediator;
 import com.example.mind_care.placeholder_fragments.PlaceholderFragment;
+import com.example.mind_care.showcases.ToolsFragmentStateAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
@@ -43,9 +46,14 @@ public class Home extends Fragment{
         fragmentList.add(chatBuddyFragment);
 
         //Get viewpager2 and set adapter
-        ViewPager2 viewPager = view.findViewById(R.id.tools_view_pager);
+        ViewPager2 viewPager = view.findViewById(R.id.home_view_pager);
         ToolsFragmentStateAdapter toolsFragmentStateAdapter = new ToolsFragmentStateAdapter(this, fragmentList);
         viewPager.setAdapter(toolsFragmentStateAdapter);
+
+        BottomNavigationView bottomNavigation = view.findViewById(R.id.home_bottom_navigation_view);
+
+        // Set up viewpager2 swipe to change bottom nav selection
+        new ViewpagerNavigationMediator(bottomNavigation, viewPager).attach();
 
 
     }
