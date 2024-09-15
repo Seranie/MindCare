@@ -64,19 +64,16 @@ public class Home extends Fragment implements BaseTools.FabListener {
         new ViewpagerNavigationMediator(bottomNavigation, viewPager).attach();
 
         fab = view.findViewById(R.id.home_fab);
-        Log.i("INFO", String.valueOf(fab));
         navController = Navigation.findNavController(view);
     }
 
 
     @Override
     public void setOnFabClickedDestination(int resId) {
-        Log.i("INFO", "HBE");
         fab.setOnClickListener(view -> navController.navigate(resId));
     }
 
     public void setFabImage(int imageId) {
-        Log.i("INFO", "HIE");
         fab.setImageResource(imageId);
     }
 }

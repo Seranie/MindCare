@@ -12,4 +12,7 @@
     <dimen name="guide_showcase_innertext_padding">8dp</dimen>
     <dimen name="guide_showcase_icon_padding">4dp</dimen>
 
+    <dimen name="reminders_create_reminder_item_corner_radius">8dp</dimen>
+    <dimen name="reminders_create_reminder_item_margin">8dp</dimen>
+
 </resources>

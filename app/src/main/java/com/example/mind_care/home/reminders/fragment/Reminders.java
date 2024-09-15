@@ -82,7 +82,6 @@ public class Reminders extends BaseTools {
     public void onResume() {
         super.onResume();
         fabListener.setFabImage(R.drawable.reminders_icon);
-        Log.i("INFO", String.valueOf(fabListener));
         //on click navigate to some other destination
         fabListener.setOnFabClickedDestination(R.id.createNewReminderFragment);
     }

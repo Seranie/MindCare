@@ -28,7 +28,6 @@ public class GuideShowcase extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         //Create a list of Card objects, each card will represent each tool available in the app
         List<GuideShowcaseCard> cardList = new ArrayList<>();
-        //TODO change drawable to tool representations
         cardList.add(new GuideShowcaseCard(
                 R.drawable.reminders_card_image,
                 R.string.showcase_card1_title,
@@ -59,7 +58,6 @@ public class GuideShowcase extends Fragment {
         ShowcaseChangeViewModel showcaseViewModel = new ViewModelProvider(getParentFragment().getActivity()).get(ShowcaseChangeViewModel.class);
         TabPositionViewModel tabPositionViewModel = new ViewModelProvider(getParentFragment()).get(TabPositionViewModel.class);
 
-        //TODO add item animations
         RecyclerView recyclerView = view.findViewById(R.id.guide_showcase_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         GuideShowcaseAdapter guideShowcaseAdapter = new GuideShowcaseAdapter(cardList, tabPositionViewModel, showcaseViewModel, getContext());

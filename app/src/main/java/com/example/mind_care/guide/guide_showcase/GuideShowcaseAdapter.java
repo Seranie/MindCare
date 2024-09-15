@@ -77,7 +77,6 @@ public class GuideShowcaseAdapter extends RecyclerView.Adapter<GuideShowcaseAdap
         TextView mCardTitle;
         TextView mCardSubtitle;
         TextView mCardDescription;
-        //TODO link up with navigation
         Button mShowMe;
         Button mLearnMore;
 

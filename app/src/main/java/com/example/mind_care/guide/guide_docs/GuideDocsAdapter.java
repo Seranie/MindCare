@@ -136,7 +136,6 @@ public class GuideDocsAdapter extends RecyclerView.Adapter<GuideDocsAdapter.Guid
 
         @Override
         public void onClick(View view) {
-            Log.i("INFO", String.valueOf(soundId));
             soundPool.play(soundId, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY, LOOP, RATE);
             //Display/hide text description of the tool and flip the drop arrow
             if (isAnimating){
