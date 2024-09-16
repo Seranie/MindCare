@@ -12,9 +12,14 @@ import com.example.mind_care.home.reminders.repository.GroupRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReminderGroupViewModel extends ViewModel{
+public class ReminderGroupViewModel extends ViewModel {
     private final GroupRepository groupRepository = new GroupRepository();
-    private final MutableLiveData<List<RemindersGroupItem>> remindersGroupLiveData = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<List<RemindersGroupItem>> remindersGroupLiveData = new MutableLiveData<>();
+
+    public ReminderGroupViewModel(){
+        // need to set this so recyclerview adapters dont break when calling getsize.
+        remindersGroupLiveData.setValue(new ArrayList<>());
+    }
 
 
     public LiveData<List<RemindersGroupItem>> getRemindersGroupLiveData() {
@@ -34,7 +39,7 @@ public class ReminderGroupViewModel extends ViewModel{
         return remindersGroupLiveData.getValue().size();
     }
 
-    public void addReminderToGroup(int position){
+    public void addReminderToGroup(int position) {
 
 
     }

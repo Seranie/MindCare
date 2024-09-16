@@ -1,6 +1,7 @@
 package com.example.mind_care.home.reminders.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,7 @@ public class CreateNewReminderFragment extends Fragment {
     private Button cancelButton;
 
     ReminderGroupViewModel groupViewModel;
-    ReminderAlertDateTimeViewModel alertDateViewModel;
+    ReminderAlertDateTimeViewModel alertDateTimeViewModel;
 
 
     @Nullable
@@ -55,7 +56,7 @@ public class CreateNewReminderFragment extends Fragment {
         cancelButton = view.findViewById(R.id.create_reminder_cancel_button);
 
         //Viewmodels for holding alert item date/times
-        alertDateViewModel = new ViewModelProvider(requireActivity()).get(ReminderAlertDateTimeViewModel.class);
+        alertDateTimeViewModel = new ViewModelProvider(requireActivity()).get(ReminderAlertDateTimeViewModel.class);
         groupViewModel = new ViewModelProvider(requireActivity()).get(ReminderGroupViewModel.class);
 
         CreateReminderGroupsAdapter groupsAdapter = new CreateReminderGroupsAdapter(groupViewModel, getContext(), this);
@@ -66,24 +67,20 @@ public class CreateNewReminderFragment extends Fragment {
         groupViewModel.getGroupListFromRepository();
 
         //TODO send alert item list in associated with the current reminder if any.
-        remindersRecyclerView.setAdapter(new CreateReminderAlertItemAdapter(alertDateViewModel, getChildFragmentManager()));
+        remindersRecyclerView.setAdapter(new CreateReminderAlertItemAdapter(alertDateTimeViewModel, getChildFragmentManager()));
         remindersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO gather data from fields
-                int currentGroupSelected = groupsAdapter.getSelectedGroupPosition();
-                String reminderTitle = title.getText() != null ? title.getText().toString() : "";
-                String reminderNote = note.getText() != null ? note.getText().toString() : "";
-                String reminderSchedule = schedule.getText() != null ? schedule.getText().toString() : "";
-                String reminderRepeat = repeat.getText() != null ? repeat.getText().toString() : "";
-                String reminderRingtone = ringtone.getText() != null ? ringtone.getText().toString() : "";
+        confirmButton.setOnClickListener(v -> {
+            //TODO gather data from fields
+            int currentGroupSelected = groupsAdapter.getSelectedGroupPosition();
+            String reminderTitle = title.getText() != null ? title.getText().toString() : "";
+            String reminderNote = note.getText() != null ? note.getText().toString() : "";
+            String reminderSchedule = schedule.getText() != null ? schedule.getText().toString() : "";
+            String reminderRepeat = repeat.getText() != null ? repeat.getText().toString() : "";
+            String reminderRingtone = ringtone.getText() != null ? ringtone.getText().toString() : "";
 
-                //send to database
-
-            }
+            //send to database
         });
 
     }

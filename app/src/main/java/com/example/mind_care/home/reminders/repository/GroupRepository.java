@@ -26,7 +26,13 @@ public class GroupRepository {
     }
 
     public void addNewGroup(RemindersGroupItem groupItem) {
-        db.collection(collection).document(user.getUid()).collection("groups").add(groupItem);
+        db.collection(collection).document(user.getUid()).collection("groups").add(groupItem).addOnCompleteListener(document -> {
+            if (document.isSuccessful()) {
+                Log.i("INFO", "Group added");
+            } else {
+                Log.i("INFO", String.valueOf(document.getException()));
+            }
+        });
     }
 
     public void deleteGroup(RemindersGroupItem groupItem) {
@@ -37,12 +43,12 @@ public class GroupRepository {
         db.collection(collection).document(user.getUid()).collection("groups").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 List<DocumentSnapshot> docs = task.getResult().getDocuments();
+
                 if (!docs.isEmpty()) {
-                    List<HashMap<String, Object>> groups = (List<HashMap<String, Object>>) docs.get();
                     List<RemindersGroupItem> tempList = new ArrayList<>();
-                    for (HashMap<String, Object> map : groups) {
-                        Uri uri = Uri.parse(String.valueOf(map.get("imageSource")));
-                        String name = String.valueOf(map.get("name"));
+                    for (DocumentSnapshot shot : docs) {
+                        Uri uri = Uri.parse(String.valueOf(shot.get("imageSource")));
+                        String name = String.valueOf(shot.get("name"));
                         RemindersGroupItem groupItem = new RemindersGroupItem(uri, name);
                         tempList.add(groupItem);
                     }
@@ -55,9 +61,9 @@ public class GroupRepository {
         });
     }
 
-    public void addReminderToGroup(int position){
-        db.collection(collection).document(user.getUid()).update("groups", );
-    }
+//    public void addReminderToGroup(int position){
+//        db.collection(collection).document(user.getUid()).update("groups", );
+//    }
 
     public interface OnCompleteCallback {
         void onComplete(List<RemindersGroupItem> groupList);

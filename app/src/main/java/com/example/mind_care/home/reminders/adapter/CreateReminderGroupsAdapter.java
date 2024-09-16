@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +22,6 @@ import com.example.mind_care.home.reminders.model.RemindersGroupItem;
 import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final ReminderGroupViewModel groupViewModel;
@@ -31,6 +29,7 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
     private final int VIEW_TYPE_GROUP_ITEM = 1;
     private final int NUMBER_OF_EXTRA_ITEMS = 1;
     private int selectedGroupPosition = RecyclerView.NO_POSITION;
+    private GroupItemViewHolder selectedGroupViewHolder = null;
     private final Context context;
     private ArrayList<RemindersGroupItem> groupItems = new ArrayList<>();
 
@@ -38,7 +37,6 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
         this.groupViewModel = groupViewModel;
         this.context = context;
         groupViewModel.getRemindersGroupLiveData().observe(fragment, remindersGroupItems -> {
-            Log.i("INFO",String.valueOf(remindersGroupItems));
             groupItems = (ArrayList<RemindersGroupItem>) remindersGroupItems;
             notifyDataSetChanged();
         });
@@ -100,6 +98,7 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
             super(itemView);
             groupImage = itemView.findViewById(R.id.group_item_image);
             groupName = itemView.findViewById(R.id.group_item_name);
+            itemView.setOnClickListener(this);
         }
 
         @Override
@@ -108,15 +107,22 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
         }
 
         private void toggleSelect(View v, int position) {
-            if (selectedGroupPosition == position) {
-                selectedGroupPosition = RecyclerView.NO_POSITION;
+            if (selectedGroupViewHolder == this) {
                 v.setBackgroundColor(Color.TRANSPARENT);
-            } else {
+                selectedGroupPosition = RecyclerView.NO_POSITION;
+                selectedGroupViewHolder = null;
+            }
+            else if (selectedGroupViewHolder == null){
+                selectedGroupViewHolder = this;
                 selectedGroupPosition = position;
                 v.setBackgroundColor(getPrimaryColor(v));
             }
-            notifyItemChanged(selectedGroupPosition);
-
+            else {
+                selectedGroupViewHolder.itemView.setBackgroundColor(Color.TRANSPARENT);
+                selectedGroupViewHolder = this;
+                selectedGroupPosition = position;
+                v.setBackgroundColor(getPrimaryColor(v));
+            }
         }
 
         private int getPrimaryColor(View v) {
