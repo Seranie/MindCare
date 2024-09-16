@@ -12,7 +12,7 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
 
-public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+public abstract class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
     @NonNull
     @Override
@@ -25,7 +25,5 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     }
 
     @Override
-    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-        // Do something with time
-    }
+    public abstract void onTimeSet(TimePicker timePicker, int hourOfDay, int minute);
 }

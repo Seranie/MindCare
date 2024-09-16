@@ -8,10 +8,6 @@ import android.widget.DatePicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
-
-import com.example.mind_care.home.reminders.viewModel.ReminderAlertDateViewModel;
-import com.example.mind_care.home.reminders.model.DateModel;
 
 import java.util.Calendar;
 
@@ -29,13 +25,6 @@ public abstract class DatePickerFragment extends DialogFragment implements DateP
     }
 
     @Override
-    public abstract void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-        //TODO store date
-        DateModel date = new DateModel();
-        date.setYear(year);
-        date.setMonth(month);
-        date.setDayOfMonth(dayOfMonth);
-        ReminderAlertDateViewModel viewModel = new ViewModelProvider(getParentFragment()).get(ReminderAlertDateViewModel.class);
-        viewModel.setMutableDateArray(date);
-    }
+    public abstract void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth);
+
 }

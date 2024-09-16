@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mind_care.R;
 import com.example.mind_care.home.reminders.adapter.CreateReminderAlertItemAdapter;
 import com.example.mind_care.home.reminders.adapter.CreateReminderGroupsAdapter;
+import com.example.mind_care.home.reminders.viewModel.ReminderAlertDateTimeViewModel;
 import com.example.mind_care.home.reminders.viewModel.ReminderAlertDateViewModel;
 import com.example.mind_care.home.reminders.viewModel.ReminderAlertTimeViewModel;
 import com.google.android.material.textfield.TextInputEditText;
@@ -51,15 +52,14 @@ public class CreateNewReminderFragment extends Fragment {
         cancelButton = view.findViewById(R.id.create_reminder_cancel_button);
 
         //Viewmodels for holding alert item date/times
-        ReminderAlertDateViewModel alertDateViewModel = new ViewModelProvider(this).get(ReminderAlertDateViewModel.class);
-        ReminderAlertTimeViewModel alertTimeViewModel = new ViewModelProvider(this).get(ReminderAlertTimeViewModel.class);
+        ReminderAlertDateTimeViewModel alertDateViewModel = new ViewModelProvider(this).get(ReminderAlertDateTimeViewModel.class);
 
         //TODO send group list in from database
         CreateReminderGroupsAdapter groupsAdapter = new CreateReminderGroupsAdapter();
         groupsRecyclerView.setAdapter(groupsAdapter);
         groupsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         //TODO send reminder list in from database
-        remindersRecyclerView.setAdapter(new CreateReminderAlertItemAdapter(alertDateViewModel, alertTimeViewModel));
+        remindersRecyclerView.setAdapter(new CreateReminderAlertItemAdapter(alertDateViewModel, getChildFragmentManager()));
         remindersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
 

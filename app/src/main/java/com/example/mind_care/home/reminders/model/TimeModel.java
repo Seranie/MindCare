@@ -4,6 +4,11 @@ public class TimeModel {
     private int mHour;
     private int mMinute;
 
+    public TimeModel(int hour, int minute) {
+        this.mHour = hour;
+        this.mMinute = minute;
+    }
+
     public int getHour() {
         return mHour;
     }
