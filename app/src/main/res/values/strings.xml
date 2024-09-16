@@ -169,6 +169,7 @@
     <string name="reminders_create_reminder_cancel">Cancel</string>
     <string name="reminders_create_reminder_reminders">Reminders</string>
     <string name="reminders_create_reminder_create_group">Create group</string>
+    <string name="reminders_create_new_alert_item">Create new reminder</string>
 
     <string name="create_group_confirm">Confirm</string>
     <string name="create_group_cancel">Cancel</string>

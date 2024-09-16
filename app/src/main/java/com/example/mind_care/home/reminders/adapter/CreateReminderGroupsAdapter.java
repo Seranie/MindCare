@@ -28,7 +28,7 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
     private final int VIEW_TYPE_ADD_GROUP = 0;
     private final int VIEW_TYPE_GROUP_ITEM = 1;
     private final int NUMBER_OF_EXTRA_ITEMS = 1;
-    private int selectedGroupPosition = RecyclerView.NO_POSITION;
+    private String selectedGroupId;
     private GroupItemViewHolder selectedGroupViewHolder = null;
     private final Context context;
     private ArrayList<RemindersGroupItem> groupItems = new ArrayList<>();
@@ -42,8 +42,8 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
         });
     }
 
-    public int getSelectedGroupPosition() {
-        return selectedGroupPosition;
+    public String getSelectedGroupId() {
+        return selectedGroupId;
     }
 
     @NonNull
@@ -109,18 +109,18 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
         private void toggleSelect(View v, int position) {
             if (selectedGroupViewHolder == this) {
                 v.setBackgroundColor(Color.TRANSPARENT);
-                selectedGroupPosition = RecyclerView.NO_POSITION;
+                selectedGroupId = null;
                 selectedGroupViewHolder = null;
             }
             else if (selectedGroupViewHolder == null){
                 selectedGroupViewHolder = this;
-                selectedGroupPosition = position;
+                selectedGroupId = groupItems.get(position).getGroupId();
                 v.setBackgroundColor(getPrimaryColor(v));
             }
             else {
                 selectedGroupViewHolder.itemView.setBackgroundColor(Color.TRANSPARENT);
                 selectedGroupViewHolder = this;
-                selectedGroupPosition = position;
+                selectedGroupId = groupItems.get(position).getGroupId();
                 v.setBackgroundColor(getPrimaryColor(v));
             }
         }

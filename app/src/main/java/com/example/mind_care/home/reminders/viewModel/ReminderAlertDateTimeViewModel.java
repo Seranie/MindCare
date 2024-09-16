@@ -1,12 +1,12 @@
 package com.example.mind_care.home.reminders.viewModel;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class ReminderAlertDateTimeViewModel extends ViewModel {
     private MutableLiveData<ArrayList<LocalDateTime>> mutableDateTimeArray = new MutableLiveData<>();
@@ -15,7 +15,7 @@ public class ReminderAlertDateTimeViewModel extends ViewModel {
         mutableDateTimeArray.setValue(new ArrayList<>());
     }
 
-    public MutableLiveData<ArrayList<LocalDateTime>> getMutableDateTimeLiveData() {
+    public LiveData<ArrayList<LocalDateTime>> getMutableDateTimeLiveData() {
         return mutableDateTimeArray;
     }
 

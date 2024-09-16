@@ -15,6 +15,7 @@ import com.example.mind_care.R;
 import com.example.mind_care.home.reminders.fragment.DatePickerFragment;
 import com.example.mind_care.home.reminders.fragment.TimePickerFragment;
 import com.example.mind_care.home.reminders.viewModel.ReminderAlertDateTimeViewModel;
+import com.google.android.material.chip.Chip;
 
 import java.time.LocalDateTime;
 
@@ -119,26 +120,15 @@ public class CreateReminderAlertItemAdapter extends RecyclerView.Adapter<Recycle
             });
         }
 
-        public void setReminderItem(Button reminderItem) {
-            this.reminderItem = reminderItem;
-        }
-
-        public void setDeleteButton(Button deleteButton) {
-            this.deleteButton = deleteButton;
-        }
     }
 
     public class ReminderAddItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final Button reminderItem;
-        private final Button addButton;
+        private final Chip reminderItem;;
         private LocalDateTime dateTime;
 
         public ReminderAddItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            reminderItem = itemView.findViewById(R.id.alert_item_add_button2);
-            addButton = itemView.findViewById(R.id.alert_item_add_button);
-
-            addButton.setOnClickListener(this);
+            reminderItem = itemView.findViewById(R.id.create_alert_item_chip);
             reminderItem.setOnClickListener(this);
         }
 

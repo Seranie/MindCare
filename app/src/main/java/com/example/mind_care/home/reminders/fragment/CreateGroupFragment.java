@@ -1,6 +1,8 @@
 package com.example.mind_care.home.reminders.fragment;
 
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +33,7 @@ public class CreateGroupFragment extends Fragment {
         if (uri != null) {
             // Handle the URI of the selected media
             // Do something with the selected media URI
+            getContext().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             imageUri = uri;
             Glide.with(this).load(imageUri).error(R.drawable.outline_image_not_supported_24).into(createGroupImage);
         }

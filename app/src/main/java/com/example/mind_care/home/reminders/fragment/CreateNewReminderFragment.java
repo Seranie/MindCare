@@ -73,7 +73,7 @@ public class CreateNewReminderFragment extends Fragment {
 
         confirmButton.setOnClickListener(v -> {
             //TODO gather data from fields
-            int currentGroupSelected = groupsAdapter.getSelectedGroupPosition();
+            String currentGroupSelectedId = groupsAdapter.getSelectedGroupId() != null ? groupsAdapter.getSelectedGroupId() : "";
             String reminderTitle = title.getText() != null ? title.getText().toString() : "";
             String reminderNote = note.getText() != null ? note.getText().toString() : "";
             String reminderSchedule = schedule.getText() != null ? schedule.getText().toString() : "";
@@ -81,6 +81,7 @@ public class CreateNewReminderFragment extends Fragment {
             String reminderRingtone = ringtone.getText() != null ? ringtone.getText().toString() : "";
 
             //send to database
+            Log.i("INFO", "Group id: " + currentGroupSelectedId);
         });
 
     }

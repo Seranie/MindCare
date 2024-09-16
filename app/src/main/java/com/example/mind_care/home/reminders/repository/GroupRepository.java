@@ -50,6 +50,7 @@ public class GroupRepository {
                         Uri uri = Uri.parse(String.valueOf(shot.get("imageSource")));
                         String name = String.valueOf(shot.get("name"));
                         RemindersGroupItem groupItem = new RemindersGroupItem(uri, name);
+                        groupItem.setGroupId(shot.getId());
                         tempList.add(groupItem);
                     }
                     groupList = tempList;

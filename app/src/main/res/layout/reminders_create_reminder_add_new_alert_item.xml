@@ -2,33 +2,21 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/alert_item_add_button"
-        style="@style/Widget.Material3.Button.TonalButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/reminders_create_reminder_item_margin"
-        android:gravity="start|center_vertical"
-        android:insetLeft="10dp"
-        app:cornerRadius="@dimen/reminders_create_reminder_item_corner_radius"
-        app:icon="@drawable/baseline_add_10"
-        app:iconGravity="start"
-        app:iconPadding="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/alert_item_add_button2"
-        style="@style/Widget.Material3.Button.TonalButton"
+    <com.google.android.material.chip.Chip
+        android:id="@+id/create_alert_item_chip"
+        style="@style/Widget.Material3.Chip.Assist"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/reminders_create_reminder_item_margin"
-        android:gravity="start|center_vertical"
-        android:text="Button"
-        app:cornerRadius="8dp"
+        android:layoutDirection="rtl"
+        android:text="@string/reminders_create_new_alert_item"
+        android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+        app:closeIcon="@drawable/baseline_add_10"
+        app:closeIconEnabled="false"
+        app:closeIconVisible="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/alert_item_add_button"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

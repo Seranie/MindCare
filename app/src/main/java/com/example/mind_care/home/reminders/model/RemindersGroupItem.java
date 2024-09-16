@@ -9,6 +9,9 @@ public class RemindersGroupItem {
     private final Uri mImageSource;
     private final String mName;
     private List<RemindersReminderItem> mRemindersReminderItems;
+
+    private String groupId;
+
     public RemindersGroupItem(Uri imageSource, String name) {
         this.mImageSource = imageSource;
         this.mName = name;
@@ -28,5 +31,13 @@ public class RemindersGroupItem {
 
     public void setRemindersReminderItems(RemindersReminderItem remindersReminderItems) {
         this.mRemindersReminderItems.add(remindersReminderItems);
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getGroupId() {
+        return groupId;
     }
 }

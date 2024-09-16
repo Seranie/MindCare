@@ -15,4 +15,6 @@
     <dimen name="reminders_create_reminder_item_corner_radius">8dp</dimen>
     <dimen name="reminders_create_reminder_item_margin">8dp</dimen>
 
+    <dimen name="reminders_create_alert_item_icon_padding">12dp</dimen>"
+
 </resources>
