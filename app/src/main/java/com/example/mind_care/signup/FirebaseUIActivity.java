@@ -11,15 +11,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mind_care.MainActivity;
 import com.example.mind_care.R;
+import com.example.mind_care.home.reminders.model.RemindersGroupItem;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.ktx.Firebase;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class FirebaseUIActivity extends AppCompatActivity {
@@ -44,6 +50,14 @@ public class FirebaseUIActivity extends AppCompatActivity {
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {
+            //Add new user to database
+            if (response.isNewUser()){
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                createNewUserDocument(user);
+            }
+
+
+
             // Successfully signed in
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
@@ -72,14 +86,8 @@ public class FirebaseUIActivity extends AppCompatActivity {
 
     }
 
-//    private void configureFirebaseServices() {
-//        Log.i("INFO", "HI");
-//        FirebaseAuth auth = FirebaseAuth.getInstance();
-//        auth.useEmulator("127.0.0.1", 9099);
-//    }
-
-
-//    private void showSnackbar(int id){
-//        Snackbar snackbar = Snackbar.make(getC, id, Snackbar.LENGTH_LONG);
-//    }
+    private void createNewUserDocument(FirebaseUser user){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(user.getUid()).collection("groups");
+    }
 }

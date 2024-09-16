@@ -31,6 +31,10 @@ public class CreateNewReminderFragment extends Fragment {
     private Button confirmButton;
     private Button cancelButton;
 
+    ReminderGroupViewModel groupViewModel;
+    ReminderAlertDateTimeViewModel alertDateViewModel;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -51,13 +55,15 @@ public class CreateNewReminderFragment extends Fragment {
         cancelButton = view.findViewById(R.id.create_reminder_cancel_button);
 
         //Viewmodels for holding alert item date/times
-        ReminderAlertDateTimeViewModel alertDateViewModel = new ViewModelProvider(this).get(ReminderAlertDateTimeViewModel.class);
-        ReminderGroupViewModel groupViewModel = new ViewModelProvider(this).get(ReminderGroupViewModel.class);
+        alertDateViewModel = new ViewModelProvider(requireActivity()).get(ReminderAlertDateTimeViewModel.class);
+        groupViewModel = new ViewModelProvider(requireActivity()).get(ReminderGroupViewModel.class);
 
-        //TODO send user's group list in from database
-        CreateReminderGroupsAdapter groupsAdapter = new CreateReminderGroupsAdapter(groupViewModel, getContext());
+        CreateReminderGroupsAdapter groupsAdapter = new CreateReminderGroupsAdapter(groupViewModel, getContext(), this);
         groupsRecyclerView.setAdapter(groupsAdapter);
         groupsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        //Get any updates from database and update viewmodel and thus adapter
+        groupViewModel.getGroupListFromRepository();
 
         //TODO send alert item list in associated with the current reminder if any.
         remindersRecyclerView.setAdapter(new CreateReminderAlertItemAdapter(alertDateViewModel, getChildFragmentManager()));
@@ -76,8 +82,10 @@ public class CreateNewReminderFragment extends Fragment {
                 String reminderRingtone = ringtone.getText() != null ? ringtone.getText().toString() : "";
 
                 //send to database
+
             }
         });
 
     }
+
 }

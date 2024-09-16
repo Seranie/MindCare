@@ -51,7 +51,7 @@ public class CreateGroupFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        groupViewModel = new ViewModelProvider(this).get(ReminderGroupViewModel.class);
+        groupViewModel = new ViewModelProvider(requireActivity()).get(ReminderGroupViewModel.class);
 
         createGroupImage = view.findViewById(R.id.create_group_image);
         chooseImageButton = view.findViewById(R.id.create_group_choose_image_button);

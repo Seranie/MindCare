@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.mind_care.R;
+import com.example.mind_care.home.reminders.fragment.CreateNewReminderFragment;
 import com.example.mind_care.home.reminders.model.RemindersGroupItem;
 import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 
@@ -30,12 +32,16 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
     private final int NUMBER_OF_EXTRA_ITEMS = 1;
     private int selectedGroupPosition = RecyclerView.NO_POSITION;
     private final Context context;
-    private final ArrayList<RemindersGroupItem> groupItems;
+    private ArrayList<RemindersGroupItem> groupItems = new ArrayList<>();
 
-    public CreateReminderGroupsAdapter(ReminderGroupViewModel groupViewModel, Context context) {
+    public CreateReminderGroupsAdapter(ReminderGroupViewModel groupViewModel, Context context, CreateNewReminderFragment fragment) {
         this.groupViewModel = groupViewModel;
         this.context = context;
-        groupItems = groupViewModel.getGroupList();
+        groupViewModel.getRemindersGroupLiveData().observe(fragment, remindersGroupItems -> {
+            Log.i("INFO",String.valueOf(remindersGroupItems));
+            groupItems = (ArrayList<RemindersGroupItem>) remindersGroupItems;
+            notifyDataSetChanged();
+        });
     }
 
     public int getSelectedGroupPosition() {
@@ -64,7 +70,7 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
         if (holder.getItemViewType() == VIEW_TYPE_GROUP_ITEM) {
             GroupItemViewHolder groupItemViewHolder = (GroupItemViewHolder) holder;
 
-            if(groupItems.size() != 0){
+            if(!groupItems.isEmpty()){
                 Uri imageUri = groupItems.get(position).getImageSource();
                 Glide.with(context).load(imageUri).error(R.drawable.outline_image_not_supported_24).into(groupItemViewHolder.groupImage);
                 groupItemViewHolder.groupName.setText(groupItems.get(position).getName());
