@@ -1,33 +1,25 @@
 package com.example.mind_care.home.reminders.model;
 
+import android.net.Uri;
+
 import java.util.List;
 
 public class RemindersGroupItem {
     //TODO incomplete class, carrys data of each group in the reminders tab
-    private int mImageSource;
-    private int mNameSource;
+    private final Uri mImageSource;
+    private final String mName;
     private List<RemindersReminderItem> mRemindersReminderItems;
-
-    public RemindersGroupItem(int imageSource, int nameSource){
+    public RemindersGroupItem(Uri imageSource, String name) {
         this.mImageSource = imageSource;
-        this.mNameSource = nameSource;
+        this.mName = name;
     }
 
-
-    public int getNameSource() {
-        return mNameSource;
-    }
-
-    public void setNameSource(int mNameSource) {
-        this.mNameSource = mNameSource;
-    }
-
-    public int getImageSource() {
+    public Uri getImageSource() {
         return mImageSource;
     }
 
-    public void setImageSource(int mImageSource) {
-        this.mImageSource = mImageSource;
+    public String getName() {
+        return mName;
     }
 
     public List<RemindersReminderItem> getRemindersReminderItems() {

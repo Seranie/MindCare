@@ -1,5 +1,6 @@
 package com.example.mind_care.home.reminders.fragment;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +19,7 @@ import com.example.mind_care.home.reminders.adapter.RemindersGroupAdapter;
 import com.example.mind_care.home.reminders.adapter.RemindersReminderAdapter;
 import com.example.mind_care.home.reminders.model.RemindersGroupItem;
 import com.example.mind_care.home.reminders.model.RemindersReminderItem;
+import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +43,9 @@ public class Reminders extends BaseTools {
         RecyclerView groupItemsRecyclerView = view.findViewById(R.id.reminders_group_recyclerview);
         RecyclerView reminderItemsRecyclerView = view.findViewById(R.id.reminders_items_recyclerview);
 
+        //get group viewmodel associated with this user
+        ReminderGroupViewModel groupViewModel = new ViewModelProvider(this).get(ReminderGroupViewModel.class);
+
         //Create arrays to hold reminder groups and a temporary reminder list as well
         //TODO reminder list will change to be gotten from database instead in the future
         List<RemindersGroupItem> remindersGroupItems = new ArrayList<>();
@@ -53,11 +59,11 @@ public class Reminders extends BaseTools {
 
         //Create and add a new group object into list TODO will be dynamically gotten from database in future.
         remindersGroupItems.add(new RemindersGroupItem(
-                R.drawable.chat_buddy_icon,
-                R.string.reminders_group_name
+                Uri.parse("OMEGALUL"),
+                "GROUP 1"
         ));
 
-        groupItemsRecyclerView.setAdapter(new RemindersGroupAdapter(remindersGroupItems));
+        groupItemsRecyclerView.setAdapter(new RemindersGroupAdapter(remindersGroupItems, getContext()));
         groupItemsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         reminderItemsRecyclerView.setAdapter(new RemindersReminderAdapter(remindersReminderItems));

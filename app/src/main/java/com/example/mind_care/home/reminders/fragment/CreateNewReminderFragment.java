@@ -17,8 +17,7 @@ import com.example.mind_care.R;
 import com.example.mind_care.home.reminders.adapter.CreateReminderAlertItemAdapter;
 import com.example.mind_care.home.reminders.adapter.CreateReminderGroupsAdapter;
 import com.example.mind_care.home.reminders.viewModel.ReminderAlertDateTimeViewModel;
-import com.example.mind_care.home.reminders.viewModel.ReminderAlertDateViewModel;
-import com.example.mind_care.home.reminders.viewModel.ReminderAlertTimeViewModel;
+import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class CreateNewReminderFragment extends Fragment {
@@ -53,12 +52,14 @@ public class CreateNewReminderFragment extends Fragment {
 
         //Viewmodels for holding alert item date/times
         ReminderAlertDateTimeViewModel alertDateViewModel = new ViewModelProvider(this).get(ReminderAlertDateTimeViewModel.class);
+        ReminderGroupViewModel groupViewModel = new ViewModelProvider(this).get(ReminderGroupViewModel.class);
 
-        //TODO send group list in from database
-        CreateReminderGroupsAdapter groupsAdapter = new CreateReminderGroupsAdapter();
+        //TODO send user's group list in from database
+        CreateReminderGroupsAdapter groupsAdapter = new CreateReminderGroupsAdapter(groupViewModel, getContext());
         groupsRecyclerView.setAdapter(groupsAdapter);
         groupsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        //TODO send reminder list in from database
+
+        //TODO send alert item list in associated with the current reminder if any.
         remindersRecyclerView.setAdapter(new CreateReminderAlertItemAdapter(alertDateViewModel, getChildFragmentManager()));
         remindersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -73,7 +74,6 @@ public class CreateNewReminderFragment extends Fragment {
                 String reminderSchedule = schedule.getText() != null ? schedule.getText().toString() : "";
                 String reminderRepeat = repeat.getText() != null ? repeat.getText().toString() : "";
                 String reminderRingtone = ringtone.getText() != null ? ringtone.getText().toString() : "";
-
 
                 //send to database
             }

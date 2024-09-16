@@ -32,4 +32,8 @@
         android:id="@+id/createNewReminderFragment"
         android:name="com.example.mind_care.home.reminders.fragment.CreateNewReminderFragment"
         android:label="CreateNewReminderFragment" />
+    <fragment
+        android:id="@+id/createGroupFragment"
+        android:name="com.example.mind_care.home.reminders.fragment.CreateGroupFragment"
+        android:label="CreateGroupFragment" />
 </navigation>
