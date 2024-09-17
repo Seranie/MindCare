@@ -47,6 +47,8 @@ public class GroupRepository {
                 if (!docs.isEmpty()) {
                     List<RemindersGroupItem> tempList = new ArrayList<>();
                     for (DocumentSnapshot shot : docs) {
+                        //Query all group under groups, and create new GroupItem and return.
+                        //TODO change groupitem to have a list of reminders under them.
                         Uri uri = Uri.parse(String.valueOf(shot.get("imageSource")));
                         String name = String.valueOf(shot.get("name"));
                         RemindersGroupItem groupItem = new RemindersGroupItem(uri, name);

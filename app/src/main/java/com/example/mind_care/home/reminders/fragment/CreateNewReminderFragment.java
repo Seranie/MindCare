@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,11 +19,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mind_care.R;
 import com.example.mind_care.home.reminders.adapter.CreateReminderAlertItemAdapter;
 import com.example.mind_care.home.reminders.adapter.CreateReminderGroupsAdapter;
+import com.example.mind_care.home.reminders.model.ReminderItemModel;
 import com.example.mind_care.home.reminders.viewModel.ReminderAlertDateTimeViewModel;
 import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
+import com.example.mind_care.home.reminders.viewModel.ReminderScheduleDateTimeViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class CreateNewReminderFragment extends Fragment {
+import java.time.LocalDateTime;
+import java.util.List;
+
+public class CreateNewReminderFragment extends Fragment implements DatePickerFragment.OnDateSetCallback, TimePickerFragment.OnTimeSetCallback {
     private RecyclerView groupsRecyclerView;
     private RecyclerView remindersRecyclerView;
     private TextInputEditText title;
@@ -32,8 +39,14 @@ public class CreateNewReminderFragment extends Fragment {
     private Button confirmButton;
     private Button cancelButton;
 
+    private final String datePickerTag = "datePicker";
+    private final String timePickerTag = "timePicker";
+
     ReminderGroupViewModel groupViewModel;
     ReminderAlertDateTimeViewModel alertDateTimeViewModel;
+    ReminderScheduleDateTimeViewModel scheduleDateTimeViewModel;
+
+    private LocalDateTime scheduleDateTime = LocalDateTime.now();
 
 
     @Nullable
@@ -58,6 +71,7 @@ public class CreateNewReminderFragment extends Fragment {
         //Viewmodels for holding alert item date/times
         alertDateTimeViewModel = new ViewModelProvider(requireActivity()).get(ReminderAlertDateTimeViewModel.class);
         groupViewModel = new ViewModelProvider(requireActivity()).get(ReminderGroupViewModel.class);
+        scheduleDateTimeViewModel = new ViewModelProvider(requireActivity()).get(ReminderScheduleDateTimeViewModel.class);
 
         CreateReminderGroupsAdapter groupsAdapter = new CreateReminderGroupsAdapter(groupViewModel, getContext(), this);
         groupsRecyclerView.setAdapter(groupsAdapter);
@@ -70,20 +84,45 @@ public class CreateNewReminderFragment extends Fragment {
         remindersRecyclerView.setAdapter(new CreateReminderAlertItemAdapter(alertDateTimeViewModel, getChildFragmentManager(), this));
         remindersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        // call date time pickers when user clicks on this.
+        schedule.setOnClickListener(v ->{
+            DatePickerFragment datePickerFragment = new DatePickerFragment();
+            datePickerFragment.setOnDateSetListener(this);
+            datePickerFragment.show(getChildFragmentManager(), datePickerTag);
+        });
+        scheduleDateTimeViewModel.getDateTimeLiveData().observe(getViewLifecycleOwner(), dateTime -> {
+            schedule.setText(scheduleDateTimeViewModel.getDateTimeString());
+        });
+
 
         confirmButton.setOnClickListener(v -> {
-            //TODO gather data from fields
             String currentGroupSelectedId = groupsAdapter.getSelectedGroupId() != null ? groupsAdapter.getSelectedGroupId() : "";
             String reminderTitle = title.getText() != null ? title.getText().toString() : "";
             String reminderNote = note.getText() != null ? note.getText().toString() : "";
-            String reminderSchedule = schedule.getText() != null ? schedule.getText().toString() : "";
+            List<LocalDateTime> reminderAlertItemList = alertDateTimeViewModel.getDateTimeList();
+            LocalDateTime reminderSchedule = scheduleDateTimeViewModel.getDateTime();
+            //TODO repeat and ringtone, for now empty might remove?
             String reminderRepeat = repeat.getText() != null ? repeat.getText().toString() : "";
             String reminderRingtone = ringtone.getText() != null ? ringtone.getText().toString() : "";
 
             //send to database
-            Log.i("INFO", "Group id: " + currentGroupSelectedId);
+            ReminderItemModel reminderItem = new ReminderItemModel(currentGroupSelectedId, reminderTitle, reminderNote, reminderSchedule, reminderAlertItemList);
+
         });
 
     }
 
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+        scheduleDateTime.withYear(year).withMonth(month).withDayOfMonth(dayOfMonth);
+        TimePickerFragment timePickerFragment = new TimePickerFragment();
+        timePickerFragment.setOnTimeSetListener(this);
+        timePickerFragment.show(getChildFragmentManager(), timePickerTag);
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+        scheduleDateTime.withHour(hourOfDay).withMinute(minute);
+        scheduleDateTimeViewModel.changeDateTime(scheduleDateTime);
+    }
 }

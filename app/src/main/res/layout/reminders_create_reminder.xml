@@ -17,6 +17,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="@string/reminders_create_reminder_groups"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -84,6 +85,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             android:hint="@string/reminders_create_reminder_schedule"
+            app:endIconDrawable="@drawable/outline_arrow_drop_down_10"
+            app:endIconMode="custom"
+            app:endIconScaleType="fitCenter"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
@@ -170,20 +174,22 @@
             android:id="@+id/create_reminder_confirm_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="152dp"
             android:layout_marginTop="32dp"
+            android:text="@string/reminders_create_reminder_confirm"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout5"
-            android:text="@string/reminders_create_reminder_confirm"/>
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout5" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/create_reminder_cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:layout_marginBottom="20dp"
             android:text="@string/reminders_create_reminder_cancel"
-            app:layout_constraintEnd_toEndOf="@+id/create_reminder_confirm_button"
-            app:layout_constraintStart_toStartOf="@+id/create_reminder_confirm_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/create_reminder_confirm_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

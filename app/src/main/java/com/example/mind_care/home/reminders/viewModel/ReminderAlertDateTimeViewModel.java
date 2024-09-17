@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ReminderAlertDateTimeViewModel extends ViewModel {
     private MutableLiveData<ArrayList<LocalDateTime>> mutableDateTimeArray = new MutableLiveData<>();
@@ -52,5 +53,9 @@ public class ReminderAlertDateTimeViewModel extends ViewModel {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         LocalDateTime dateTime = arrayList.get(position);
         return dateTime.format(formatter);
+    }
+
+    public List<LocalDateTime> getDateTimeList(){
+        return mutableDateTimeArray.getValue();
     }
 }
