@@ -8,6 +8,7 @@ public class ReminderItemModel {
     private String title;
     private String note;
     private LocalDateTime schedule;
+
     private List<LocalDateTime> reminderAlertItemList;
 
     public ReminderItemModel(String ownerGroup, String title, String note, LocalDateTime schedule, List<LocalDateTime> reminderAlertItemList) {
@@ -20,5 +21,21 @@ public class ReminderItemModel {
 
     public String getGroupId(){
         return ownerGroup;
+    }
+
+    public LocalDateTime getSchedule() {
+        return schedule;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public List<LocalDateTime> getReminderAlertItemList() {
+        return reminderAlertItemList;
     }
 }

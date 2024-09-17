@@ -2,14 +2,16 @@ package com.example.mind_care.home.reminders.model;
 
 import android.net.Uri;
 
+import com.google.firebase.firestore.PropertyName;
+
 import java.util.List;
 
 public class RemindersGroupItem {
     //TODO incomplete class, carrys data of each group in the reminders tab
     private final Uri mImageSource;
     private final String mName;
-    private List<RemindersReminderItem> mRemindersReminderItems;
-
+    @PropertyName("reminderList")
+    private List<ReminderItemModel> reminderList;
     private String groupId;
 
     public RemindersGroupItem(Uri imageSource, String name) {
@@ -25,12 +27,12 @@ public class RemindersGroupItem {
         return mName;
     }
 
-    public List<RemindersReminderItem> getRemindersReminderItems() {
-        return mRemindersReminderItems;
+    public List<ReminderItemModel> getReminderList() {
+        return reminderList;
     }
 
-    public void setRemindersReminderItems(RemindersReminderItem remindersReminderItems) {
-        this.mRemindersReminderItems.add(remindersReminderItems);
+    public void setReminderList(List<ReminderItemModel> reminders) {
+        this.reminderList = reminders;
     }
 
     public void setGroupId(String groupId) {

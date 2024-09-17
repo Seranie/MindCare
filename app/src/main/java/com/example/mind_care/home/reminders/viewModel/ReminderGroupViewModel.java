@@ -14,12 +14,8 @@ import java.util.List;
 
 public class ReminderGroupViewModel extends ViewModel {
     private final GroupRepository groupRepository = new GroupRepository();
-    private final MutableLiveData<List<RemindersGroupItem>> remindersGroupLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<RemindersGroupItem>> remindersGroupLiveData = new MutableLiveData<>(new ArrayList<>());
 
-    public ReminderGroupViewModel(){
-        // need to set this so recyclerview adapters dont break when calling getsize.
-        remindersGroupLiveData.setValue(new ArrayList<>());
-    }
 
 
     public LiveData<List<RemindersGroupItem>> getRemindersGroupLiveData() {
@@ -36,7 +32,11 @@ public class ReminderGroupViewModel extends ViewModel {
     }
 
     public int getSize() {
-        return remindersGroupLiveData.getValue().size();
+        try{
+            return remindersGroupLiveData.getValue().size();
+        } catch (NullPointerException e){
+            return 0;
+        }
     }
 
     public void addReminderToGroup(int position) {

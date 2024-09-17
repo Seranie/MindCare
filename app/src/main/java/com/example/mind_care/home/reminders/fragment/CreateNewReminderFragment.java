@@ -22,6 +22,7 @@ import com.example.mind_care.home.reminders.adapter.CreateReminderGroupsAdapter;
 import com.example.mind_care.home.reminders.model.ReminderItemModel;
 import com.example.mind_care.home.reminders.viewModel.ReminderAlertDateTimeViewModel;
 import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
+import com.example.mind_care.home.reminders.viewModel.ReminderItemViewModel;
 import com.example.mind_care.home.reminders.viewModel.ReminderScheduleDateTimeViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -45,6 +46,7 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
     ReminderGroupViewModel groupViewModel;
     ReminderAlertDateTimeViewModel alertDateTimeViewModel;
     ReminderScheduleDateTimeViewModel scheduleDateTimeViewModel;
+    ReminderItemViewModel reminderItemViewModel;
 
     private LocalDateTime scheduleDateTime = LocalDateTime.now();
 
@@ -72,6 +74,7 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
         alertDateTimeViewModel = new ViewModelProvider(requireActivity()).get(ReminderAlertDateTimeViewModel.class);
         groupViewModel = new ViewModelProvider(requireActivity()).get(ReminderGroupViewModel.class);
         scheduleDateTimeViewModel = new ViewModelProvider(requireActivity()).get(ReminderScheduleDateTimeViewModel.class);
+        reminderItemViewModel = new ViewModelProvider(requireActivity()).get(ReminderItemViewModel.class);
 
         CreateReminderGroupsAdapter groupsAdapter = new CreateReminderGroupsAdapter(groupViewModel, getContext(), this);
         groupsRecyclerView.setAdapter(groupsAdapter);
@@ -107,7 +110,7 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
 
             //send to database
             ReminderItemModel reminderItem = new ReminderItemModel(currentGroupSelectedId, reminderTitle, reminderNote, reminderSchedule, reminderAlertItemList);
-
+            reminderItemViewModel.addReminderItem(reminderItem);
         });
 
     }
