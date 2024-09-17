@@ -67,7 +67,7 @@ public class CreateNewReminderFragment extends Fragment {
         groupViewModel.getGroupListFromRepository();
 
         //TODO send alert item list in associated with the current reminder if any.
-        remindersRecyclerView.setAdapter(new CreateReminderAlertItemAdapter(alertDateTimeViewModel, getChildFragmentManager()));
+        remindersRecyclerView.setAdapter(new CreateReminderAlertItemAdapter(alertDateTimeViewModel, getChildFragmentManager(), this));
         remindersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
 

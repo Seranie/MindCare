@@ -2,6 +2,7 @@ package com.example.mind_care.home.reminders.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.DatePicker;
 
@@ -11,7 +12,8 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
 
-public abstract class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+    private OnDateSetCallback callback;
 
 
     @NonNull
@@ -25,6 +27,15 @@ public abstract class DatePickerFragment extends DialogFragment implements DateP
     }
 
     @Override
-    public abstract void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth);
+    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth){
+        callback.onDateSet(datePicker, year, month, dayOfMonth);
+    };
 
+    public interface OnDateSetCallback {
+        void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth);
+    };
+
+    public void setOnDateSetListener(OnDateSetCallback callback){
+        this.callback = callback;
+    }
 }

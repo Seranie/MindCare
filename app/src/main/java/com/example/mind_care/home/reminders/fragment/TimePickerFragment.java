@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
@@ -12,7 +13,8 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
 
-public abstract class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+    private OnTimeSetCallback callback;
 
     @NonNull
     @Override
@@ -25,5 +27,19 @@ public abstract class TimePickerFragment extends DialogFragment implements TimeP
     }
 
     @Override
-    public abstract void onTimeSet(TimePicker timePicker, int hourOfDay, int minute);
+    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+        try{
+            callback.onTimeSet(timePicker, hourOfDay, minute);
+        } catch (NullPointerException e){
+            Log.i("TimePickerFragment", "callback is null");
+        }
+    }
+
+    public interface OnTimeSetCallback {
+        void onTimeSet(TimePicker timePicker, int hourOfDay, int minute);
+    }
+
+    public void setOnTimeSetListener(OnTimeSetCallback callback) {
+        this.callback = callback;
+    }
 }

@@ -5,31 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/alert_item_delete_button"
-        style="@style/Widget.Material3.Button.TonalButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/reminders_create_reminder_item_margin"
-        android:gravity="start|center_vertical"
-        android:insetLeft="10dp"
-        app:cornerRadius="@dimen/reminders_create_reminder_item_corner_radius"
-        app:icon="@drawable/outline_close_10"
-        app:iconGravity="start"
-        app:iconPadding="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/alert_item_button"
-        style="@style/Widget.Material3.Button.TonalButton"
+    <com.google.android.material.chip.Chip
+        android:id="@+id/alert_item_chip"
+        style="@style/Widget.Material3.Chip.Assist"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/reminders_create_reminder_item_margin"
-        android:gravity="start|center_vertical"
-        android:text="Button"
-        app:cornerRadius="8dp"
+        android:layoutDirection="rtl"
+        android:text="Date"
+        android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+        android:textDirection="ltr"
+        app:closeIconVisible="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/alert_item_delete_button"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

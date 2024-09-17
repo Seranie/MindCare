@@ -3,11 +3,11 @@ package com.example.mind_care.home.reminders.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,9 +29,10 @@ public class CreateReminderAlertItemAdapter extends RecyclerView.Adapter<Recycle
     ReminderAlertDateTimeViewModel alertDateTimeViewModel;
     FragmentManager fragmentManager;
 
-    public CreateReminderAlertItemAdapter(ReminderAlertDateTimeViewModel alertDateTimeViewModel, FragmentManager fragmentManager) {
+    public CreateReminderAlertItemAdapter(ReminderAlertDateTimeViewModel alertDateTimeViewModel, FragmentManager fragmentManager, Fragment fragment) {
         this.alertDateTimeViewModel = alertDateTimeViewModel;
         this.fragmentManager = fragmentManager;
+        alertDateTimeViewModel.getMutableDateTimeLiveData().observe(fragment, arrayList -> notifyDataSetChanged());
     }
 
     @NonNull
@@ -52,7 +53,7 @@ public class CreateReminderAlertItemAdapter extends RecyclerView.Adapter<Recycle
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int viewType = getItemViewType(position);
         if (viewType == ITEM_VIEW_TYPE_REMINDER) {
-            if(alertDateTimeViewModel.getSize() != 0){
+            if (alertDateTimeViewModel.getSize() != 0) {
                 ReminderItemViewHolder reminderItemViewHolder = (ReminderItemViewHolder) holder;
                 String dateTimeString = alertDateTimeViewModel.getDateTimeString(position);
                 reminderItemViewHolder.reminderItem.setText(dateTimeString);
@@ -62,7 +63,7 @@ public class CreateReminderAlertItemAdapter extends RecyclerView.Adapter<Recycle
 
     @Override
     public int getItemViewType(int position) {
-        if (position+1 == getItemCount()) {
+        if (position + 1 == getItemCount()) {
             return ITEM_VIEW_TYPE_ADD_NEW;
         } else {
             return ITEM_VIEW_TYPE_REMINDER;
@@ -74,57 +75,41 @@ public class CreateReminderAlertItemAdapter extends RecyclerView.Adapter<Recycle
         return alertDateTimeViewModel.getSize() + NUMBER_OF_EXTRA_ITEMS;
     }
 
-    public class ReminderItemViewHolder extends RecyclerView.ViewHolder {
-        private Button reminderItem;
-        private Button deleteButton;
+    public class ReminderItemViewHolder extends RecyclerView.ViewHolder implements DatePickerFragment.OnDateSetCallback, TimePickerFragment.OnTimeSetCallback {
+        private final Chip reminderItem;
         private LocalDateTime dateTime = LocalDateTime.now();
 
         public ReminderItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            reminderItem = itemView.findViewById(R.id.alert_item_button);
-            deleteButton = itemView.findViewById(R.id.alert_item_delete_button);
+            reminderItem = itemView.findViewById(R.id.alert_item_chip);
 
-            int position = getAdapterPosition();
-
-            reminderItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-
-                    DatePickerFragment datePickerFragment = new DatePickerFragment() {
-                        @Override
-                        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                            dateTime = dateTime.withYear(year).withMonth(month).withDayOfMonth(dayOfMonth);
-                        }
-                    };
-                    datePickerFragment.show(fragmentManager, DATE_PICKER_TAG);
-
-                    TimePickerFragment timePickerFragment = new TimePickerFragment() {
-                        @Override
-                        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-                            dateTime = dateTime.withHour(hourOfDay).withMinute(minute);
-
-                            //If user OKs both date and time, edit the existing alert item.
-                            alertDateTimeViewModel.replaceDateTimeObject(position, dateTime);
-                        }
-                    };
-                    timePickerFragment.show(fragmentManager, TIME_PICKER_TAG);
-                }
+            reminderItem.setOnClickListener(view -> {
+                DatePickerFragment datePickerFragment = new DatePickerFragment();
+                datePickerFragment.setOnDateSetListener(ReminderItemViewHolder.this);
+                datePickerFragment.show(fragmentManager, DATE_PICKER_TAG);
             });
-
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    alertDateTimeViewModel.deleteDateTimeObject(position);
-                }
-            });
+            reminderItem.setOnCloseIconClickListener(view -> alertDateTimeViewModel.deleteDateTimeObject(getAdapterPosition()));
         }
 
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+            dateTime = dateTime.withYear(year).withMonth(month).withDayOfMonth(dayOfMonth);
+            TimePickerFragment timePickerFragment = new TimePickerFragment();
+            timePickerFragment.setOnTimeSetListener(this);
+            timePickerFragment.show(fragmentManager, TIME_PICKER_TAG);
+        }
+
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+            dateTime = dateTime.withHour(hourOfDay).withMinute(minute);
+            //If user OKs both date and time, edit the existing alert item.
+            alertDateTimeViewModel.replaceDateTimeObject(getAdapterPosition(), dateTime);
+        }
     }
 
-    public class ReminderAddItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final Chip reminderItem;;
-        private LocalDateTime dateTime;
+    public class ReminderAddItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, DatePickerFragment.OnDateSetCallback, TimePickerFragment.OnTimeSetCallback {
+        private final Chip reminderItem;
+        private LocalDateTime dateTime = LocalDateTime.now();
 
         public ReminderAddItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -135,24 +120,23 @@ public class CreateReminderAlertItemAdapter extends RecyclerView.Adapter<Recycle
         @Override
         public void onClick(View view) {
             //Add on click show date/time picker, then pass datetime to viewmodel
-            DatePickerFragment datePickerFragment = new DatePickerFragment() {
-                @Override
-                public void onDateSet(DatePicker datePicker, int yr, int mth, int date) {
-                    dateTime = dateTime.withYear(yr).withMonth(mth).withDayOfMonth(date);
-                }
-            };
+            DatePickerFragment datePickerFragment = new DatePickerFragment();
+            datePickerFragment.setOnDateSetListener(this);
             datePickerFragment.show(fragmentManager, DATE_PICKER_TAG);
 
-            TimePickerFragment timePickerFragment = new TimePickerFragment() {
-                @Override
-                public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-                    dateTime = dateTime.withHour(hourOfDay).withMinute(minute);
+        }
 
-                    //If user OKs both date and time pickers, add this dateTime to viewmodel.
-                    alertDateTimeViewModel.addDateTimeToArray(dateTime);
-                }
-            };
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+            dateTime = dateTime.withYear(year).withMonth(month).withDayOfMonth(dayOfMonth);
+            TimePickerFragment timePickerFragment = new TimePickerFragment();
+            timePickerFragment.setOnTimeSetListener(this);
             timePickerFragment.show(fragmentManager, TIME_PICKER_TAG);
+        }
+
+        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+            dateTime = dateTime.withHour(hourOfDay).withMinute(minute);
+            alertDateTimeViewModel.addDateTimeToArray(dateTime);
         }
     }
 }
