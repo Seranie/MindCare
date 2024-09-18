@@ -4,6 +4,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -52,13 +53,13 @@ public class ReminderWorker extends Worker {
     private void triggerNotification(String reminderTitle, String reminderId) {
         NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         String channelID = "reminder_channel";
+        Log.i("INFO", String.valueOf(notificationManager.areNotificationsEnabled()));
+        Log.i("INFO", reminderTitle);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    channelID, "Reminder Notifications",
-                    NotificationManager.IMPORTANCE_HIGH);
-            notificationManager.createNotificationChannel(channel);
-        }
+        NotificationChannel channel = new NotificationChannel(
+                channelID, "Reminder Notifications",
+                NotificationManager.IMPORTANCE_HIGH);
+        notificationManager.createNotificationChannel(channel);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), channelID)
                 .setSmallIcon(R.drawable.ic_image_icon) //TODO chng later
@@ -66,6 +67,6 @@ public class ReminderWorker extends Worker {
                 .setContentText(reminderTitle + " is due now!")
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
-        notificationManager.notify(Integer.parseInt(reminderId), notificationBuilder.build());
+        notificationManager.notify(1, notificationBuilder.build());
     }
 }

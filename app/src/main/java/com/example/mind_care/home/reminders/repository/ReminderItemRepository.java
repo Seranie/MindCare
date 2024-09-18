@@ -45,7 +45,9 @@ public class ReminderItemRepository {
                 reminderItemDocRef.update("reminderId", reminderItemDocRef.getId());
                 for (LocalDateTime dateTime :reminderItem.getReminderAlertItemList()){
                     Timestamp alertItemTimestamp = new Timestamp(Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant()));
-                    reminderItemDocRef.collection("alertItems").add(alertItemTimestamp);
+                    HashMap<String, Timestamp> alertItemMap = new HashMap<>();
+                    alertItemMap.put("dateTime", alertItemTimestamp);
+                    reminderItemDocRef.collection("alertItems").add(alertItemMap);
                 }
             }
         });

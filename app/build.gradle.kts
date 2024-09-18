@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.glide)
     implementation(libs.worker)
+    implementation(libs.guava)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

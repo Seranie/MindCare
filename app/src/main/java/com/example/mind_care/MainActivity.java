@@ -1,7 +1,10 @@
 package com.example.mind_care;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.transition.Fade;
 import android.util.Log;
@@ -9,6 +12,8 @@ import android.util.Log;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -21,6 +26,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+import android.Manifest.permission;
 
 import com.example.mind_care.showcases.ShowcaseChangeViewModel;
 import com.example.mind_care.signup.FirebaseUIActivity;
@@ -75,11 +81,16 @@ public class MainActivity extends AppCompatActivity {
             switchToShowcase(id);
         });
 
+        //Request notification permissions
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            checkAndRequestNotificationPermission();
+        }
+
         //Set up notification worker for reminders
         PeriodicWorkRequest reminderCheckRequest = new PeriodicWorkRequest.Builder(
-                ReminderWorker.class, 15, TimeUnit.MINUTES)
+                ReminderWorker.class, 1, TimeUnit.MINUTES)
                 .build();
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork("reminderWork", ExistingPeriodicWorkPolicy.KEEP, reminderCheckRequest);
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork("reminderWork", ExistingPeriodicWorkPolicy.REPLACE, reminderCheckRequest);
     }
 
 
@@ -97,5 +108,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 
-
+    @SuppressLint("InlinedApi")
+    public void checkAndRequestNotificationPermission(){
+        if (ContextCompat.checkSelfPermission(this, permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            // Request permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{permission.POST_NOTIFICATIONS},
+                    1);
+        }
+    }
 }
