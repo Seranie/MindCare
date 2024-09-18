@@ -5,57 +5,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.google.android.material.card.MaterialCardView
-        style="@style/Widget.Material3.CardView.Elevated"
+    <com.google.android.material.chip.Chip
+        android:id="@+id/reminders_chip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp">
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="8dp"
-                android:adjustViewBounds="false"
-                android:background="#00FFFFFF"
-                app:srcCompat="@android:drawable/checkbox_on_background" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_weight="0.9"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/reminders_reminder_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="TextView" />
-
-                <View
-                    style="@style/divider"
-                    android:layout_marginVertical="4dp" />
-
-                <TextView
-                    android:id="@+id/reminders_reminder_note"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="4dp"
-                    android:text="recyclerview item" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
+        android:layoutDirection="rtl"
+        android:text="text"
+        android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+        android:textDirection="ltr"
+        app:closeIcon="@drawable/baseline_circle_10"
+        app:closeIconVisible="true" />
 </LinearLayout>

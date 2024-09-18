@@ -18,13 +18,13 @@ import com.example.mind_care.home.ViewpagerNavigationMediator;
 import com.example.mind_care.home.reminders.fragment.Reminders;
 import com.example.mind_care.placeholder_fragments.PlaceholderFragment;
 import com.example.mind_care.showcases.ToolsFragmentStateAdapter;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 
-//TODO change to viewpager
 public class Home extends Fragment implements BaseTools.FabListener {
     private NavController navController;
     private FloatingActionButton fab;
@@ -65,6 +65,14 @@ public class Home extends Fragment implements BaseTools.FabListener {
 
         fab = view.findViewById(R.id.home_fab);
         navController = Navigation.findNavController(view);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Fix appbar being collapsed even after returning from fragment.
+        AppBarLayout layout = getActivity().findViewById(R.id.appbar);
+        layout.setExpanded(true);
     }
 
 

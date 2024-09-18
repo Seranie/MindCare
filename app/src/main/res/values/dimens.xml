@@ -13,8 +13,14 @@
     <dimen name="guide_showcase_icon_padding">4dp</dimen>
 
     <dimen name="reminders_create_reminder_item_corner_radius">8dp</dimen>
-    <dimen name="reminders_create_reminder_item_margin">8dp</dimen>
+    <dimen name="reminders_create_reminder_item_margin">24dp</dimen>
 
     <dimen name="reminders_create_alert_item_icon_padding">12dp</dimen>"
+    <dimen name="reminders_group_icon_top_margin">12dp</dimen>
+    <dimen name="reminders_group_icon_horizontal_margin">6dp</dimen>
+    <dimen name="reminders_group_icon_padding">4dp</dimen>
+
+    <dimen name="reminders_home_page_recyclerview_margins">8dp</dimen>
+    <dimen name="reminders_divider_margin">16dp</dimen>
 
 </resources>

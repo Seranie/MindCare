@@ -1,6 +1,8 @@
 package com.example.mind_care.home.reminders.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,22 +10,39 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleEventObserver;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.OnLifecycleEvent;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.mind_care.R;
+import com.example.mind_care.home.reminders.fragment.Reminders;
 import com.example.mind_care.home.reminders.model.RemindersGroupItem;
+import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class RemindersGroupAdapter extends RecyclerView.Adapter<RemindersGroupAdapter.GroupItemViewHolder> {
-    //TODO incomplete adapter, takes in a list of group items
-    private List<RemindersGroupItem> remindersGroupItems;
-    private Context context;
+public class RemindersGroupAdapter extends RecyclerView.Adapter<RemindersGroupAdapter.GroupItemViewHolder> implements DefaultLifecycleObserver {
+    private final Context context;
+    private final Reminders fragment;
+    private List<RemindersGroupItem> remindersGroupItems = new ArrayList<>();
+    private String selectedGroupId;
+    private GroupItemViewHolder selectedGroupViewHolder = null;
 
-    public RemindersGroupAdapter(List<RemindersGroupItem> remindersGroupItems, Context context){
-        this.remindersGroupItems = remindersGroupItems;
+    public RemindersGroupAdapter(ReminderGroupViewModel groupViewModel, Context context, Fragment fragment) {
         this.context = context;
+        this.fragment = (Reminders) fragment;
+        groupViewModel.getRemindersGroupLiveData().observe(fragment, groupItems -> {
+            remindersGroupItems = groupItems;
+            notifyDataSetChanged();
+        });
     }
 
     @NonNull
@@ -45,7 +64,19 @@ public class RemindersGroupAdapter extends RecyclerView.Adapter<RemindersGroupAd
         return remindersGroupItems.size();
     }
 
-    class GroupItemViewHolder extends RecyclerView.ViewHolder{
+    @Override
+    public void onPause(@NonNull LifecycleOwner owner) {
+        DefaultLifecycleObserver.super.onPause(owner);
+        if(selectedGroupViewHolder != null){
+            selectedGroupViewHolder.itemView.performClick();
+        }
+    }
+
+    public interface OnGroupItemClickListener {
+        void onItemClick(String groupId);
+    }
+
+    class GroupItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView groupItemImage;
         TextView groupItemName;
 
@@ -53,6 +84,42 @@ public class RemindersGroupAdapter extends RecyclerView.Adapter<RemindersGroupAd
             super(itemView);
             groupItemImage = itemView.findViewById(R.id.group_item_image);
             groupItemName = itemView.findViewById(R.id.group_item_name);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            //Update UI state of selected group
+            toggleSelect(view, getAdapterPosition());
+
+            if(selectedGroupId != null){
+                OnGroupItemClickListener listener = fragment;
+                listener.onItemClick(selectedGroupId);
+            }
+        }
+
+        private void toggleSelect(View v, int position) {
+            if (selectedGroupViewHolder == this) {
+                v.setBackground(null);
+                selectedGroupId = "";
+                selectedGroupViewHolder = null;
+            } else if (selectedGroupViewHolder == null) {
+                selectedGroupViewHolder = this;
+                selectedGroupId = remindersGroupItems.get(position).getGroupId();
+                v.setBackground(getPrimaryColor(v));
+            } else {
+                selectedGroupViewHolder.itemView.setBackgroundColor(Color.TRANSPARENT);
+                selectedGroupViewHolder = this;
+                selectedGroupId = remindersGroupItems.get(position).getGroupId();
+                v.setBackground(getPrimaryColor(v));
+            }
+        }
+
+        private Drawable getPrimaryColor(View v) {
+            return ContextCompat.getDrawable(v.getContext(), R.drawable.group_icon_drawable);
         }
     }
+
+
 }

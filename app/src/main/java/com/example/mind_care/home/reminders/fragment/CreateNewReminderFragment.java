@@ -8,11 +8,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -73,7 +75,7 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
         //Viewmodels for holding alert item date/times
         alertDateTimeViewModel = new ViewModelProvider(requireActivity()).get(ReminderAlertDateTimeViewModel.class);
         groupViewModel = new ViewModelProvider(requireActivity()).get(ReminderGroupViewModel.class);
-        scheduleDateTimeViewModel = new ViewModelProvider(requireActivity()).get(ReminderScheduleDateTimeViewModel.class);
+        scheduleDateTimeViewModel = new ViewModelProvider(this).get(ReminderScheduleDateTimeViewModel.class);
         reminderItemViewModel = new ViewModelProvider(requireActivity()).get(ReminderItemViewModel.class);
 
         CreateReminderGroupsAdapter groupsAdapter = new CreateReminderGroupsAdapter(groupViewModel, getContext(), this);
@@ -108,16 +110,28 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
             String reminderRepeat = repeat.getText() != null ? repeat.getText().toString() : "";
             String reminderRingtone = ringtone.getText() != null ? ringtone.getText().toString() : "";
 
-            //send to database
-            ReminderItemModel reminderItem = new ReminderItemModel(currentGroupSelectedId, reminderTitle, reminderNote, reminderSchedule, reminderAlertItemList);
-            reminderItemViewModel.addReminderItem(reminderItem);
+            //Check if at least title is filled and groupID must be selected.
+            if(reminderTitle.isEmpty()){
+                Toast.makeText(getContext(), "Please fill in title", Toast.LENGTH_SHORT).show();
+            }
+            else if (currentGroupSelectedId.isEmpty()){
+                Toast.makeText(getContext(), "Please select a group", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                //send to database
+                ReminderItemModel reminderItem = new ReminderItemModel(currentGroupSelectedId, reminderTitle, reminderNote, reminderSchedule, reminderAlertItemList);
+                reminderItemViewModel.addReminderItem(reminderItem);
+
+                Navigation.findNavController(v).popBackStack();
+            }
         });
 
+        cancelButton.setOnClickListener(v -> {Navigation.findNavController(v).popBackStack();});
     }
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-        scheduleDateTime.withYear(year).withMonth(month).withDayOfMonth(dayOfMonth);
+        scheduleDateTime = scheduleDateTime.withYear(year).withMonth(month).withDayOfMonth(dayOfMonth);
         TimePickerFragment timePickerFragment = new TimePickerFragment();
         timePickerFragment.setOnTimeSetListener(this);
         timePickerFragment.show(getChildFragmentManager(), timePickerTag);
@@ -125,7 +139,7 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-        scheduleDateTime.withHour(hourOfDay).withMinute(minute);
+        scheduleDateTime = scheduleDateTime.withHour(hourOfDay).withMinute(minute);
         scheduleDateTimeViewModel.changeDateTime(scheduleDateTime);
     }
 }

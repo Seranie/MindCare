@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,13 +21,16 @@ import com.example.mind_care.home.reminders.adapter.RemindersReminderAdapter;
 import com.example.mind_care.home.reminders.model.RemindersGroupItem;
 import com.example.mind_care.home.reminders.model.RemindersReminderItem;
 import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
+import com.example.mind_care.home.reminders.viewModel.ReminderItemViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Reminders extends BaseTools {
+public class Reminders extends BaseTools implements RemindersGroupAdapter.OnGroupItemClickListener {
     RecyclerView reminderItemsRecyclerView;
     FabListener fabListener;
+    private ReminderGroupViewModel groupViewModel;
+    private ReminderItemViewModel reminderItemViewModel;
 
     @Nullable
     @Override
@@ -41,33 +45,26 @@ public class Reminders extends BaseTools {
 
         //Get recycler views
         RecyclerView groupItemsRecyclerView = view.findViewById(R.id.reminders_group_recyclerview);
-        RecyclerView reminderItemsRecyclerView = view.findViewById(R.id.reminders_items_recyclerview);
+        reminderItemsRecyclerView = view.findViewById(R.id.reminders_items_recyclerview);
 
-        //get group viewmodel associated with this user
-        ReminderGroupViewModel groupViewModel = new ViewModelProvider(this).get(ReminderGroupViewModel.class);
+        //get group and reminders viewmodel associated with this user
+        groupViewModel = new ViewModelProvider(requireActivity()).get(ReminderGroupViewModel.class);
+        reminderItemViewModel = new ViewModelProvider(requireActivity()).get(ReminderItemViewModel.class);
 
-        //Create arrays to hold reminder groups and a temporary reminder list as well
-        //TODO reminder list will change to be gotten from database instead in the future
-        List<RemindersGroupItem> remindersGroupItems = new ArrayList<>();
-        List<RemindersReminderItem> remindersReminderItems = new ArrayList<>();
-
-        //Create a fake reminder item for temp use and add to list TODO remove in future.
-        RemindersReminderItem remindersReminderItem = new RemindersReminderItem();
-        remindersReminderItem.setTitle("Do something");
-        remindersReminderItem.setNote("On someday");
-        remindersReminderItems.add(remindersReminderItem);
-
-        //Create and add a new group object into list TODO will be dynamically gotten from database in future.
-        remindersGroupItems.add(new RemindersGroupItem(
-                Uri.parse("OMEGALUL"),
-                "GROUP 1"
-        ));
-
-        groupItemsRecyclerView.setAdapter(new RemindersGroupAdapter(remindersGroupItems, getContext()));
+        RemindersGroupAdapter groupAdapter = new RemindersGroupAdapter(groupViewModel, getContext(), this);
+        groupItemsRecyclerView.setAdapter(groupAdapter);
         groupItemsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        //adapter observes if fragment pauses, causing all cureently selected group to be deselected
+        getLifecycle().addObserver(groupAdapter);
 
-        reminderItemsRecyclerView.setAdapter(new RemindersReminderAdapter(remindersReminderItems));
+        reminderItemsRecyclerView.setAdapter(new RemindersReminderAdapter(groupViewModel, this));
         reminderItemsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+
+        groupViewModel.getGroupListFromRepository();
+
+
+
 
 //        MenuHost menuHost = requireActivity();
 //        menuHost.addMenuProvider(new MenuProvider() {
@@ -81,14 +78,16 @@ public class Reminders extends BaseTools {
 //                return false;
 //            }
 //        });
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         fabListener.setFabImage(R.drawable.reminders_icon);
         //on click navigate to some other destination
         fabListener.setOnFabClickedDestination(R.id.createNewReminderFragment);
+
+    }
+
+
+    @Override
+    public void onItemClick(String groupId) {
+        //Get reminders from the group the user clicked on and update UI state accordingly
+        groupViewModel.getRemindersFromGroup(groupId);
     }
 }

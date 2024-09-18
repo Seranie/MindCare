@@ -1,10 +1,15 @@
 package com.example.mind_care.home.reminders.model;
 
-public class RemindersReminderItem {
-    //TODO incomplete class, represents a single reminder in the reminders tool
+import com.google.firebase.Timestamp;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+public class RemindersReminderItem {
     private String mTitle;
     private String mNote;
+    private Timestamp mSchedule;
+    private List<LocalDateTime> mAlertItems;
 
     public String getNote() {
         return mNote;

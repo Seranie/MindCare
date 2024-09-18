@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.mind_care.home.reminders.model.ReminderItemModel;
 import com.example.mind_care.home.reminders.model.RemindersGroupItem;
 import com.example.mind_care.home.reminders.repository.GroupRepository;
 
@@ -15,8 +16,7 @@ import java.util.List;
 public class ReminderGroupViewModel extends ViewModel {
     private final GroupRepository groupRepository = new GroupRepository();
     private final MutableLiveData<List<RemindersGroupItem>> remindersGroupLiveData = new MutableLiveData<>(new ArrayList<>());
-
-
+    private final MutableLiveData<List<ReminderItemModel>> remindersLiveData = new MutableLiveData<>(new ArrayList<>());
 
     public LiveData<List<RemindersGroupItem>> getRemindersGroupLiveData() {
         return remindersGroupLiveData;
@@ -39,8 +39,21 @@ public class ReminderGroupViewModel extends ViewModel {
         }
     }
 
-    public void addReminderToGroup(int position) {
+    public LiveData<List<ReminderItemModel>> getRemindersLiveData() {
+        return remindersLiveData;
+    }
 
+    public void getRemindersFromGroup(String groupId){
+        if (groupId.isEmpty()){
+            remindersLiveData.setValue(new ArrayList<>());
+        }else{
+            new Thread(() -> groupRepository.retrieveRemindersFromGroup(groupId, remindersLiveData::postValue)).start();
+        }
+    }
 
+    public void deleteReminder(String groupId, String reminderId){
+        //delete then update livedata
+        groupRepository.deleteReminder(groupId, reminderId);
+        getRemindersFromGroup(groupId);
     }
 }

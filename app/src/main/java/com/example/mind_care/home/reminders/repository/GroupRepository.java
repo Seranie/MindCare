@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.mind_care.home.reminders.model.ReminderItemModel;
 import com.example.mind_care.home.reminders.model.RemindersGroupItem;
+import com.example.mind_care.home.reminders.model.RemindersReminderItem;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,12 +18,13 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class GroupRepository {
     private final FirebaseFirestore db;
     private final String collection = "users";
     private final FirebaseUser user;
-    private List<RemindersGroupItem> groupList;
+    List<RemindersGroupItem> groupList = new ArrayList<>();
 
     public GroupRepository() {
         db = FirebaseFirestore.getInstance();
@@ -67,11 +69,15 @@ public class GroupRepository {
                             if (reminderTask.isSuccessful()){
                                 for (DocumentSnapshot reminderShot : reminderTask.getResult()) {
                                     String groupId = shot.getId();
-                                    String title = String.valueOf(reminderShot.get("title"));
-                                    String note = String.valueOf(reminderShot.get("note"));
-                                    Timestamp timestap  = reminderShot.getTimestamp("schedule");
-                                    Date date = timestap.toDate();
-                                    LocalDateTime dateTime = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+                                    String title = (String) reminderShot.get("title");
+                                    String note = (String) reminderShot.get("note");
+                                    Timestamp timestamp = reminderShot.getTimestamp("schedule");
+                                    LocalDateTime dateTime = LocalDateTime.now();
+                                    if(timestamp != null){
+                                        Date date = timestamp.toDate();
+                                        dateTime = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+                                    }
+
 
                                     //For each reminder, query for alert items reminder -> datetime
                                     CollectionReference alertRef = reminderShot.getReference().collection("alertItems");
@@ -79,8 +85,12 @@ public class GroupRepository {
                                     alertRef.get().addOnCompleteListener(alertTask -> {
                                         if (alertTask.isSuccessful()){
                                             for (DocumentSnapshot alertShot : alertTask.getResult()) {
+                                                Date alertDate = new Date();
                                                 Timestamp alertTimestamp = alertShot.getTimestamp("dateTime");
-                                                Date alertDate = alertTimestamp.toDate();
+                                                if (alertTimestamp != null){
+                                                 alertDate= alertTimestamp.toDate();
+
+                                                }
                                                 LocalDateTime alertDateTime = LocalDateTime.ofInstant(alertDate.toInstant(), ZoneId.systemDefault());
                                                 alertItemList.add(alertDateTime);
                                             }
@@ -105,12 +115,48 @@ public class GroupRepository {
         });
     }
 
-//    public void addReminderToGroup(int position){
-//        db.collection(collection).document(user.getUid()).update("groups", );
-//    }
+    public void retrieveRemindersFromGroup(String groupId, OnReminderCompleteCallback callback) {
+        List<ReminderItemModel> tempList = new ArrayList<>();
+
+        db.collection(collection).document(user.getUid()).collection("groups").document(groupId).collection("reminders").get().addOnCompleteListener(task ->{
+            if(task.isSuccessful()){
+                for (DocumentSnapshot doc : task.getResult().getDocuments()){
+                    //Get all alert items and make a list of it
+                    List<LocalDateTime> alertItemList = new ArrayList<>();
+                    doc.getReference().collection("alertItems").get().addOnCompleteListener(getAlertItemsTask -> {
+                        for (DocumentSnapshot alertItemDoc : getAlertItemsTask.getResult().getDocuments()){
+                            alertItemList.add(alertItemDoc.getTimestamp("dateTime").toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                        }
+                    });
+                    //Make new reminder item
+                    Map<String, Object> map = doc.getData();
+                    Timestamp timestamp = (Timestamp) map.get("schedule");
+                    LocalDateTime dateTime = LocalDateTime.now();
+                    Date date = timestamp.toDate();
+                    dateTime = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+
+                    ReminderItemModel reminderItem = new ReminderItemModel(groupId, (String) map.get("title"), (String) map.get("note"), dateTime, alertItemList);
+                    reminderItem.setReminderId(doc.getId());
+                    tempList.add(reminderItem);
+                }
+                callback.onComplete(tempList);
+            } else {
+                Log.i("INFO", String.valueOf(task.getException()));
+            }
+        });
+    }
+
+    public void deleteReminder(String groupId, String reminderId){
+        db.collection(collection).document(user.getUid()).collection("groups").document(groupId).collection("reminders").document(reminderId).delete();
+    }
+
 
     public interface OnCompleteCallback {
         void onComplete(List<RemindersGroupItem> groupList);
+    }
+
+    public interface OnReminderCompleteCallback {
+        void onComplete(List<ReminderItemModel> reminderList);
     }
 
 }

@@ -6,26 +6,27 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mind_care.R;
-import com.example.mind_care.home.reminders.model.RemindersReminderItem;
+import com.example.mind_care.home.reminders.model.ReminderItemModel;
+import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
+import com.google.android.material.chip.Chip;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RemindersReminderAdapter extends RecyclerView.Adapter<RemindersReminderAdapter.ReminderItemViewHolder>{
-    //TODO incomplete adapter
-    private List<RemindersReminderItem> remindersReminderItems;
+    private List<ReminderItemModel> remindersReminderItems = new ArrayList<>();
+    private ReminderGroupViewModel groupViewModel;
 
-    public RemindersReminderAdapter(List<RemindersReminderItem> remindersReminderItems){
-        //TODO will need to be changed to use data gotten group RemindersGroupItem instead
-        this.remindersReminderItems = remindersReminderItems;
-    }
-
-    public void updateList(List<RemindersReminderItem> newReminders){
-        //TODO incomplete method to use for updating list based on which group is chosen
-        remindersReminderItems = newReminders;
-        notifyDataSetChanged();
+    public RemindersReminderAdapter(ReminderGroupViewModel groupViewModel, Fragment fragment){
+        this.groupViewModel = groupViewModel;
+        groupViewModel.getRemindersLiveData().observe(fragment, reminders -> {
+            this.remindersReminderItems = reminders;
+            notifyDataSetChanged();
+        });
     }
 
     @NonNull
@@ -37,9 +38,8 @@ public class RemindersReminderAdapter extends RecyclerView.Adapter<RemindersRemi
 
     @Override
     public void onBindViewHolder(@NonNull RemindersReminderAdapter.ReminderItemViewHolder holder, int position) {
-        RemindersReminderItem remindersReminderItem = remindersReminderItems.get(position);
-        holder.mNote.setText(remindersReminderItem.getNote());
-        holder.mTitle.setText(remindersReminderItem.getTitle());
+        ReminderItemModel remindersReminderItem = remindersReminderItems.get(position);
+        holder.chip.setText(remindersReminderItem.getTitle());
     }
 
     @Override
@@ -48,13 +48,14 @@ public class RemindersReminderAdapter extends RecyclerView.Adapter<RemindersRemi
     }
 
     class ReminderItemViewHolder extends RecyclerView.ViewHolder{
-        TextView mTitle;
-        TextView mNote;
+        private Chip chip;
 
         public ReminderItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            mTitle = itemView.findViewById(R.id.reminders_reminder_title);
-            mNote = itemView.findViewById(R.id.reminders_reminder_note);
+            chip = itemView.findViewById(R.id.reminders_chip);
+            chip.setOnCloseIconClickListener(view -> {
+                groupViewModel.deleteReminder(remindersReminderItems.get(getAdapterPosition()).getGroupId(), remindersReminderItems.get(getAdapterPosition()).getId());
+            });
         }
     }
 }

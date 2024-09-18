@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Create viewmodel and pass to showcase tab's recyclerview items TODO
         ShowcaseChangeViewModel model = new ViewModelProvider(this).get(ShowcaseChangeViewModel.class);
-        Log.i("INFO1", String.valueOf(model));
         model.getShowcaseChangeId().observe(this, id -> {
             switchToShowcase(id);
         });
@@ -74,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
     @Override
     public boolean onSupportNavigateUp(){
@@ -88,5 +88,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtras(bundle);
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
+
 
 }

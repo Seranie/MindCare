@@ -1,6 +1,7 @@
 package com.example.mind_care.home.reminders.repository;
 
 import com.example.mind_care.home.reminders.model.ReminderItemModel;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -9,6 +10,9 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.HashMap;
 
 public class ReminderItemRepository {
@@ -31,13 +35,17 @@ public class ReminderItemRepository {
         HashMap<String, Object> map = new HashMap<>();
         map.put("title", reminderItem.getTitle());
         map.put("note", reminderItem.getNote());
-        map.put("schedule", reminderItem.getSchedule());
+
+        Timestamp timestamp = new Timestamp(Date.from(reminderItem.getSchedule().atZone(ZoneId.systemDefault()).toInstant()));
+        map.put("schedule", timestamp);
 
         remindersColRef.add(map).addOnCompleteListener(task -> {
             if (task.isSuccessful()){
                 DocumentReference reminderItemDocRef = task.getResult();
+                reminderItemDocRef.update("reminderId", reminderItemDocRef.getId());
                 for (LocalDateTime dateTime :reminderItem.getReminderAlertItemList()){
-                    reminderItemDocRef.collection("alertItems").add(dateTime);
+                    Timestamp alertItemTimestamp = new Timestamp(Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant()));
+                    reminderItemDocRef.collection("alertItems").add(alertItemTimestamp);
                 }
             }
         });

@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class ReminderItemModel {
+    private String reminderId;
+
     private String ownerGroup;
     private String title;
     private String note;
     private LocalDateTime schedule;
-
     private List<LocalDateTime> reminderAlertItemList;
-
     public ReminderItemModel(String ownerGroup, String title, String note, LocalDateTime schedule, List<LocalDateTime> reminderAlertItemList) {
         this.ownerGroup = ownerGroup;
         this.title = title;
@@ -37,5 +37,13 @@ public class ReminderItemModel {
 
     public List<LocalDateTime> getReminderAlertItemList() {
         return reminderAlertItemList;
+    }
+
+    public String getId(){
+        return reminderId;
+    }
+
+    public void setReminderId(String reminderId) {
+        this.reminderId = reminderId;
     }
 }

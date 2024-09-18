@@ -20,6 +20,9 @@ public class ReminderItemViewModel extends ViewModel {
     }
 
     public void addReminderItem(ReminderItemModel reminderItem){
-        repository.addReminderItemToDatabase(reminderItem);
+        new Thread(() -> {
+            repository.addReminderItemToDatabase(reminderItem);
+        }).start();
     }
+
 }

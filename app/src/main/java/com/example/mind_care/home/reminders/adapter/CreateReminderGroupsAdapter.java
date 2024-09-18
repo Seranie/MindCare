@@ -3,6 +3,7 @@ package com.example.mind_care.home.reminders.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -108,28 +110,25 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
 
         private void toggleSelect(View v, int position) {
             if (selectedGroupViewHolder == this) {
-                v.setBackgroundColor(Color.TRANSPARENT);
+                v.setBackground(null);
                 selectedGroupId = null;
                 selectedGroupViewHolder = null;
             }
             else if (selectedGroupViewHolder == null){
                 selectedGroupViewHolder = this;
                 selectedGroupId = groupItems.get(position).getGroupId();
-                v.setBackgroundColor(getPrimaryColor(v));
+                v.setBackground(getPrimaryColor(v));
             }
             else {
                 selectedGroupViewHolder.itemView.setBackgroundColor(Color.TRANSPARENT);
                 selectedGroupViewHolder = this;
                 selectedGroupId = groupItems.get(position).getGroupId();
-                v.setBackgroundColor(getPrimaryColor(v));
+                v.setBackground(getPrimaryColor(v));
             }
         }
 
-        private int getPrimaryColor(View v) {
-            Resources.Theme theme = v.getContext().getTheme();
-            TypedValue typedValue = new TypedValue();
-            theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue, true);
-            return typedValue.data;
+        private Drawable getPrimaryColor(View v) {
+            return ContextCompat.getDrawable(v.getContext(), R.drawable.group_icon_drawable);
         }
     }
 

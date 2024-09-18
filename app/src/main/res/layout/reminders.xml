@@ -12,6 +12,7 @@
         android:id="@+id/reminders_group_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/reminders_home_page_recyclerview_margins"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -20,8 +21,7 @@
     <View
         android:id="@+id/view2"
         style="@style/divider"
-        android:layout_marginTop="17dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginVertical="@dimen/reminders_divider_margin"
         app:layout_constraintBottom_toTopOf="@+id/reminders_items_recyclerview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reminders_group_recyclerview" />
@@ -30,7 +30,7 @@
         android:id="@+id/reminders_items_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_margin="@dimen/reminders_home_page_recyclerview_margins"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view2" />
 
