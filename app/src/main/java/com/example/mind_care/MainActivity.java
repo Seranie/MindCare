@@ -18,11 +18,16 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.example.mind_care.showcases.ShowcaseChangeViewModel;
 import com.example.mind_care.signup.FirebaseUIActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
@@ -69,9 +74,12 @@ public class MainActivity extends AppCompatActivity {
         model.getShowcaseChangeId().observe(this, id -> {
             switchToShowcase(id);
         });
-        //Switch based on viewModel data
 
-
+        //Set up notification worker for reminders
+        PeriodicWorkRequest reminderCheckRequest = new PeriodicWorkRequest.Builder(
+                ReminderWorker.class, 15, TimeUnit.MINUTES)
+                .build();
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork("reminderWork", ExistingPeriodicWorkPolicy.KEEP, reminderCheckRequest);
     }
 
 

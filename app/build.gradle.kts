@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.firebase.ui.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.glide)
+    implementation(libs.worker)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
