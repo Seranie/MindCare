@@ -1,8 +1,10 @@
 package com.example.mind_care.home.reminders.repository;
 
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
+import com.example.mind_care.ScheduleNotification;
 import com.example.mind_care.home.reminders.model.ReminderItemModel;
 import com.example.mind_care.home.reminders.model.RemindersGroupItem;
 import com.example.mind_care.home.reminders.model.RemindersReminderItem;
@@ -10,6 +12,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -148,6 +151,43 @@ public class GroupRepository {
 
     public void deleteReminder(String groupId, String reminderId){
         db.collection(collection).document(user.getUid()).collection("groups").document(groupId).collection("reminders").document(reminderId).delete();
+    }
+
+    public void getAllRemindersAndSetNotifications(Context context){
+        db.collection(collection).document(user.getUid()).collection("groups").get().addOnCompleteListener(task ->{
+           if(task.isSuccessful()){
+               for (DocumentSnapshot groupDoc : task.getResult()){
+                   groupDoc.getReference().collection("reminders").get().addOnCompleteListener(reminderTask -> {
+                       if(reminderTask.isSuccessful()){
+                           for (DocumentSnapshot reminderDoc : reminderTask.getResult()){
+                               ScheduleNotification.scheduleNotification(context, reminderDoc.getTimestamp("schedule"), reminderDoc.getString("title"), reminderDoc.getString("note"), reminderDoc.getId());
+                               reminderDoc.getReference().collection("alertItems").get().addOnCompleteListener(alertItemTask -> {
+                                   if(alertItemTask.isSuccessful()){
+                                       for (DocumentSnapshot alertItemDoc : alertItemTask.getResult()){
+                                           ScheduleNotification.scheduleNotification(context, alertItemDoc.getTimestamp("dateTime"), reminderDoc.getString("title"), reminderDoc.getString("note"), reminderDoc.getId(), alertItemDoc.getId());
+                                       }
+                                   }
+                               });
+                           }
+                       }
+                   });
+
+
+               }
+           }
+        });
+    }
+
+    public List<String> getAllAlertItemIds(String groupId, String reminderId){
+        List<String> alertItemIds = new ArrayList<>();
+        db.collection(collection).document(user.getUid()).collection("groups").document(groupId).collection("reminders").document(reminderId).collection("alertItems").get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                for (DocumentSnapshot doc : task.getResult().getDocuments()){
+                    alertItemIds.add(doc.getId());
+                }
+            }
+        });
+        return alertItemIds;
     }
 
 

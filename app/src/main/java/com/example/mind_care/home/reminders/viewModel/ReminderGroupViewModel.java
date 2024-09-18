@@ -1,5 +1,6 @@
 package com.example.mind_care.home.reminders.viewModel;
 
+import android.content.Context;
 import android.net.Uri;
 
 import androidx.lifecycle.LiveData;
@@ -55,5 +56,13 @@ public class ReminderGroupViewModel extends ViewModel {
         //delete then update livedata
         groupRepository.deleteReminder(groupId, reminderId);
         getRemindersFromGroup(groupId);
+    }
+
+    public void scheduleAllNotifications(Context context){
+        groupRepository.getAllRemindersAndSetNotifications(context);
+    }
+
+    public List<String> getAllAlertItemIdsFromReminder(String groupId, String reminderId){
+        return groupRepository.getAllAlertItemIds(groupId, reminderId);
     }
 }

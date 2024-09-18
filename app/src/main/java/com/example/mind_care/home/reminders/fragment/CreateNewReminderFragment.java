@@ -121,6 +121,7 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
                 //send to database
                 ReminderItemModel reminderItem = new ReminderItemModel(currentGroupSelectedId, reminderTitle, reminderNote, reminderSchedule, reminderAlertItemList);
                 reminderItemViewModel.addReminderItem(reminderItem);
+                groupViewModel.scheduleAllNotifications(requireActivity());
 
                 Navigation.findNavController(v).popBackStack();
             }

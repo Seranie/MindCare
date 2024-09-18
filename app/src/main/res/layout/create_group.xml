@@ -5,20 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/create_group_image"
-        android:layout_width="110dp"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="@dimen/create_group_image_marginTop"
         android:layout_marginBottom="16dp"
         android:background="?attr/colorPrimaryContainer"
         android:cropToPadding="true"
-        android:scaleType="fitCenter"
-        android:src="@drawable/upload_image_icon"
+        android:scaleType="center"
+        android:src="@drawable/upload_image_icon2"
         app:layout_constraintBottom_toTopOf="@+id/create_group_choose_image_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/upload_image_icon" />
+        app:shapeAppearanceOverlay="@style/customGroupImageShape" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/create_group_choose_image_button"
@@ -26,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/create_group_choose_image"
+        app:backgroundTint="?attr/colorSecondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,7 +69,6 @@
         android:layout_marginTop="28dp"
         android:text="@string/create_group_cancel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/create_group_confirm" />
 

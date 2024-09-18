@@ -1,11 +1,16 @@
 package com.example.mind_care;
 
+import static androidx.core.app.AlarmManagerCompat.canScheduleExactAlarms;
+
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.app.AlarmManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.transition.Fade;
 import android.util.Log;
 
@@ -86,11 +91,11 @@ public class MainActivity extends AppCompatActivity {
             checkAndRequestNotificationPermission();
         }
 
-        //Set up notification worker for reminders
-        PeriodicWorkRequest reminderCheckRequest = new PeriodicWorkRequest.Builder(
-                ReminderWorker.class, 1, TimeUnit.MINUTES)
-                .build();
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork("reminderWork", ExistingPeriodicWorkPolicy.REPLACE, reminderCheckRequest);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            checkAndRequestExactAlarmPermission();
+        }
+
+
     }
 
 
@@ -115,6 +120,16 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{permission.POST_NOTIFICATIONS},
                     1);
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private void checkAndRequestExactAlarmPermission() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        if (!alarmManager.canScheduleExactAlarms()) {
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+            startActivity(intent);
         }
     }
 }

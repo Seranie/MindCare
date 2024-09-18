@@ -26,4 +26,6 @@
     <dimen name="reminders_item_notes_horizontal_padding">6dp</dimen>
     <dimen name="reminders_item_notes_vertical_margin">6dp</dimen>
 
+    <dimen name="create_group_image_marginTop">8dp</dimen>
+
 </resources>

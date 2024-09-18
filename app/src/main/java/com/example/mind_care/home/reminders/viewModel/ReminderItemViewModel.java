@@ -24,5 +24,4 @@ public class ReminderItemViewModel extends ViewModel {
             repository.addReminderItemToDatabase(reminderItem);
         }).start();
     }
-
 }

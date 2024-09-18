@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="@+id/textView33"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/outline_add_circle_outline_24"
-        app:tint="?attr/colorOnPrimary" />
+        app:tint="?attr/colorOnSurfaceVariant" />
 
     <TextView
         android:id="@+id/textView33"
