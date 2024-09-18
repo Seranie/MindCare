@@ -1,18 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_marginVertical="@dimen/reminders_item_notes_vertical_margin">
 
     <com.google.android.material.chip.Chip
         android:id="@+id/reminders_chip"
-        android:layout_width="match_parent"
+        style="@style/Widget.Material3.Chip.Input"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layoutDirection="rtl"
         android:text="text"
         android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+        android:textColor="?attr/colorOnPrimary"
         android:textDirection="ltr"
+        app:chipBackgroundColor="?attr/colorPrimary"
         app:closeIcon="@drawable/baseline_circle_10"
-        app:closeIconVisible="true" />
-</LinearLayout>
+        app:closeIconTint="?attr/colorOnPrimary"
+        app:closeIconVisible="true"
+        app:ensureMinTouchTargetSize="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/textView34"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/reminders_item_notes_horizontal_padding"
+        android:layout_marginHorizontal="@dimen/reminders_item_notes_horizontal_margin"
+        android:background="@drawable/reminder_item_note_shape"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="textview"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="?attr/colorOnSecondary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reminders_chip" />
+</androidx.constraintlayout.widget.ConstraintLayout>

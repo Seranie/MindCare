@@ -37,8 +37,8 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
     private TextInputEditText title;
     private TextInputEditText note;
     private TextInputEditText schedule;
-    private TextInputEditText repeat;
-    private TextInputEditText ringtone;
+//    private TextInputEditText repeat;
+//    private TextInputEditText ringtone;
     private Button confirmButton;
     private Button cancelButton;
 
@@ -67,8 +67,8 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
         title = view.findViewById(R.id.create_reminder_title);
         note = view.findViewById(R.id.create_reminder_note);
         schedule = view.findViewById(R.id.create_reminder_schedule);
-        repeat = view.findViewById(R.id.create_reminder_repeat);
-        ringtone = view.findViewById(R.id.create_reminder_ringtone);
+//        repeat = view.findViewById(R.id.create_reminder_repeat);
+//        ringtone = view.findViewById(R.id.create_reminder_ringtone);
         confirmButton = view.findViewById(R.id.create_reminder_confirm_button);
         cancelButton = view.findViewById(R.id.create_reminder_cancel_button);
 
@@ -107,8 +107,8 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
             List<LocalDateTime> reminderAlertItemList = alertDateTimeViewModel.getDateTimeList();
             LocalDateTime reminderSchedule = scheduleDateTimeViewModel.getDateTime();
             //TODO repeat and ringtone, for now empty might remove?
-            String reminderRepeat = repeat.getText() != null ? repeat.getText().toString() : "";
-            String reminderRingtone = ringtone.getText() != null ? ringtone.getText().toString() : "";
+//            String reminderRepeat = repeat.getText() != null ? repeat.getText().toString() : "";
+//            String reminderRingtone = ringtone.getText() != null ? ringtone.getText().toString() : "";
 
             //Check if at least title is filled and groupID must be selected.
             if(reminderTitle.isEmpty()){
