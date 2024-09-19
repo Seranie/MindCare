@@ -16,6 +16,8 @@ import com.example.mind_care.home.reminders.model.ReminderItemModel;
 import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 import com.google.android.material.chip.Chip;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +46,13 @@ public class RemindersReminderAdapter extends RecyclerView.Adapter<RemindersRemi
     public void onBindViewHolder(@NonNull RemindersReminderAdapter.ReminderItemViewHolder holder, int position) {
         ReminderItemModel remindersReminderItem = remindersReminderItems.get(position);
         holder.chip.setText(remindersReminderItem.getTitle());
+        String note = remindersReminderItem.getNote();
+        if(note.isEmpty()){
+            holder.note.setVisibility(View.GONE);
+        }
+        else{
+            holder.note.setText(note);
+        }
     }
 
     @Override
@@ -51,20 +60,27 @@ public class RemindersReminderAdapter extends RecyclerView.Adapter<RemindersRemi
         return remindersReminderItems.size();
     }
 
-    class ReminderItemViewHolder extends RecyclerView.ViewHolder{
+    class ReminderItemViewHolder extends RecyclerView.ViewHolder implements ReminderGroupViewModel.OnAlertItemIdQueryComplete {
         private Chip chip;
+        private TextView note;
 
         public ReminderItemViewHolder(@NonNull View itemView) {
             super(itemView);
             chip = itemView.findViewById(R.id.reminders_chip);
+            note = itemView.findViewById(R.id.reminder_note_textview);
             chip.setOnCloseIconClickListener(view -> {
                 String groupId = remindersReminderItems.get(getAdapterPosition()).getGroupId();
                 String reminderId = remindersReminderItems.get(getAdapterPosition()).getId();
-
-                groupViewModel.deleteReminder(groupId, reminderId);
-                List<String> alertItemIds = groupViewModel.getAllAlertItemIdsFromReminder(groupId, reminderId);
-                ScheduleNotification.cancelNotification(activityContext, reminderId, alertItemIds);
+                groupViewModel.getAllAlertItemIdsFromReminder(groupId, reminderId, this);
             });
+        }
+
+        @Override
+        public void onComplete(List<String> alertItemIds) {
+            String reminderId = remindersReminderItems.get(getAdapterPosition()).getId();
+            String groupId = remindersReminderItems.get(getAdapterPosition()).getGroupId();
+            ScheduleNotification.cancelNotification(activityContext, reminderId, alertItemIds);
+            groupViewModel.deleteReminder(groupId, reminderId);
         }
     }
 }

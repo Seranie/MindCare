@@ -14,7 +14,7 @@ import com.example.mind_care.home.reminders.repository.GroupRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReminderGroupViewModel extends ViewModel {
+public class ReminderGroupViewModel extends ViewModel{
     private final GroupRepository groupRepository = new GroupRepository();
     private final MutableLiveData<List<RemindersGroupItem>> remindersGroupLiveData = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<List<ReminderItemModel>> remindersLiveData = new MutableLiveData<>(new ArrayList<>());
@@ -59,10 +59,15 @@ public class ReminderGroupViewModel extends ViewModel {
     }
 
     public void scheduleAllNotifications(Context context){
-        groupRepository.getAllRemindersAndSetNotifications(context);
+        new Thread(() -> groupRepository.getAllRemindersAndSetNotifications(context)).start();
     }
 
-    public List<String> getAllAlertItemIdsFromReminder(String groupId, String reminderId){
-        return groupRepository.getAllAlertItemIds(groupId, reminderId);
+
+    public void getAllAlertItemIdsFromReminder(String groupId, String reminderId, OnAlertItemIdQueryComplete callback){
+        groupRepository.getAllAlertItemIds(groupId, reminderId, callback);
+    }
+
+    public interface OnAlertItemIdQueryComplete {
+        void onComplete(List<String> alertItemIds);
     }
 }
