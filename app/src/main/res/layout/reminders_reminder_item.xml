@@ -27,7 +27,7 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
-        android:id="@+id/textView34"
+        android:id="@+id/reminder_note_textview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/reminders_item_notes_horizontal_padding"

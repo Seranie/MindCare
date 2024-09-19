@@ -73,7 +73,7 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
         cancelButton = view.findViewById(R.id.create_reminder_cancel_button);
 
         //Viewmodels for holding alert item date/times
-        alertDateTimeViewModel = new ViewModelProvider(requireActivity()).get(ReminderAlertDateTimeViewModel.class);
+        alertDateTimeViewModel = new ViewModelProvider(this).get(ReminderAlertDateTimeViewModel.class);
         groupViewModel = new ViewModelProvider(requireActivity()).get(ReminderGroupViewModel.class);
         scheduleDateTimeViewModel = new ViewModelProvider(this).get(ReminderScheduleDateTimeViewModel.class);
         reminderItemViewModel = new ViewModelProvider(requireActivity()).get(ReminderItemViewModel.class);
@@ -121,7 +121,7 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
                 //send to database
                 ReminderItemModel reminderItem = new ReminderItemModel(currentGroupSelectedId, reminderTitle, reminderNote, reminderSchedule, reminderAlertItemList);
                 reminderItemViewModel.addReminderItem(reminderItem);
-                groupViewModel.scheduleAllNotifications(requireActivity());
+                groupViewModel.scheduleAllNotifications(requireActivity().getApplicationContext());
 
                 Navigation.findNavController(v).popBackStack();
             }

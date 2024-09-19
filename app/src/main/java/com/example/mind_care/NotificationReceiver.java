@@ -21,7 +21,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         NotificationChannel channel = new NotificationChannel(channelId, "Reminder Notifications", NotificationManager.IMPORTANCE_HIGH);
         notificationManager.createNotificationChannel(channel);
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channelId).setSmallIcon(R.drawable.ic_image_icon)//TODO CHANGE
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channelId).setSmallIcon(R.mipmap.ic_launcher_official_round)
                 .setContentTitle(reminderTitle + " is due now!").setContentText(reminderNote).setPriority(NotificationCompat.PRIORITY_HIGH).setAutoCancel(true);
 
         // Show the notification

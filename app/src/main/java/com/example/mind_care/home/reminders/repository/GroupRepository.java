@@ -8,6 +8,7 @@ import com.example.mind_care.ScheduleNotification;
 import com.example.mind_care.home.reminders.model.ReminderItemModel;
 import com.example.mind_care.home.reminders.model.RemindersGroupItem;
 import com.example.mind_care.home.reminders.model.RemindersReminderItem;
+import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -150,7 +151,15 @@ public class GroupRepository {
     }
 
     public void deleteReminder(String groupId, String reminderId){
-        db.collection(collection).document(user.getUid()).collection("groups").document(groupId).collection("reminders").document(reminderId).delete();
+        DocumentReference reminderDoc = db.collection(collection).document(user.getUid()).collection("groups").document(groupId).collection("reminders").document(reminderId);
+        reminderDoc.collection("alertItems").get().addOnCompleteListener(alertItemTask -> {
+            if(alertItemTask.isSuccessful()){
+                for (DocumentSnapshot alertItemDoc : alertItemTask.getResult().getDocuments()){
+                    alertItemDoc.getReference().delete();
+                }
+            }
+        });
+        reminderDoc.delete();
     }
 
     public void getAllRemindersAndSetNotifications(Context context){
@@ -178,16 +187,17 @@ public class GroupRepository {
         });
     }
 
-    public List<String> getAllAlertItemIds(String groupId, String reminderId){
+    public void getAllAlertItemIds(String groupId, String reminderId, ReminderGroupViewModel.OnAlertItemIdQueryComplete callback){
         List<String> alertItemIds = new ArrayList<>();
         db.collection(collection).document(user.getUid()).collection("groups").document(groupId).collection("reminders").document(reminderId).collection("alertItems").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 for (DocumentSnapshot doc : task.getResult().getDocuments()){
                     alertItemIds.add(doc.getId());
                 }
+                Log.i("INFO","AlertItemId's "  + alertItemIds);
+                callback.onComplete(alertItemIds);
             }
         });
-        return alertItemIds;
     }
 
 
@@ -198,5 +208,6 @@ public class GroupRepository {
     public interface OnReminderCompleteCallback {
         void onComplete(List<ReminderItemModel> reminderList);
     }
+
 
 }
