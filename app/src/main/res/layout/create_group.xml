@@ -7,8 +7,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/create_group_image"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="@dimen/image_icons_size"
+        android:layout_height="@dimen/image_icons_size"
         android:layout_marginTop="@dimen/create_group_image_marginTop"
         android:layout_marginBottom="16dp"
         android:background="?attr/colorPrimaryContainer"

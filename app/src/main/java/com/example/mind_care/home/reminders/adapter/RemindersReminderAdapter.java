@@ -11,12 +11,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mind_care.R;
-import com.example.mind_care.ScheduleNotification;
+import com.example.mind_care.notification.ScheduleNotification;
 import com.example.mind_care.home.reminders.model.ReminderItemModel;
 import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 import com.google.android.material.chip.Chip;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;

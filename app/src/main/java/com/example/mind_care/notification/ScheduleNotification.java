@@ -1,4 +1,4 @@
-package com.example.mind_care;
+package com.example.mind_care.notification;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -9,9 +9,6 @@ import android.util.Log;
 
 import com.google.firebase.Timestamp;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 public class ScheduleNotification {

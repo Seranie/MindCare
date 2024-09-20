@@ -1,7 +1,6 @@
 package com.example.mind_care;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 
-public class Home extends Fragment implements BaseTools.FabListener {
+public class HomeFragment extends Fragment implements BaseTools.FabListener {
     private NavController navController;
     private FloatingActionButton fab;
 

@@ -176,4 +176,10 @@
     <string name="create_group_choose_image">Choose Image</string>
     <string name="create_group_enter_group_name">Enter group name</string>
 
+    <string name="create_contact_enter_name">Enter name</string>
+    <string name="create_contact_enter_number">Enter phone number</string>
+    <string name="create_contact_confirm">Confirm</string>
+    <string name="create_contact_cancel">Cancel</string>
+    <string name="create_contact_choose_image">Choose Image</string>
+
 </resources>

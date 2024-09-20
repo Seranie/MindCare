@@ -10,7 +10,7 @@
         android:label="Guide" />
     <fragment
         android:id="@+id/homeTabFragment"
-        android:name="com.example.mind_care.Home"
+        android:name="com.example.mind_care.HomeFragment"
         android:label="Home" />
     <fragment
         android:id="@+id/guideDocs"

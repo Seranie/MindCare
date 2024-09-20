@@ -1,4 +1,4 @@
-package com.example.mind_care;
+package com.example.mind_care.notification;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.core.app.NotificationCompat;
+
+import com.example.mind_care.R;
 
 public class NotificationReceiver extends BroadcastReceiver {
     @Override

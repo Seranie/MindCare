@@ -4,10 +4,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
-import com.example.mind_care.ScheduleNotification;
+import com.example.mind_care.notification.ScheduleNotification;
 import com.example.mind_care.home.reminders.model.ReminderItemModel;
 import com.example.mind_care.home.reminders.model.RemindersGroupItem;
-import com.example.mind_care.home.reminders.model.RemindersReminderItem;
 import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;

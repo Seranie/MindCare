@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="image_icons_size">150dp</dimen>
+
     <dimen name="guide_docs_image_margin">12dp</dimen>
     <dimen name="guide_docs_image_padding">8dp</dimen>
     <dimen name="guide_docs_card_margin">8dp</dimen>
@@ -27,5 +29,7 @@
     <dimen name="reminders_item_notes_vertical_margin">6dp</dimen>
 
     <dimen name="create_group_image_marginTop">8dp</dimen>
+
+    <dimen name="create_new_contact_item_horizontal_margins">24dp</dimen>
 
 </resources>
