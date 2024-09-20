@@ -13,15 +13,39 @@ public class ContactEntity {
 
     public String contactName;
     public String contactNumber;
-    private String imageUri;
+    public String imageUri;
 
-    public ContactEntity(String contactName, String contactNumber, Uri contactImageSource) {
+    public ContactEntity(String contactName, String contactNumber, String imageUri) {
         this.contactName = contactName;
         this.contactNumber = contactNumber;
-        this.imageUri = contactImageSource.toString();
+        this.imageUri = imageUri.toString();
     }
 
     public Uri getImageUri(){
         return Uri.parse(imageUri);
+    }
+
+    public int getContactId() {
+        return contactId;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactId(int contactId) {
+        this.contactId = contactId;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
     }
 }

@@ -22,8 +22,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     private Context context;
     
     public ContactsAdapter(ContactsViewModel contactsViewModel, Context context) {
-        contactsList = contactsViewModel.getAllContacts();
         this.context = context;
+        contactsViewModel.getContactsLiveData().observe(this, (queryContactsList) -> {
+            this.contactsList = queryContactsList;
+        });
+        contactsViewModel.getAllContacts();
     }
 
     @NonNull

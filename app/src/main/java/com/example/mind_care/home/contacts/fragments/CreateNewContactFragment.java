@@ -59,13 +59,10 @@ public class CreateNewContactFragment extends Fragment {
             pickMediaLauncher.launch(new PickVisualMediaRequest.Builder().setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build());
         });
 
+        ContactsViewModel contactsViewModel = new ViewModelProvider(requireActivity()).get(ContactsViewModel.class);
+
         confirmButton.setOnClickListener(v -> {
-            //TODO send data to database
-            ContactsViewModel contactsViewModel = new ViewModelProvider(requireActivity()).get(ContactsViewModel.class);
-            contactsViewModel.insertContact(nameField.getText(), numberField.getText(), imageUri);
-
-
-
+            contactsViewModel.insertContact(nameField.getText().toString(), numberField.getText().toString(), imageUri.toString());
             Navigation.findNavController(v).popBackStack();
         });
         cancelButton.setOnClickListener(v -> {

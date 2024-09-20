@@ -18,6 +18,7 @@ import com.example.mind_care.home.contacts.viewmodel.ContactsViewModel;
 
 public class contactsFragment extends BaseTools {
     private final int GRID_SPAN = 2;
+    ContactsViewModel contactsViewModel;
 
     @Nullable
     @Override
@@ -31,12 +32,20 @@ public class contactsFragment extends BaseTools {
 
         FabListener fabListener = (FabListener) getParentFragment();
         fabListener.setFabImage(R.drawable.outline_person_add_alt_1_24);
-        fabListener.setOnFabClickedDestination(R.id.);
+        fabListener.setOnFabClickedDestination(R.id.createNewContactFragment);
 
-        ContactsViewModel contactsViewModel = new ViewModelProvider(requireActivity()).get(ContactsViewModel.class);
+        contactsViewModel = new ViewModelProvider(requireActivity()).get(ContactsViewModel.class);
 
         RecyclerView contactsRecyclerview = view.findViewById(R.id.contacts_recyclerview);
         contactsRecyclerview.setAdapter(new ContactsAdapter(contactsViewModel, getContext()));
         contactsRecyclerview.setLayoutManager(new GridLayoutManager(getContext(), GRID_SPAN));
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+
 }

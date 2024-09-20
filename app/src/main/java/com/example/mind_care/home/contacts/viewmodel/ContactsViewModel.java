@@ -3,6 +3,7 @@ package com.example.mind_care.home.contacts.viewmodel;
 import android.app.Application;
 import android.net.Uri;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.room.Room;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsViewModel extends ViewModel {
-    private MutableLiveData<List<ContactEntity>> contactsLivedata = new MutableLiveData<>(new ArrayList<>());
+    private MutableLiveData<ArrayList<ContactEntity>> contactsLivedata = new MutableLiveData<>(new ArrayList<>());
     private AppDatabase db;
     private ContactDao contactDao;
 
@@ -24,11 +25,15 @@ public class ContactsViewModel extends ViewModel {
         contactDao = db.contactDao();
     }
 
-    public void insertContact(String contactName, String contactNumber, Uri contactImageSource){
+    public LiveData<ArrayList<ContactEntity>> getContactsLiveData(){
+        return contactsLivedata;
+    }
+
+    public void insertContact(String contactName, String contactNumber, String contactImageSource){
         contactDao.insertContact(new ContactEntity(contactName, contactNumber, contactImageSource));
     }
 
-    public List<ContactEntity> getAllContacts(){
-        return contactDao.getAllContacts();
+    public void getAllContacts(){
+        contactsLivedata.setValue((ArrayList<ContactEntity>) contactDao.getAllContacts());
     }
 }
