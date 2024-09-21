@@ -20,6 +20,7 @@ import androidx.navigation.Navigation;
 import com.bumptech.glide.Glide;
 import com.example.mind_care.R;
 import com.example.mind_care.home.contacts.viewmodel.ContactsViewModel;
+import com.example.mind_care.home.contacts.viewmodel.ContactsViewModelFactory;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -59,7 +60,8 @@ public class CreateNewContactFragment extends Fragment {
             pickMediaLauncher.launch(new PickVisualMediaRequest.Builder().setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build());
         });
 
-        ContactsViewModel contactsViewModel = new ViewModelProvider(requireActivity()).get(ContactsViewModel.class);
+        ContactsViewModelFactory factory = new ContactsViewModelFactory(requireActivity().getApplication());
+        ContactsViewModel contactsViewModel = new ViewModelProvider(requireActivity(), factory).get(ContactsViewModel.class);
 
         confirmButton.setOnClickListener(v -> {
             contactsViewModel.insertContact(nameField.getText().toString(), numberField.getText().toString(), imageUri.toString());

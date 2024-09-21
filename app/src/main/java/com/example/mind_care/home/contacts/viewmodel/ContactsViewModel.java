@@ -13,12 +13,12 @@ import com.example.mind_care.database.ContactDao;
 import com.example.mind_care.database.ContactEntity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ContactsViewModel extends ViewModel {
     private MutableLiveData<ArrayList<ContactEntity>> contactsLivedata = new MutableLiveData<>(new ArrayList<>());
     private AppDatabase db;
     private ContactDao contactDao;
+
 
     public ContactsViewModel(Application application) {
         db = Room.databaseBuilder(application, AppDatabase.class, "contacts_database").build();
@@ -30,10 +30,10 @@ public class ContactsViewModel extends ViewModel {
     }
 
     public void insertContact(String contactName, String contactNumber, String contactImageSource){
-        contactDao.insertContact(new ContactEntity(contactName, contactNumber, contactImageSource));
+        new Thread(()-> contactDao.insertContact(new ContactEntity(contactName, contactNumber, contactImageSource))).start();
     }
 
     public void getAllContacts(){
-        contactsLivedata.setValue((ArrayList<ContactEntity>) contactDao.getAllContacts());
+        new Thread(() -> contactsLivedata.postValue((ArrayList<ContactEntity>) contactDao.getAllContacts())).start();
     }
 }

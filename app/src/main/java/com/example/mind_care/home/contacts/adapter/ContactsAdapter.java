@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -15,18 +16,18 @@ import com.example.mind_care.R;
 import com.example.mind_care.database.ContactEntity;
 import com.example.mind_care.home.contacts.viewmodel.ContactsViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder> {
-    private List<ContactEntity> contactsList;
+    private List<ContactEntity> contactsList = new ArrayList<>();
     private Context context;
     
-    public ContactsAdapter(ContactsViewModel contactsViewModel, Context context) {
+    public ContactsAdapter(ContactsViewModel contactsViewModel, Context context, Fragment fragment) {
         this.context = context;
-        contactsViewModel.getContactsLiveData().observe(this, (queryContactsList) -> {
+        contactsViewModel.getContactsLiveData().observe(fragment, (queryContactsList) -> {
             this.contactsList = queryContactsList;
         });
-        contactsViewModel.getAllContacts();
     }
 
     @NonNull
