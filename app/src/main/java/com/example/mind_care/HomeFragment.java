@@ -25,7 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 
-public class HomeFragment extends Fragment implements BaseTools.FabListener {
+public class HomeFragment extends Fragment {
     private NavController navController;
     private FloatingActionButton fab;
 
@@ -65,6 +65,22 @@ public class HomeFragment extends Fragment implements BaseTools.FabListener {
 
         fab = view.findViewById(R.id.home_fab);
         navController = Navigation.findNavController(view);
+
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                if(fragmentList.get(position) instanceof BaseTools){
+                    BaseTools currentFragment = (BaseTools) fragmentList.get(position);
+                    currentFragment.setFabImage(fab);
+                    currentFragment.setOnFabClickedDestination(fab, navController);
+                }
+                if(fragmentList.get(position) instanceof ContactsFragment){
+                    ContactsFragment fragment = (ContactsFragment) fragmentList.get(position);
+                    fragment.updateUI();
+                }
+            }
+        });
     }
 
     @Override
@@ -76,12 +92,4 @@ public class HomeFragment extends Fragment implements BaseTools.FabListener {
     }
 
 
-    @Override
-    public void setOnFabClickedDestination(int resId) {
-        fab.setOnClickListener(view -> navController.navigate(resId));
-    }
-
-    public void setFabImage(int imageId) {
-        fab.setImageResource(imageId);
-    }
 }

@@ -43,7 +43,7 @@ public class FirebaseUIActivity extends AppCompatActivity {
         List<AuthUI.IdpConfig> providers = Arrays.asList(new AuthUI.IdpConfig.GoogleBuilder().build(), new AuthUI.IdpConfig.PhoneBuilder().build());
 
         // Create and launch sign-in intent
-        Intent signInIntent = AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).setLogo(R.drawable.ic_launcher_foreground).setTheme(R.style.AppTheme).build();
+        Intent signInIntent = AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).setLogo(R.mipmap.ic_launcher_foreground_official).setTheme(R.style.AppTheme).build();
         signInLauncher.launch(signInIntent);
     }
 

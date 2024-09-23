@@ -41,7 +41,7 @@ public class CreateNewContactFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.create_new_contact_layout, container, false);
+        return inflater.inflate(R.layout.create_contact, container, false);
     }
 
     @Override
@@ -64,6 +64,16 @@ public class CreateNewContactFragment extends Fragment {
         ContactsViewModel contactsViewModel = new ViewModelProvider(requireActivity(), factory).get(ContactsViewModel.class);
 
         confirmButton.setOnClickListener(v -> {
+            if (nameField.getText().toString().isEmpty()){
+                nameField.setError("Name field cannot be empty");
+            }
+            if (numberField.getText().toString().isEmpty()){
+                numberField.setError("Number field cannot be empty");
+            }
+            if (imageUri == null){
+               imageUri = Uri.parse("");
+            }
+
             contactsViewModel.insertContact(nameField.getText().toString(), numberField.getText().toString(), imageUri.toString());
             Navigation.findNavController(v).popBackStack();
         });

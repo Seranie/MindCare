@@ -34,6 +34,8 @@ public class ContactsViewModel extends ViewModel {
     }
 
     public void getAllContacts(){
-        new Thread(() -> contactsLivedata.postValue((ArrayList<ContactEntity>) contactDao.getAllContacts())).start();
+        new Thread(() -> {
+            contactsLivedata.postValue((ArrayList<ContactEntity>) contactDao.getAllContacts());
+        }).start();
     }
 }

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,13 +23,13 @@ import com.example.mind_care.home.reminders.model.RemindersGroupItem;
 import com.example.mind_care.home.reminders.model.RemindersReminderItem;
 import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 import com.example.mind_care.home.reminders.viewModel.ReminderItemViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Reminders extends BaseTools implements RemindersGroupAdapter.OnGroupItemClickListener {
     RecyclerView reminderItemsRecyclerView;
-    FabListener fabListener;
     private ReminderGroupViewModel groupViewModel;
     private ReminderItemViewModel reminderItemViewModel;
 
@@ -41,7 +42,6 @@ public class Reminders extends BaseTools implements RemindersGroupAdapter.OnGrou
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fabListener = (FabListener) getParentFragment();
 
         //Get recycler views
         RecyclerView groupItemsRecyclerView = view.findViewById(R.id.reminders_group_recyclerview);
@@ -78,16 +78,25 @@ public class Reminders extends BaseTools implements RemindersGroupAdapter.OnGrou
 //                return false;
 //            }
 //        });
-        fabListener.setFabImage(R.drawable.reminders_icon);
-        //on click navigate to some other destination
-        fabListener.setOnFabClickedDestination(R.id.createNewReminderFragment);
+
 
     }
+
 
 
     @Override
     public void onItemClick(String groupId) {
         //Get reminders from the group the user clicked on and update UI state accordingly
         groupViewModel.getRemindersFromGroup(groupId);
+    }
+
+    @Override
+    public void setOnFabClickedDestination(FloatingActionButton fab, NavController navController) {
+        fab.setOnClickListener(v -> {navController.navigate(R.id.createNewReminderFragment);});
+    }
+
+    @Override
+    public void setFabImage(FloatingActionButton fab) {
+        fab.setImageResource(R.drawable.reminders_icon);
     }
 }

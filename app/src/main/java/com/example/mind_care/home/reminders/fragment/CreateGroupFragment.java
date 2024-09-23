@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,12 +63,15 @@ public class CreateGroupFragment extends Fragment {
         confirmButton = view.findViewById(R.id.create_group_confirm);
         cancelButton = view.findViewById(R.id.create_group_cancel);
 
+        if (imageUri == null){
+            imageUri = Uri.parse("");
+        }
+
         chooseImageButton.setOnClickListener((View v) -> {
             pickMediaLauncher.launch(new PickVisualMediaRequest.Builder().setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build());
         });
 
         confirmButton.setOnClickListener((View v) ->{
-            //TODO send data to database
             groupViewModel.createGroup(imageUri, groupName.getText().toString());
             Navigation.findNavController(v).popBackStack();
         });
