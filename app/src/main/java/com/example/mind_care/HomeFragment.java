@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.home, container,false);
+        return inflater.inflate(R.layout.home, container, false);
     }
 
     @Override
@@ -70,14 +70,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                if(fragmentList.get(position) instanceof BaseTools){
+                if (fragmentList.get(position) instanceof BaseTools) {
                     BaseTools currentFragment = (BaseTools) fragmentList.get(position);
                     currentFragment.setFabImage(fab);
                     currentFragment.setOnFabClickedDestination(fab, navController);
-                }
-                if(fragmentList.get(position) instanceof ContactsFragment){
-                    ContactsFragment fragment = (ContactsFragment) fragmentList.get(position);
-                    fragment.updateUI();
                 }
             }
         });

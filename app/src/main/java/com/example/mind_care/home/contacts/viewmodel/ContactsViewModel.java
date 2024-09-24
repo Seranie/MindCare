@@ -1,7 +1,7 @@
 package com.example.mind_care.home.contacts.viewmodel;
 
 import android.app.Application;
-import android.net.Uri;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -35,7 +35,8 @@ public class ContactsViewModel extends ViewModel {
 
     public void getAllContacts(){
         new Thread(() -> {
-            contactsLivedata.postValue((ArrayList<ContactEntity>) contactDao.getAllContacts());
+            ArrayList<ContactEntity> temp = (ArrayList<ContactEntity>) contactDao.getAllContacts();
+            contactsLivedata.postValue(temp);
         }).start();
     }
 }

@@ -181,5 +181,7 @@
     <string name="create_contact_confirm">Confirm</string>
     <string name="create_contact_cancel">Cancel</string>
     <string name="create_contact_choose_image">Choose Image</string>
-
+    <string name="create_contact_empty_name">Name field cannot be empty</string>
+    <string name="create_contact_empty_number">Number field cannot be empty</string>
+    <string name="create_contact_invalid_number">Not a valid phone number</string>
 </resources>

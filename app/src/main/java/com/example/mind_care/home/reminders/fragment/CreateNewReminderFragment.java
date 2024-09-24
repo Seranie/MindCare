@@ -111,7 +111,7 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
 //            String reminderRingtone = ringtone.getText() != null ? ringtone.getText().toString() : "";
 
             //Check if at least title is filled and groupID must be selected.
-            if(reminderTitle.isEmpty()){
+            if(reminderTitle.isEmpty()){ // TODO use textinputlayout.seterror instead
                 Toast.makeText(getContext(), "Please fill in title", Toast.LENGTH_SHORT).show();
             }
             else if (currentGroupSelectedId.isEmpty()){

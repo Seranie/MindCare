@@ -3,6 +3,7 @@ package com.example.mind_care.home.contacts.fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +24,17 @@ import com.example.mind_care.home.contacts.viewmodel.ContactsViewModel;
 import com.example.mind_care.home.contacts.viewmodel.ContactsViewModelFactory;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
+import com.hbb20.CountryCodePicker;
+
+import java.util.Locale;
 
 public class CreateNewContactFragment extends Fragment {
     private Uri imageUri;
     ShapeableImageView imageView;
+    TextInputLayout phoneNumberLayout;
 
     private ActivityResultLauncher<PickVisualMediaRequest> pickMediaLauncher = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
         if (uri != null) {
@@ -34,6 +42,7 @@ public class CreateNewContactFragment extends Fragment {
             // Do something with the selected media URI
             getContext().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             imageUri = uri;
+            //TODO can add imagepicker
             Glide.with(this).load(imageUri).error(R.drawable.outline_image_not_supported_24).into(imageView);
         }
     });
@@ -54,6 +63,8 @@ public class CreateNewContactFragment extends Fragment {
         TextInputEditText numberField = view.findViewById(R.id.create_contact_number_field);
         Button confirmButton = view.findViewById(R.id.create_contact_confirm_button);
         Button cancelButton = view.findViewById(R.id.create_contact_cancel_button);
+        CountryCodePicker countryCodePicker = view.findViewById(R.id.create_contact_countryCodePicker);
+        phoneNumberLayout = view.findViewById(R.id.create_contact_number_layout);
 
 
         chooseImageButton.setOnClickListener(v -> {
@@ -65,20 +76,38 @@ public class CreateNewContactFragment extends Fragment {
 
         confirmButton.setOnClickListener(v -> {
             if (nameField.getText().toString().isEmpty()){
-                nameField.setError("Name field cannot be empty");
+                TextInputLayout layout = view.findViewById(R.id.create_contact_name_layout);
+                layout.setError(getResources().getText(R.string.create_contact_empty_name));
             }
-            if (numberField.getText().toString().isEmpty()){
-                numberField.setError("Number field cannot be empty");
+            else if (numberField.getText().toString().isEmpty()){
+                phoneNumberLayout.setError(getResources().getText(R.string.create_contact_empty_number));
             }
-            if (imageUri == null){
-               imageUri = Uri.parse("");
+            else if (validatePhoneNumber(numberField.getText().toString(), countryCodePicker)){
+                phoneNumberLayout.setError(getResources().getText(R.string.create_contact_invalid_number));
             }
-
-            contactsViewModel.insertContact(nameField.getText().toString(), numberField.getText().toString(), imageUri.toString());
-            Navigation.findNavController(v).popBackStack();
+            else{
+                if (imageUri == null){
+                    imageUri = Uri.parse("");
+                }
+                contactsViewModel.insertContact(nameField.getText().toString(), numberField.getText().toString(), imageUri.toString());
+                Navigation.findNavController(v).popBackStack();
+            }
         });
         cancelButton.setOnClickListener(v -> {
             Navigation.findNavController(v).popBackStack();
         });
+    }
+
+    private boolean validatePhoneNumber(String number, CountryCodePicker countryCodePicker) {
+        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+        try {
+            String countryCode = countryCodePicker.getSelectedCountryNameCode();
+            Log.i("INFO", countryCode);
+            Phonenumber.PhoneNumber phoneNumber = phoneNumberUtil.parse(number, countryCode);
+            Log.i("INFO", String.valueOf(phoneNumber));
+            return !phoneNumberUtil.isValidNumber(phoneNumber);
+        } catch (Exception e) {
+            return true;
+        }
     }
 }

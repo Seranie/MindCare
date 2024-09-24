@@ -43,9 +43,7 @@ public class ContactsFragment extends BaseTools {
         RecyclerView contactsRecyclerview = view.findViewById(R.id.contacts_recyclerview);
         contactsRecyclerview.setAdapter(new ContactsAdapter(contactsViewModel, getContext(), this));
         contactsRecyclerview.setLayoutManager(new GridLayoutManager(getContext(), GRID_SPAN));
-    }
 
-    public void updateUI(){
         contactsViewModel.getAllContacts();
     }
 

@@ -41,6 +41,8 @@ dependencies {
     implementation(libs.guava)
     implementation(libs.room.runtime)
     annotationProcessor(libs.room.compiler)
+    implementation (libs.libphonenumber)
+    implementation (libs.ccp)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
