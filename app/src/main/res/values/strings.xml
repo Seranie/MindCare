@@ -192,4 +192,8 @@
     <string name="create_fence_confirm">Confirm</string>
     <string name="create_fence_cancel">Cancel</string>
 
+    <string name="link_account_enter_uid">Enter UID</string>
+    <string name="link_account_confirm">Confirm</string>
+    <string name="link_account_cancel">Cancel</string>
+
 </resources>

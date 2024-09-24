@@ -44,4 +44,8 @@
         android:id="@+id/createFencesFragment"
         android:name="com.example.mind_care.home.fences.fragment.CreateFencesFragment"
         android:label="CreateFencesFragment" />
+    <fragment
+        android:id="@+id/linkAccountFragment"
+        android:name="com.example.mind_care.home.fences.fragment.LinkAccountFragment"
+        android:label="LinkAccountFragment" />
 </navigation>

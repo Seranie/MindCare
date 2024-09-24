@@ -32,4 +32,6 @@
 
     <dimen name="create_new_contact_item_horizontal_margins">24dp</dimen>
 
+    <dimen name="link_account_edit_text_horizontal_margin">24dp</dimen>
+
 </resources>
