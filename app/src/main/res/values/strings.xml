@@ -184,4 +184,6 @@
     <string name="create_contact_empty_name">Name field cannot be empty</string>
     <string name="create_contact_empty_number">Number field cannot be empty</string>
     <string name="create_contact_invalid_number">Not a valid phone number</string>
+    <string name="edit_contact">Edit contact</string>
+    <string name="delete_contact">Delete contact</string>
 </resources>

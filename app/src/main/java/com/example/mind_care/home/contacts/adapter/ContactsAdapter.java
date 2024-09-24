@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -43,6 +46,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         contactsViewModel.getContactsLiveData().observe(fragment, (queryContactsList) -> {
             this.contactsList = queryContactsList;
             notifyDataSetChanged();
+            if (fragment instanceof OnRecyclerViewReadyInterface) {
+                ((OnRecyclerViewReadyInterface) fragment).OnRecyclerViewReadyCallback();
+            }
         });
     }
 
@@ -65,7 +71,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         return contactsList.size();
     }
 
-    public class ContactsViewHolder extends RecyclerView.ViewHolder {
+    public class ContactsViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         ShapeableImageView contactImage;
         TextView contactName;
 
@@ -77,7 +83,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             GestureDetector gesture = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
                 @Override
                 public boolean onDoubleTap(MotionEvent e){
-                    Log.i("INFO","CALL");
                     makePhoneCall();
                     return super.onDoubleTap(e);
                 }
@@ -86,10 +91,14 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             itemView.setOnTouchListener((v, event) -> {
                 Log.i("TouchEvent", "Event action: " + event.getAction());
                 gesture.onTouchEvent(event);
+                return false;
+            });
+            itemView.setOnLongClickListener(v -> {
+                Log.i("INFO", "LONG CLICK");
+                v.showContextMenu();
                 return true;
             });
-
-
+            itemView.setOnCreateContextMenuListener(this);
         }
 
         public void makePhoneCall(){
@@ -103,5 +112,15 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             }
             else {context.startActivity(callIntent);}
         }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            MenuInflater menuInflater = fragment.requireActivity().getMenuInflater();
+            menuInflater.inflate(R.menu.contacts_menu, contextMenu);
+        }
+    }
+
+    public interface OnRecyclerViewReadyInterface{
+        void OnRecyclerViewReadyCallback();
     }
 }
