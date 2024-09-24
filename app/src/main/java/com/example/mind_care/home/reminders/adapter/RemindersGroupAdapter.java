@@ -26,7 +26,6 @@ import com.example.mind_care.home.reminders.fragment.Reminders;
 import com.example.mind_care.home.reminders.model.RemindersGroupItem;
 import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +55,7 @@ public class RemindersGroupAdapter extends RecyclerView.Adapter<RemindersGroupAd
     @Override
     public void onBindViewHolder(@NonNull GroupItemViewHolder holder, int position) {
         RemindersGroupItem groupItem = remindersGroupItems.get(position);
-        Glide.with(context).load(new File(groupItem.getImageSource().toString())).error(R.drawable.outline_image_not_supported_24).into(holder.groupItemImage);
+        Glide.with(context).load(groupItem.getImageSource()).error(R.drawable.outline_image_not_supported_24).into(holder.groupItemImage);
         holder.groupItemName.setText(groupItem.getName());
     }
 

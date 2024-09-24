@@ -1,11 +1,9 @@
 package com.example.mind_care.home.reminders.fragment;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +27,6 @@ import com.bumptech.glide.Glide;
 import com.example.mind_care.R;
 import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 
-import java.io.File;
-
 public class CreateGroupFragment extends Fragment {
     private Uri imageUri;
     private ImageView createGroupImage;
@@ -39,9 +35,8 @@ public class CreateGroupFragment extends Fragment {
             // Handle the URI of the selected media
             // Do something with the selected media URI
             getContext().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            String filepath = getRealPathFromURI(uri);
-            imageUri = filepath != null ? Uri.parse(filepath) : uri;
-            Glide.with(this).load(new File(imageUri.toString())).error(R.drawable.outline_image_not_supported_24).into(createGroupImage);
+            imageUri = uri;
+            Glide.with(this).load(imageUri).error(R.drawable.outline_image_not_supported_24).into(createGroupImage);
         }
     });
     private Button chooseImageButton;
@@ -84,19 +79,5 @@ public class CreateGroupFragment extends Fragment {
             Navigation.findNavController(v).popBackStack();
         });
 
-    }
-
-    private String getRealPathFromURI(Uri uri) {
-        String filePath = null;
-        Cursor cursor = getContext().getContentResolver().query(uri, null, null, null, null);
-
-        if (cursor != null) {
-            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            filePath = cursor.getString(columnIndex);
-            cursor.close();
-        }
-
-        return filePath;
     }
 }
