@@ -56,6 +56,14 @@ public class CreateNewContactFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Bundle bundle = getArguments();
+        boolean isEdit;
+        if(bundle != null){
+            isEdit = bundle.getBoolean("isEdit");
+        } else {
+            isEdit = false;
+        }
+
 
         imageView = view.findViewById(R.id.create_contact_imageview);
         Button chooseImageButton = view.findViewById(R.id.create_contact_choose_image_button);
@@ -65,6 +73,13 @@ public class CreateNewContactFragment extends Fragment {
         Button cancelButton = view.findViewById(R.id.create_contact_cancel_button);
         CountryCodePicker countryCodePicker = view.findViewById(R.id.create_contact_countryCodePicker);
         phoneNumberLayout = view.findViewById(R.id.create_contact_number_layout);
+
+        if (isEdit){
+            nameField.setText(bundle.getString("contactName"));
+            numberField.setText(bundle.getString("contactNumber"));
+            imageUri = Uri.parse(bundle.getString("contactImage"));
+            Glide.with(this).load(imageUri).error(R.drawable.outline_image_not_supported_24).into(imageView);
+        }
 
 
         chooseImageButton.setOnClickListener(v -> {
@@ -89,7 +104,15 @@ public class CreateNewContactFragment extends Fragment {
                 if (imageUri == null){
                     imageUri = Uri.parse("");
                 }
-                contactsViewModel.insertContact(nameField.getText().toString(), numberField.getText().toString(), imageUri.toString());
+                String nameString = nameField.getText().toString();
+                String numberString = numberField.getText().toString();
+                String imageString = imageUri.toString();
+                if (isEdit){
+                    contactsViewModel.updateContact(nameString, numberString, imageString, bundle.getInt("contactId"));
+                }
+                else{
+                    contactsViewModel.insertContact(nameString, numberString, imageString);
+                }
                 Navigation.findNavController(v).popBackStack();
             }
         });
@@ -102,9 +125,7 @@ public class CreateNewContactFragment extends Fragment {
         PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
         try {
             String countryCode = countryCodePicker.getSelectedCountryNameCode();
-            Log.i("INFO", countryCode);
             Phonenumber.PhoneNumber phoneNumber = phoneNumberUtil.parse(number, countryCode);
-            Log.i("INFO", String.valueOf(phoneNumber));
             return !phoneNumberUtil.isValidNumber(phoneNumber);
         } catch (Exception e) {
             return true;

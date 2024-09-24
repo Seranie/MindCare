@@ -38,6 +38,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
 
         //Fragment list to hold tool fragments
         ArrayList<Fragment> fragmentList = new ArrayList<>();
@@ -64,7 +65,6 @@ public class HomeFragment extends Fragment {
         new ViewpagerNavigationMediator(bottomNavigation, viewPager).attach();
 
         fab = view.findViewById(R.id.home_fab);
-        navController = Navigation.findNavController(view);
 
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override

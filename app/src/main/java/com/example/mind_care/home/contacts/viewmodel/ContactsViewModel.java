@@ -39,4 +39,24 @@ public class ContactsViewModel extends ViewModel {
             contactsLivedata.postValue(temp);
         }).start();
     }
+
+    public void updateContact(String contactName, String contactNumber, String contactImageSource, int contactId){
+        new Thread(() -> {
+            ContactEntity entity = contactDao.getContactById(contactId);
+            Log.i("INFO", String.valueOf(entity.getContactName()));
+            entity.setContactName(contactName);
+            entity.setContactNumber(contactNumber);
+            entity.setImageUri(contactImageSource);
+            Log.i("INFO", contactName);
+            contactDao.updateContact(entity);
+            getAllContacts();
+        }).start();
+    }
+
+    public void deleteContact(int contactId){
+        new Thread(()->{
+            contactDao.deleteContact(contactDao.getContactById(contactId));
+            getAllContacts();
+        }).start();
+    }
 }

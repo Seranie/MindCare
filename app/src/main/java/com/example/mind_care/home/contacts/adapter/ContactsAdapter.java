@@ -6,23 +6,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -35,20 +35,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder> {
-    private List<ContactEntity> contactsList = new ArrayList<>();
-    private Context context;
-    private Fragment fragment;
     private final static int REQUEST_CALL_PERMISSION = 1;
-    
-    public ContactsAdapter(ContactsViewModel contactsViewModel, Context context, Fragment fragment) {
+    private final Context context;
+    private final Fragment fragment;
+    private List<ContactEntity> contactsList = new ArrayList<>();
+    private NavController navController;
+    private ContactsViewModel contactsViewModel;
+
+    public ContactsAdapter(ContactsViewModel contactsViewModel, Context context, Fragment fragment, NavController navController) {
         this.context = context;
         this.fragment = fragment;
+        this.navController = navController;
+        this.contactsViewModel = contactsViewModel;
         contactsViewModel.getContactsLiveData().observe(fragment, (queryContactsList) -> {
             this.contactsList = queryContactsList;
             notifyDataSetChanged();
-            if (fragment instanceof OnRecyclerViewReadyInterface) {
-                ((OnRecyclerViewReadyInterface) fragment).OnRecyclerViewReadyCallback();
-            }
         });
     }
 
@@ -71,7 +72,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         return contactsList.size();
     }
 
-    public class ContactsViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+    public class ContactsViewHolder extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
         ShapeableImageView contactImage;
         TextView contactName;
 
@@ -80,28 +81,28 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             super(itemView);
             contactImage = itemView.findViewById(R.id.contacts_item_image);
             contactName = itemView.findViewById(R.id.contacts_item_textview);
-            GestureDetector gesture = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
+            GestureDetector gesture = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                 @Override
-                public boolean onDoubleTap(MotionEvent e){
+                public boolean onDoubleTap(MotionEvent e) {
                     makePhoneCall();
                     return super.onDoubleTap(e);
                 }
             });
 
             itemView.setOnTouchListener((v, event) -> {
-                Log.i("TouchEvent", "Event action: " + event.getAction());
                 gesture.onTouchEvent(event);
                 return false;
             });
             itemView.setOnLongClickListener(v -> {
-                Log.i("INFO", "LONG CLICK");
-                v.showContextMenu();
+                PopupMenu popupMenu = new PopupMenu(context, v);
+                popupMenu.getMenuInflater().inflate(R.menu.contacts_menu, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(this);
+                popupMenu.show();
                 return true;
             });
-            itemView.setOnCreateContextMenuListener(this);
         }
 
-        public void makePhoneCall(){
+        public void makePhoneCall() {
             Intent callIntent = new Intent(Intent.ACTION_CALL);
             callIntent.setData(Uri.parse("tel:" + contactsList.get(getAdapterPosition()).contactNumber));
 
@@ -109,18 +110,33 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
                 // You can request permission here if needed
                 Toast.makeText(context, "Permission not granted", Toast.LENGTH_SHORT).show();
                 ActivityCompat.requestPermissions(fragment.requireActivity(), new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL_PERMISSION);
+            } else {
+                context.startActivity(callIntent);
             }
-            else {context.startActivity(callIntent);}
         }
+
 
         @Override
-        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-            MenuInflater menuInflater = fragment.requireActivity().getMenuInflater();
-            menuInflater.inflate(R.menu.contacts_menu, contextMenu);
+        public boolean onMenuItemClick(MenuItem menuItem) {
+            int itemId = menuItem.getItemId();
+            ContactEntity entity = contactsList.get(getBindingAdapterPosition());
+            if (itemId == R.id.editContactMenu) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isEdit", true);
+                bundle.putString("contactName", entity.contactName);
+                bundle.putString("contactNumber", entity.contactNumber);
+                bundle.putString("contactImage", entity.imageUri);
+                bundle.putInt("contactId", entity.getContactId());
+                navController.navigate(R.id.createNewContactFragment, bundle);
+                return true;
+            } else if (itemId == R.id.deleteContactMenu) {
+                contactsViewModel.deleteContact(entity.getContactId());
+                return true;
+            }
+            return false;
+
+
         }
     }
-
-    public interface OnRecyclerViewReadyInterface{
-        void OnRecyclerViewReadyCallback();
-    }
 }
+

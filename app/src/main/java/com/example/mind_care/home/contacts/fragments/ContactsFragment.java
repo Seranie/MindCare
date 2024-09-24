@@ -16,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,24 +48,13 @@ public class ContactsFragment extends BaseTools{
         contactsViewModel = new ViewModelProvider((ViewModelStoreOwner) context, factory).get(ContactsViewModel.class);
 
         contactsRecyclerview = view.findViewById(R.id.contacts_recyclerview);
-        contactsRecyclerview.setAdapter(new ContactsAdapter(contactsViewModel, getContext(), this));
+        contactsRecyclerview.setAdapter(new ContactsAdapter(contactsViewModel, getContext(), this, NavHostFragment.findNavController(getParentFragment())));
         contactsRecyclerview.setLayoutManager(new GridLayoutManager(getContext(), GRID_SPAN));
 
         contactsViewModel.getAllContacts();
     }
 
 
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        int itemId = item.getItemId();
-        if (itemId == R.id.editContactMenu) {
-            return true;
-        } else if (itemId == R.id.deleteContactMenu) {
-            return true;
-        }
-        else{ return super.onContextItemSelected(item); }
-    }
 
 
     @Override
