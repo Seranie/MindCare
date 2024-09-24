@@ -40,4 +40,8 @@
         android:id="@+id/createNewContactFragment"
         android:name="com.example.mind_care.home.contacts.fragments.CreateNewContactFragment"
         android:label="CreateNewContactFragment" />
+    <fragment
+        android:id="@+id/createFencesFragment"
+        android:name="com.example.mind_care.home.fences.fragment.CreateFencesFragment"
+        android:label="CreateFencesFragment" />
 </navigation>

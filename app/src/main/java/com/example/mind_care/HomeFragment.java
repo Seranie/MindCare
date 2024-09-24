@@ -15,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.mind_care.home.BaseTools;
 import com.example.mind_care.home.ViewpagerNavigationMediator;
 import com.example.mind_care.home.contacts.fragments.ContactsFragment;
+import com.example.mind_care.home.fences.fragment.FencesFragment;
 import com.example.mind_care.home.reminders.fragment.Reminders;
 import com.example.mind_care.placeholder_fragments.PlaceholderFragment;
 import com.example.mind_care.showcases.ToolsFragmentStateAdapter;
@@ -44,7 +45,7 @@ public class HomeFragment extends Fragment {
         ArrayList<Fragment> fragmentList = new ArrayList<>();
         BaseTools remindersFragment = new Reminders();
         BaseTools contactsFragment = new ContactsFragment();
-        PlaceholderFragment fencesFragment = new PlaceholderFragment().setText("Fences");
+        BaseTools fencesFragment = new FencesFragment();
         PlaceholderFragment chatBuddyFragment = new PlaceholderFragment().setText("Chat Buddy");
 
 

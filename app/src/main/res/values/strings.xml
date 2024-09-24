@@ -186,4 +186,10 @@
     <string name="create_contact_invalid_number">Not a valid phone number</string>
     <string name="edit_contact">Edit contact</string>
     <string name="delete_contact">Delete contact</string>
+
+
+    <string name="create_fence_radius_label">Radius</string>
+    <string name="create_fence_confirm">Confirm</string>
+    <string name="create_fence_cancel">Cancel</string>
+
 </resources>
