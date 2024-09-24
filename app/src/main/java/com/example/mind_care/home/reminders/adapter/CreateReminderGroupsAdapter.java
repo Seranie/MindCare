@@ -23,6 +23,7 @@ import com.example.mind_care.home.reminders.fragment.CreateNewReminderFragment;
 import com.example.mind_care.home.reminders.model.RemindersGroupItem;
 import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -72,7 +73,7 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
 
             if(!groupItems.isEmpty()){
                 Uri imageUri = groupItems.get(position).getImageSource();
-                Glide.with(context).load(imageUri).error(R.drawable.outline_image_not_supported_24).into(groupItemViewHolder.groupImage);
+                Glide.with(context).load(new File(imageUri.toString())).error(R.drawable.outline_image_not_supported_24).into(groupItemViewHolder.groupImage);
                 groupItemViewHolder.groupName.setText(groupItems.get(position).getName());
             }
         }
