@@ -22,6 +22,7 @@ firebaseUiAuth = "8.0.0"
 worker = "2.7.1"
 room = "2.6.1"
 playServicesMaps = "19.0.0"
+playServicesLocation = "21.3.0"
 
 
 [libraries]
@@ -49,6 +50,7 @@ showcaseview = { group = "com.github.mreram", name = "showcaseview", version.ref
 materiashowcaseview = { group = "com.github.deano2390", name = "MaterialShowcaseView", version.ref = "materialshowcaseview"}
 worker = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "worker"}
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

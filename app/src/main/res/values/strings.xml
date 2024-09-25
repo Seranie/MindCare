@@ -196,4 +196,6 @@
     <string name="link_account_confirm">Confirm</string>
     <string name="link_account_cancel">Cancel</string>
 
+    <string name="share_location_switch">Start sharing location</string>
+
 </resources>

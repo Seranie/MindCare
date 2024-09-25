@@ -34,4 +34,7 @@
 
     <dimen name="link_account_edit_text_horizontal_margin">24dp</dimen>
 
+    <dimen name="share_location_switch_horizontal_margin">16dp</dimen>
+
+
 </resources>

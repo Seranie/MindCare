@@ -49,6 +49,7 @@ public class FencesFragment extends BaseTools implements OnMapReadyCallback {
     @Override
     public void onStart() {
         super.onStart();
+        //TODO maybe can move to a setting instead of automatically starting
         PeriodicWorkRequest locationCheckRequest = new PeriodicWorkRequest.Builder(
                 LocationCheckWorker.class, 15, TimeUnit.MINUTES)
                 .build();
@@ -77,6 +78,9 @@ public class FencesFragment extends BaseTools implements OnMapReadyCallback {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.link_account_menu) {
             navController.navigate(R.id.linkAccountFragment);
+        }
+        else if(item.getItemId() == R.id.share_location_menu){
+            navController.navigate(R.id.shareLocationFragment);
         }
         return true;
     }

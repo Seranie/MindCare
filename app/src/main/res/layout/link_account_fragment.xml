@@ -7,21 +7,23 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/link_account_edit_text"
+        android:id="@+id/textinputlayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/link_account_edit_text_horizontal_margin"
         android:layout_marginTop="48dp"
         android:hint="@string/link_account_enter_uid"
+        app:errorEnabled="true"
         app:hintAnimationEnabled="true"
         app:hintEnabled="true"
-        android:layout_marginHorizontal="@dimen/link_account_edit_text_horizontal_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="0dp"
+            android:id="@+id/link_account_edit_text"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -34,7 +36,7 @@
         android:text="@string/link_account_confirm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/link_account_edit_text" />
+        app:layout_constraintTop_toBottomOf="@+id/textinputlayout" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/link_account_cancel_button"
