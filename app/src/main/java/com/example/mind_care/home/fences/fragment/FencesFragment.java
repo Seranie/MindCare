@@ -46,18 +46,6 @@ public class FencesFragment extends BaseTools implements OnMapReadyCallback {
         navController = Navigation.findNavController(view);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        //TODO maybe can move to a setting instead of automatically starting
-        PeriodicWorkRequest locationCheckRequest = new PeriodicWorkRequest.Builder(
-                LocationCheckWorker.class, 15, TimeUnit.MINUTES)
-                .build();
-
-        // Enqueue the work request
-        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueue(locationCheckRequest);
-    }
-
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {

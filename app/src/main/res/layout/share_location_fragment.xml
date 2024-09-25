@@ -9,11 +9,25 @@
         android:id="@+id/share_location_switch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/share_location_switch_horizontal_margin"
+        android:layout_marginTop="16dp"
         android:checked="false"
         android:text="@string/share_location_switch"
         android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-        android:layout_marginHorizontal="@dimen/share_location_switch_horizontal_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/check_location_switch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/share_location_switch_horizontal_margin"
+        android:layout_marginTop="16dp"
+        android:checked="false"
+        android:text="@string/check_location_switch"
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/share_location_switch" />
 </androidx.constraintlayout.widget.ConstraintLayout>

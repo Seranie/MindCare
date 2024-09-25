@@ -48,4 +48,8 @@
         android:id="@+id/linkAccountFragment"
         android:name="com.example.mind_care.home.fences.fragment.LinkAccountFragment"
         android:label="LinkAccountFragment" />
+    <fragment
+        android:id="@+id/shareLocationFragment"
+        android:name="com.example.mind_care.home.fences.fragment.ShareLocationFragment"
+        android:label="ShareLocationFragment" />
 </navigation>
