@@ -23,6 +23,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class CreateFencesFragment extends Fragment implements OnMapReadyCallback {
     private SeekBar radiusBar;
@@ -42,34 +44,47 @@ public class CreateFencesFragment extends Fragment implements OnMapReadyCallback
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.create_fences_map);
         mapFragment.getMapAsync(this);
+
         radiusBar = view.findViewById(R.id.create_fence_seekbar);
         Button confirmButton = view.findViewById(R.id.create_fences_confirm_button);
         Button cancelButton = view.findViewById(R.id.create_fences_cancel_button);
+        TextInputEditText editText = view.findViewById(R.id.create_fence_edit_text);
+        TextInputLayout editLayout = view.findViewById(R.id.create_fence_text_layout);
+        String inputText = editText.getText().toString();
+
         CreateFencesViewModel createFencesViewModel = new ViewModelProvider(requireActivity()).get(CreateFencesViewModel.class);
 
         radiusBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-
+                ;
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                ;
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 circleRadius = seekBar.getProgress();
-                circleOptions.radius(circleRadius);
+                if(circleOptions != null){
+                    circleOptions.radius(circleRadius);
+                }
                 updateCircle();
             }
         });
 
         confirmButton.setOnClickListener(v -> {
-            FenceObjectModel model = new FenceObjectModel(circleCenter, circleRadius);
-            createFencesViewModel.setFence(model);
-            Navigation.findNavController(v).popBackStack();
+            if(inputText != null){
+                if(inputText.isEmpty()){
+                    editLayout.setError("Please enter a name");
+                }else{
+                    FenceObjectModel model = new FenceObjectModel(circleCenter, circleRadius, inputText);
+                    createFencesViewModel.setFence(model);
+                    Navigation.findNavController(v).popBackStack();
+                }
+            }
         });
 
         cancelButton.setOnClickListener(v -> {

@@ -191,6 +191,7 @@
     <string name="create_fence_radius_label">Radius</string>
     <string name="create_fence_confirm">Confirm</string>
     <string name="create_fence_cancel">Cancel</string>
+    <string name="create_fence_name">Enter fence name</string>
 
     <string name="link_account_enter_uid">Enter UID</string>
     <string name="link_account_confirm">Confirm</string>
@@ -198,5 +199,6 @@
 
     <string name="share_location_switch">Start sharing location</string>
     <string name="check_location_switch">Check linked account location</string>
+
 
 </resources>

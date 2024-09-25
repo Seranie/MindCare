@@ -16,6 +16,6 @@ public class CreateFencesViewModel extends ViewModel {
     }
 
     public void setFence(FenceObjectModel fence) {
-        createFenceRepository.createFence(fence);
+        new Thread(()-> createFenceRepository.createFence(fence)).start();
     }
 }

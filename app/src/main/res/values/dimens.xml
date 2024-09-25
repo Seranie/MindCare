@@ -36,5 +36,8 @@
 
     <dimen name="share_location_switch_horizontal_margin">16dp</dimen>
 
+    <dimen name="create_fence_horizontal_margin">16dp</dimen>
+    <dimen name="create_fence_vertical_margin">16dp</dimen>
+
 
 </resources>

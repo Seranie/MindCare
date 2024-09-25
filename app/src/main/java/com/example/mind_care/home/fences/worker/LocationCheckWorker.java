@@ -56,9 +56,11 @@ public class LocationCheckWorker extends Worker {
             if(task.isSuccessful()){
                 for (DocumentSnapshot document : task.getResult()){
                     GeoPoint fenceLocation = document.getGeoPoint("location");
-                    int radius = document.getLong("radius").intValue();
-                    if (currentLocation.getLatitude() - fenceLocation.getLatitude() >= radius || currentLocation.getLongitude() - fenceLocation.getLongitude() >= radius){
-                        sendNotification(document.getString("name"));
+                    Double radius = document.getDouble("radius");
+                    if (radius != null && fenceLocation != null){
+                        if (currentLocation.getLatitude() - fenceLocation.getLatitude() >= radius || currentLocation.getLongitude() - fenceLocation.getLongitude() >= radius){
+                            sendNotification(document.getString("name"));
+                        }
                     }
                 }
             }

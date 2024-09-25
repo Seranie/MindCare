@@ -32,13 +32,10 @@ public class ShareLocationWorker extends Worker {
         @Override
         public void onLocationResult(@NonNull LocationResult locationResult) {
             super.onLocationResult(locationResult);
-            if (locationResult == null) {
-            } else {
-                for (Location location : locationResult.getLocations()) {
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-                    updateLocationInDatabase(latitude, longitude);
-                }
+            for (Location location : locationResult.getLocations()) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+                updateLocationInDatabase(latitude, longitude);
             }
         }
     };
@@ -80,9 +77,9 @@ public class ShareLocationWorker extends Worker {
         fusedLocationClient.removeLocationUpdates(locationCallback);
     }
 
-    public void stopWorker() {
+    @Override
+    public void onStopped() {
         super.onStopped();
         stopLocationUpdates();
     }
-
 }

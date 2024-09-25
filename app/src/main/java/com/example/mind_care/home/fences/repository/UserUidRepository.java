@@ -1,7 +1,5 @@
 package com.example.mind_care.home.fences.repository;
 
-import androidx.lifecycle.MutableLiveData;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -18,30 +16,26 @@ public class UserUidRepository {
         user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    public void fetchUserUid() {
-        //TODO
-    }
 
-    public void validateUid(String Uid, validated callback){
-        db.collection("users").get().addOnCompleteListener(task -> {
+    public void validateUid(String Uid, validated callback) {
+        db.collection("users").document(Uid).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                for (DocumentSnapshot document : task.getResult()) {
-                    if (document.getId().equals(Uid)) {
-                        callback.isValid(true);
-                    }
-                }
+                DocumentSnapshot document = task.getResult();
+                boolean isValid = document.exists();
+                callback.isValid(isValid);
+            } else {
+                callback.isValid(false);
             }
         });
-        callback.isValid(false);
     }
 
-    public void setLinkedAccount(String uid){
+    public void setLinkedAccount(String uid) {
         HashMap<String, String> map = new HashMap<>();
         map.put("id", uid);
         db.collection("users").document(user.getUid()).collection("linked_patient").document("patient").set(map);
     }
 
-    public interface validated{
+    public interface validated {
         void isValid(boolean isValid);
     }
 }
