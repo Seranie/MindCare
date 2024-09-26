@@ -88,6 +88,6 @@ public class FirebaseUIActivity extends AppCompatActivity {
 
     private void createNewUserDocument(FirebaseUser user){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users").document(user.getUid()).collection("groups");
+        db.collection("users").document(user.getUid()).set(new HashMap<>());
     }
 }

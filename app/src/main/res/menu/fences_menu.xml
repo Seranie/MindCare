@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/link_account_menu" android:title="Lnk Account"/>
-    <item android:id="@+id/share_location_menu" android:title="Location settings"/>
+    <item android:id="@+id/link_account_menu" android:title="@string/link_account"/>
+    <item android:id="@+id/share_location_menu" android:title="@string/location_settings"/>
 </menu>

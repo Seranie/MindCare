@@ -1,5 +1,7 @@
 package com.example.mind_care.home.fences.repository;
 
+import android.util.Log;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -18,6 +20,10 @@ public class UserUidRepository {
 
 
     public void validateUid(String Uid, validated callback) {
+        if (user.getUid().equals(Uid)) {
+            callback.isValid(false);
+            return;
+        }
         db.collection("users").document(Uid).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();

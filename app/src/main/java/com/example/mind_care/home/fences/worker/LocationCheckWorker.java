@@ -59,7 +59,7 @@ public class LocationCheckWorker extends Worker {
                     Double radius = document.getDouble("radius");
                     if (radius != null && fenceLocation != null){
                         if (currentLocation.getLatitude() - fenceLocation.getLatitude() >= radius || currentLocation.getLongitude() - fenceLocation.getLongitude() >= radius){
-                            sendNotification(document.getString("name"));
+                            sendNotification(document.getString("fenceName"));
                         }
                     }
                 }

@@ -1,17 +1,22 @@
 package com.example.mind_care.home.fences.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.mind_care.R;
 import com.example.mind_care.home.BaseTools;
@@ -25,6 +30,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class FencesFragment extends BaseTools implements OnMapReadyCallback {
     private NavController navController;
+    private SupportMapFragment mapFragment;
+    private final float ZOOM_LEVEL = 11;
 
     @Nullable
     @Override
@@ -35,19 +42,17 @@ public class FencesFragment extends BaseTools implements OnMapReadyCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fences_map);
+        setHasOptionsMenu(true);
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fences_map);
         mapFragment.getMapAsync(this);
 
-        navController = Navigation.findNavController(view);
+        navController = NavHostFragment.findNavController(getParentFragment());
     }
-
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        GoogleMap mMap = googleMap;
-        // Example: Add a marker in Sydney and move the camera
         LatLng sg = new LatLng(1.290270, 103.851959);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sg));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sg, ZOOM_LEVEL));
     }
 
     @Override
@@ -71,7 +76,7 @@ public class FencesFragment extends BaseTools implements OnMapReadyCallback {
 
     @Override
     public void setOnFabClickedDestination(FloatingActionButton fab, NavController navController) {
-        navController.navigate(R.id.createFencesFragment);
+        fab.setOnClickListener(v -> navController.navigate(R.id.createFencesFragment));
     }
 
     @Override

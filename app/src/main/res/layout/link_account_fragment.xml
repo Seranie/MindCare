@@ -7,7 +7,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textinputlayout"
+        android:id="@+id/link_account_text_input_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/link_account_edit_text_horizontal_margin"
@@ -36,7 +36,7 @@
         android:text="@string/link_account_confirm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textinputlayout" />
+        app:layout_constraintTop_toBottomOf="@+id/link_account_text_input_layout" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/link_account_cancel_button"

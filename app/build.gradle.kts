@@ -5,6 +5,10 @@ plugins {
 }
 
 android {
+    buildFeatures {
+        buildConfig = true
+    }
+
     namespace = "com.example.mind_care"
     compileSdk = 34
 

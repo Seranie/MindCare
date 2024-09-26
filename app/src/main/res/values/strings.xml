@@ -199,6 +199,8 @@
 
     <string name="share_location_switch">Start sharing location</string>
     <string name="check_location_switch">Check linked account location</string>
+    <string name="link_account">Link Account</string>
+    <string name="location_settings">Location settings</string>
 
 
 </resources>
