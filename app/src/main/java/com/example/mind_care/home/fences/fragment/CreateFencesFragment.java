@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,7 @@ public class CreateFencesFragment extends Fragment implements OnMapReadyCallback
         Button cancelButton = view.findViewById(R.id.create_fences_cancel_button);
         TextInputEditText editText = view.findViewById(R.id.create_fence_edit_text);
         TextInputLayout editLayout = view.findViewById(R.id.create_fence_text_layout);
-        String inputText = editText.getText().toString();
+
 
         CreateFencesViewModel createFencesViewModel = new ViewModelProvider(requireActivity()).get(CreateFencesViewModel.class);
 
@@ -77,11 +78,12 @@ public class CreateFencesFragment extends Fragment implements OnMapReadyCallback
                 if (circleOptions != null) {
                     circleOptions.radius(circleRadius);
                 }
-                updateCircle();
+                circle.setRadius(circleRadius);
             }
         });
 
         confirmButton.setOnClickListener(v -> {
+            String inputText = editText.getText().toString();
             if (inputText != null) {
                 if (inputText.isEmpty()) {
                     editLayout.setError("Please enter a name");
@@ -130,8 +132,8 @@ public class CreateFencesFragment extends Fragment implements OnMapReadyCallback
     }
 
     private void updateCircle() {
-        LatLng currentCircleCenter = mMap.getCameraPosition().target;
-        circle.setCenter(currentCircleCenter);
+        circleCenter = mMap.getCameraPosition().target;
+        circle.setCenter(circleCenter);
 
     }
 

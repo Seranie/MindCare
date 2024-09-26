@@ -4,9 +4,11 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
@@ -35,6 +38,8 @@ public class ShareLocationFragment extends Fragment {
 
     MaterialSwitch shareLocationSwitch;
     MaterialSwitch checkLocationSwitch;
+
+    CompoundButton.OnCheckedChangeListener listener;
 
 
     @Nullable
@@ -63,15 +68,20 @@ public class ShareLocationFragment extends Fragment {
         isLocationWorkerRunning();
         isCheckLocationWorkerRunning();
 
-        shareLocationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                // Switch is checked
-                startLocationWorker();
-            } else {
-                // Switch is unchecked
-                stopLocationWorker();
+        listener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    // Switch is checked
+                    startLocationWorker();
+                } else {
+                    // Switch is unchecked
+                    stopLocationWorker();
+                }
             }
-        });
+        };
+
+        shareLocationSwitch.setOnCheckedChangeListener(listener);
 
         checkLocationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
            if(isChecked){
@@ -98,7 +108,8 @@ public class ShareLocationFragment extends Fragment {
 
         // Start the location worker
         PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(ShareLocationWorker.class, 15, TimeUnit.MINUTES).setConstraints(constraints).build();
-        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueueUniquePeriodicWork(SHARE_LOCATION_WORKER_TAG, ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
+//        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueueUniquePeriodicWork(SHARE_LOCATION_WORKER_TAG, ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
+        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueue(new OneTimeWorkRequest.Builder(ShareLocationWorker.class).build());
     }
 
     private void stopLocationWorker(){
@@ -110,7 +121,9 @@ public class ShareLocationFragment extends Fragment {
         workManager.getWorkInfosForUniqueWorkLiveData(SHARE_LOCATION_WORKER_TAG).observe(getViewLifecycleOwner(), workInfos -> {
             if (workInfos != null && !workInfos.isEmpty()) {
                 WorkInfo workInfo = workInfos.get(0);
-                shareLocationSwitch.setChecked(workInfo.getState() == WorkInfo.State.RUNNING);
+                shareLocationSwitch.setOnCheckedChangeListener(null);
+                shareLocationSwitch.setChecked(workInfo.getState() == WorkInfo.State.RUNNING || workInfo.getState() == WorkInfo.State.ENQUEUED);
+                shareLocationSwitch.setOnCheckedChangeListener(listener);
             }
         });
     }

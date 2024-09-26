@@ -30,4 +30,12 @@ public class FenceObjectModel {
         this.radius = radius;
     }
 
+
+    public String getFenceName() {
+        return fenceName;
+    }
+
+    public void setFenceName(String fenceName) {
+        this.fenceName = fenceName;
+    }
 }

@@ -1,11 +1,15 @@
 package com.example.mind_care.home.fences.worker;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,12 +18,20 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.example.mind_care.home.fences.repository.UpdateLocationRepository;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.Priority;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.Task;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class ShareLocationWorker extends Worker {
     private final int LOCATION_REQUEST_INTERVAL = 15000; // 15 seconds
@@ -33,6 +45,7 @@ public class ShareLocationWorker extends Worker {
         public void onLocationResult(@NonNull LocationResult locationResult) {
             super.onLocationResult(locationResult);
             for (Location location : locationResult.getLocations()) {
+                Log.i("INFO", String.valueOf(location));
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
                 updateLocationInDatabase(latitude, longitude);
@@ -50,17 +63,52 @@ public class ShareLocationWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        getLocationAndUpdateDatabase();
-        return null;
+        CompletableFuture<Result> completableFuture = new CompletableFuture<>();
+        Task<Void> task = getLocationAndUpdateDatabase();
+        if(task != null){
+            task.addOnSuccessListener(aVoid -> completableFuture.complete(Result.success())).addOnFailureListener(e -> completableFuture.complete(Result.failure()));
+            try{
+                return completableFuture.get();
+            } catch (ExecutionException | InterruptedException e) {
+                return Result.failure();
+            }
+        }
+        return Result.failure();
     }
 
-    private void getLocationAndUpdateDatabase() {
-
+    private Task<Void> getLocationAndUpdateDatabase() {
+        //check location accuracy permission
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(context, "Location permission not granted", Toast.LENGTH_SHORT).show();
-            return;
+            return null;
         }
-        fusedLocationClient.requestLocationUpdates(createLocationRequest(), locationCallback, Looper.getMainLooper());
+        //check gps is enabled
+        LocationRequest locationRequest = createLocationRequest();
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
+        SettingsClient settingsClient = LocationServices.getSettingsClient(context);
+        Task<LocationSettingsResponse> task = settingsClient.checkLocationSettings(builder.build());
+
+        CompletableFuture<Task<Void>> completableFuture = new CompletableFuture<>();
+        task.addOnSuccessListener(locationSettingsResponse -> {
+            Log.i("INFO", "Location settings are enabled");
+            completableFuture.complete(fusedLocationClient.requestLocationUpdates(createLocationRequest(), locationCallback, Looper.getMainLooper()));
+        }).addOnFailureListener(e -> {
+            Log.i("INFO", "Location settings are NOT enabled");
+            if (e instanceof ResolvableApiException){
+                try {
+                    Log.i("INFO", "Try activity");
+                    ((ResolvableApiException) e).startResolutionForResult((Activity) get, 1);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            completableFuture.complete(null);
+        });
+        try{
+            return completableFuture.get();
+        } catch (ExecutionException | InterruptedException e) {
+            return null;
+        }
     }
 
 
