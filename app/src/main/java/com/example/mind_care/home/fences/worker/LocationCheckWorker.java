@@ -6,6 +6,8 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -21,6 +23,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 public class LocationCheckWorker extends Worker {
     private GeoPoint currentLocation;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -33,25 +38,47 @@ public class LocationCheckWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        checkPatientLocation();
-        return Result.success();
+        return checkPatientLocation();
     }
 
-    public void checkPatientLocation(){
+    public Result checkPatientLocation(){
+        CompletableFuture<Result> completableFuture = new CompletableFuture<>();
         db.collection("users").document(user.getUid()).collection("linked_patient").document("patient").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
-                String patientId = task.getResult().getString("id");
-                db.collection("users").document(patientId).collection("locations").document("location").get().addOnCompleteListener(task1 -> {
-                    if(task1.isSuccessful()){
-                        currentLocation = task1.getResult().getGeoPoint("location");
-                        checkGeoFence(currentLocation);
-                    }
-                });
+                DocumentSnapshot snapshot = task.getResult();
+                if(snapshot.exists()){
+                    String patientId = snapshot.getString("id");
+                    Log.i("INFO", patientId);
+                    db.collection("users").document(patientId).collection("locations").document("location").get().addOnCompleteListener(task1 -> {
+                        if(task1.isSuccessful()){
+                            DocumentSnapshot patientLocation = task1.getResult();
+                            if(patientLocation.exists()){
+                                currentLocation = patientLocation.getGeoPoint("location");
+                                checkGeoFence(currentLocation);
+                                completableFuture.complete(Result.success());
+                            } else {completableFuture.complete(Result.failure(new Data.Builder().putString("message", "Patient has no current location").build()));}
+                        }else {completableFuture.complete(Result.failure());}
+                    });
+                }
+                else{
+                    //No patient linked
+                    Data data = new Data.Builder().putString("message", "No patient linked").build();
+                    completableFuture.complete(Result.failure(data));
+                }
+            }
+            else{
+                completableFuture.complete(Result.failure());
             }
         });
+        try{
+            return completableFuture.get();
+        } catch (ExecutionException | InterruptedException e) {
+            return Result.failure();
+        }
     }
 
     public void checkGeoFence(GeoPoint currentLocation){
+        Log.i("INFO", String.valueOf(currentLocation));
         db.collection("users").document(user.getUid()).collection("fences").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 for (DocumentSnapshot document : task.getResult()){
@@ -66,6 +93,7 @@ public class LocationCheckWorker extends Worker {
             }
         });
     }
+
     public void sendNotification(String fenceName){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "Fence_Alerts")
                 .setSmallIcon(R.mipmap.ic_launcher_official)

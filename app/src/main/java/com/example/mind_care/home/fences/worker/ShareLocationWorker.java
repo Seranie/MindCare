@@ -45,7 +45,6 @@ public class ShareLocationWorker extends Worker {
         public void onLocationResult(@NonNull LocationResult locationResult) {
             super.onLocationResult(locationResult);
             for (Location location : locationResult.getLocations()) {
-                Log.i("INFO", String.valueOf(location));
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
                 updateLocationInDatabase(latitude, longitude);
@@ -82,33 +81,7 @@ public class ShareLocationWorker extends Worker {
             Toast.makeText(context, "Location permission not granted", Toast.LENGTH_SHORT).show();
             return null;
         }
-        //check gps is enabled
-        LocationRequest locationRequest = createLocationRequest();
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
-        SettingsClient settingsClient = LocationServices.getSettingsClient(context);
-        Task<LocationSettingsResponse> task = settingsClient.checkLocationSettings(builder.build());
-
-        CompletableFuture<Task<Void>> completableFuture = new CompletableFuture<>();
-        task.addOnSuccessListener(locationSettingsResponse -> {
-            Log.i("INFO", "Location settings are enabled");
-            completableFuture.complete(fusedLocationClient.requestLocationUpdates(createLocationRequest(), locationCallback, Looper.getMainLooper()));
-        }).addOnFailureListener(e -> {
-            Log.i("INFO", "Location settings are NOT enabled");
-            if (e instanceof ResolvableApiException){
-                try {
-                    Log.i("INFO", "Try activity");
-                    ((ResolvableApiException) e).startResolutionForResult((Activity) get, 1);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-            completableFuture.complete(null);
-        });
-        try{
-            return completableFuture.get();
-        } catch (ExecutionException | InterruptedException e) {
-            return null;
-        }
+        return fusedLocationClient.requestLocationUpdates(createLocationRequest(), locationCallback, Looper.getMainLooper());
     }
 
 
