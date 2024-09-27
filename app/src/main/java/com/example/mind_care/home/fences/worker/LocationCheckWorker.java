@@ -30,6 +30,7 @@ public class LocationCheckWorker extends Worker {
     private GeoPoint currentLocation;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private static final double EARTH_RADIUS = 6371000;
 
     public LocationCheckWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -48,7 +49,6 @@ public class LocationCheckWorker extends Worker {
                 DocumentSnapshot snapshot = task.getResult();
                 if(snapshot.exists()){
                     String patientId = snapshot.getString("id");
-                    Log.i("INFO", patientId);
                     db.collection("users").document(patientId).collection("locations").document("location").get().addOnCompleteListener(task1 -> {
                         if(task1.isSuccessful()){
                             DocumentSnapshot patientLocation = task1.getResult();
@@ -78,20 +78,43 @@ public class LocationCheckWorker extends Worker {
     }
 
     public void checkGeoFence(GeoPoint currentLocation){
-        Log.i("INFO", String.valueOf(currentLocation));
         db.collection("users").document(user.getUid()).collection("fences").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 for (DocumentSnapshot document : task.getResult()){
                     GeoPoint fenceLocation = document.getGeoPoint("location");
                     Double radius = document.getDouble("radius");
+                    if (fenceLocation != null) {
+                        Log.i("INFO", calculateDistance(currentLocation, fenceLocation) + "with radius: " + radius);
+                    }
                     if (radius != null && fenceLocation != null){
-                        if (currentLocation.getLatitude() - fenceLocation.getLatitude() >= radius || currentLocation.getLongitude() - fenceLocation.getLongitude() >= radius){
-                            sendNotification(document.getString("fenceName"));
+                        if (calculateDistance(currentLocation, fenceLocation) >= radius){
+                            String fenceName = document.getString("fenceName");
+                            if(fenceName != null){
+                                sendNotification(fenceName);
+                            }
                         }
                     }
                 }
             }
         });
+    }
+
+    private double calculateDistance(GeoPoint currentLocation, GeoPoint fenceLocation){
+        double lat1 = currentLocation.getLatitude();
+        double lon1 = currentLocation.getLongitude();
+        double lat2 = fenceLocation.getLatitude();
+        double lon2 = fenceLocation.getLongitude();
+
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return EARTH_RADIUS * c; // returns the distance in meters
     }
 
     public void sendNotification(String fenceName){
@@ -102,10 +125,8 @@ public class LocationCheckWorker extends Worker {
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
         NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("Default", "Geofence Alerts", NotificationManager.IMPORTANCE_HIGH);
-            notificationManager.createNotificationChannel(channel);
-        }
+        NotificationChannel channel = new NotificationChannel("Fence_Alerts", "Geofence Alerts", NotificationManager.IMPORTANCE_HIGH);
+        notificationManager.createNotificationChannel(channel);
         notificationManager.notify(fenceName.hashCode(), builder.build());
     }
 }

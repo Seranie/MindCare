@@ -41,6 +41,7 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class ShareLocationFragment extends Fragment {
@@ -54,7 +55,9 @@ public class ShareLocationFragment extends Fragment {
     MaterialSwitch checkLocationSwitch;
 
     CompoundButton.OnCheckedChangeListener shareLocationListener;
+    CompoundButton.OnCheckedChangeListener checkLocationListener;
     PeriodicWorkRequest locationCheckRequest;
+    OneTimeWorkRequest oneTimeLocationCheckRequest;
 
     private final ActivityResultLauncher<IntentSenderRequest> gpsSettingsLauncher = gpsPermissionLauncher();
 
@@ -118,13 +121,20 @@ public class ShareLocationFragment extends Fragment {
 
         shareLocationSwitch.setOnCheckedChangeListener(shareLocationListener);
 
-        checkLocationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                startCheckLocationWorker();
-            } else {
-                stopCheckLocationWorker();
-            }
-        });
+        checkLocationListener = new CompoundButton.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED){
+                        requestNotificationPermission();
+                    }else{
+                        startCheckLocationWorker();
+                    }
+                } else {
+                    stopCheckLocationWorker();
+                }
+            }};
+        checkLocationSwitch.setOnCheckedChangeListener(checkLocationListener);
     }
 
     private void requestPermission() {
@@ -142,8 +152,8 @@ public class ShareLocationFragment extends Fragment {
 
         // Start the location worker
         PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(ShareLocationWorker.class, 15, TimeUnit.MINUTES).setConstraints(constraints).build();
-        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueueUniquePeriodicWork(SHARE_LOCATION_WORKER_TAG, ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
-//        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueue(new OneTimeWorkRequest.Builder(ShareLocationWorker.class).build());
+//        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueueUniquePeriodicWork(SHARE_LOCATION_WORKER_TAG, ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
+        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueue(new OneTimeWorkRequest.Builder(ShareLocationWorker.class).build());
     }
 
     private void stopLocationWorker() {
@@ -166,11 +176,14 @@ public class ShareLocationFragment extends Fragment {
         Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
 
         locationCheckRequest = new PeriodicWorkRequest.Builder(LocationCheckWorker.class, 15, TimeUnit.MINUTES).setConstraints(constraints).build();
+//        oneTimeLocationCheckRequest = new OneTimeWorkRequest.Builder(LocationCheckWorker.class).build();
+
+        observeForCheckLocationChange(locationCheckRequest.getId());
 
         // Enqueue the work request
-//        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueueUniquePeriodicWork(CHECK_LOCATION_WORKER_TAG, ExistingPeriodicWorkPolicy.REPLACE, locationCheckRequest);
-        observeForCheckLocationChange();
-        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueue(new OneTimeWorkRequest.Builder(LocationCheckWorker.class).build());
+        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueueUniquePeriodicWork(CHECK_LOCATION_WORKER_TAG, ExistingPeriodicWorkPolicy.REPLACE, locationCheckRequest);
+
+//        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueue(oneTimeLocationCheckRequest);
 
     }
 
@@ -183,7 +196,9 @@ public class ShareLocationFragment extends Fragment {
         workManager.getWorkInfosForUniqueWorkLiveData(CHECK_LOCATION_WORKER_TAG).observe(getViewLifecycleOwner(), workInfos -> {
             if (workInfos != null && !workInfos.isEmpty()) {
                 WorkInfo workInfo = workInfos.get(0);
+                checkLocationSwitch.setOnCheckedChangeListener(null);
                 checkLocationSwitch.setChecked(workInfo.getState() == WorkInfo.State.RUNNING || workInfo.getState() == WorkInfo.State.ENQUEUED);
+                checkLocationSwitch.setOnCheckedChangeListener(checkLocationListener);
             }
         });
     }
@@ -202,12 +217,10 @@ public class ShareLocationFragment extends Fragment {
 
     }
 
-    private void observeForCheckLocationChange(){
-        WorkManager.getInstance(requireActivity().getApplicationContext()).getWorkInfoByIdLiveData(locationCheckRequest.getId()).observe(getViewLifecycleOwner(), workInfo -> {
+    private void observeForCheckLocationChange(UUID uid){
+        WorkManager.getInstance(requireActivity().getApplicationContext()).getWorkInfoByIdLiveData(uid).observe(getViewLifecycleOwner(), workInfo -> {
             if(workInfo != null){
-                Log.i("INFO","workinfo" + workInfo.getState());
                 if(workInfo.getState() == WorkInfo.State.FAILED){
-                    Log.i("INFO","iz oki");
                     String errorMessage = workInfo.getOutputData().getString("message");
                     if (errorMessage != null){
                         Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
@@ -215,5 +228,11 @@ public class ShareLocationFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void requestNotificationPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+        }
     }
 }
