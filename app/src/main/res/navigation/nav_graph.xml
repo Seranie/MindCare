@@ -52,4 +52,8 @@
         android:id="@+id/shareLocationFragment"
         android:name="com.example.mind_care.home.fences.fragment.ShareLocationFragment"
         android:label="ShareLocationFragment" />
+    <fragment
+        android:id="@+id/manageFencesFragment"
+        android:name="com.example.mind_care.home.fences.fragment.ManageFencesFragment"
+        android:label="ManageFencesFragment" />
 </navigation>

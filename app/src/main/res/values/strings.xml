@@ -201,6 +201,7 @@
     <string name="check_location_switch">Check linked account location</string>
     <string name="link_account">Link Account</string>
     <string name="location_settings">Location settings</string>
+    <string name="manage_fences">Manage Fences</string>
 
 
 </resources>

@@ -70,6 +70,9 @@ public class FencesFragment extends BaseTools implements OnMapReadyCallback {
         else if(item.getItemId() == R.id.share_location_menu){
             navController.navigate(R.id.shareLocationFragment);
         }
+        else if(item.getItemId() == R.id.manage_fences_menu){
+            navController.navigate(R.id.manageFencesFragment);
+        }
         return true;
     }
 
