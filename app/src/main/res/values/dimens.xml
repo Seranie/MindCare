@@ -41,7 +41,7 @@
     <dimen name="manage_fence_chip_horizontal_margin">16dp</dimen>
 
     <dimen name="chat_buddy_message_item_image_size">50dp</dimen>
-    <dimen name="chat_buddy_message_item_horizontal_margin">16dp"</dimen>
+    <dimen name="chat_buddy_message_item_horizontal_margin">16dp</dimen>
     <dimen name="chat_buddy_message_item_text_padding">4dp</dimen>
 
 </resources>

@@ -14,21 +14,24 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.mind_care.home.BaseTools;
 import com.example.mind_care.home.ViewpagerNavigationMediator;
+import com.example.mind_care.home.chat_buddy.fragment.ChatBuddyFragment;
 import com.example.mind_care.home.contacts.fragments.ContactsFragment;
 import com.example.mind_care.home.fences.fragment.FencesFragment;
 import com.example.mind_care.home.reminders.fragment.Reminders;
 import com.example.mind_care.placeholder_fragments.PlaceholderFragment;
 import com.example.mind_care.showcases.ToolsFragmentStateAdapter;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment{
     private NavController navController;
     private FloatingActionButton fab;
+    private BottomAppBar bottomAppBar;
 
     @Nullable
     @Override
@@ -46,7 +49,7 @@ public class HomeFragment extends Fragment {
         BaseTools remindersFragment = new Reminders();
         BaseTools contactsFragment = new ContactsFragment();
         BaseTools fencesFragment = new FencesFragment();
-        PlaceholderFragment chatBuddyFragment = new PlaceholderFragment().setText("Chat Buddy");
+        ChatBuddyFragment chatBuddyFragment = new ChatBuddyFragment();
 
 
         //Add fragments to array
@@ -66,6 +69,7 @@ public class HomeFragment extends Fragment {
         new ViewpagerNavigationMediator(bottomNavigation, viewPager).attach();
 
         fab = view.findViewById(R.id.home_fab);
+        bottomAppBar = view.findViewById(R.id.bottom_app_bar);
 
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -75,6 +79,12 @@ public class HomeFragment extends Fragment {
                     BaseTools currentFragment = (BaseTools) fragmentList.get(position);
                     currentFragment.setFabImage(fab);
                     currentFragment.setOnFabClickedDestination(fab, navController);
+                }
+                if(fragmentList.get(position) instanceof ChatBuddyFragment){
+                    //Disable bottom app bar in chatbuddy so that editext can show
+                    bottomAppBar.setVisibility(View.GONE);
+                }else{
+                    bottomAppBar.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -87,6 +97,5 @@ public class HomeFragment extends Fragment {
         AppBarLayout layout = getActivity().findViewById(R.id.appbar);
         layout.setExpanded(true);
     }
-
 
 }

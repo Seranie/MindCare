@@ -1,4 +1,4 @@
-package com.example.mind_care.database;
+package com.example.mind_care.database.contacts;
 
 import androidx.room.Dao;
 import androidx.room.Delete;

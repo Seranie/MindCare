@@ -203,5 +203,7 @@
     <string name="location_settings">Location settings</string>
     <string name="manage_fences">Manage Fences</string>
 
+    <string name="chat_buddy_send_message">Send message</string>
+    <string name="perform_main_action">Perform main action</string>
 
 </resources>

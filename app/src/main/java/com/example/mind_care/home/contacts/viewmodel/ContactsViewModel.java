@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModel;
 import androidx.room.Room;
 
 import com.example.mind_care.database.AppDatabase;
-import com.example.mind_care.database.ContactDao;
-import com.example.mind_care.database.ContactEntity;
+import com.example.mind_care.database.contacts.ContactDao;
+import com.example.mind_care.database.contacts.ContactEntity;
 
 import java.util.ArrayList;
 
