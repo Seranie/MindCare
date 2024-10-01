@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.worker)
     implementation(libs.guava)
     implementation(libs.room.runtime)
+    implementation(libs.generativeai)
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
     annotationProcessor(libs.room.compiler)
