@@ -17,6 +17,7 @@ import android.util.Log;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -29,6 +30,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import android.Manifest.permission;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 
 import com.example.mind_care.showcases.ShowcaseChangeViewModel;
 import com.google.android.material.navigation.NavigationView;
@@ -46,6 +50,21 @@ public class MainActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        CoordinatorLayout coordinator = findViewById(R.id.main_activity_coordinatorlayout);
+        coordinator.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                coordinator.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                int coordinatorHeight = coordinator.getHeight();
+                int toolbarHeight = findViewById(R.id.toolbar).getHeight();
+                FrameLayout frameLayout = findViewById(R.id.main_activity_frame_layout);
+                ViewGroup.LayoutParams layoutParams = frameLayout.getLayoutParams();
+                layoutParams.height = coordinatorHeight - toolbarHeight;
+                frameLayout.setLayoutParams(layoutParams);
+            }
         });
 
 

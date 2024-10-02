@@ -103,7 +103,7 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
                 chat = model.startChat(history);
             }
             for(MessageEntity message : messages){
-                Log.i("INFO", "Message is" + message.getMessage());
+                Log.i("INFO", "Message is" + message.getMessage());//TODO
             }
         });
 
@@ -112,7 +112,7 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
         editText = view.findViewById(R.id.chat_buddy_edit_text);
 
         RecyclerView recyclerView = view.findViewById(R.id.chat_buddy_recyclerview);
-        recyclerView.setAdapter(new ChatBuddyAdapter());
+        recyclerView.setAdapter(new ChatBuddyAdapter(chatBuddyViewModel, getViewLifecycleOwner()));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         //TODO set up recycler view animations for items as well
@@ -177,7 +177,7 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
 
                 @Override
                 public void onComplete() {
-                    Log.i("INFO", "AI STRING IS:" + stringOutput);
+                    Log.i("INFO", "AI STRING IS:" + stringOutput);// TODO
                     chatBuddyViewModel.insertMessage(new MessageEntity(true, stringOutput.toString()));
                     requireActivity().runOnUiThread(()-> textInputLayout.setEndIconOnClickListener(onSendClickListener));
                 }

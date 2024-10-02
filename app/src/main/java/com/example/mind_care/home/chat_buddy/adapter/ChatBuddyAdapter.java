@@ -7,18 +7,31 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mind_care.R;
 import com.example.mind_care.database.chat_buddy.MessageEntity;
+import com.example.mind_care.home.chat_buddy.viewmodel.ChatBuddyViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private final List<MessageEntity> messageList = new ArrayList<>();
+    private List<MessageEntity> messageList = new ArrayList<>();
     private static final int VIEW_TYPE_USER = 1;
     private static final int VIEW_TYPE_AI = 2;
+    private ChatBuddyViewModel chatBuddyViewModel;
+
+
+    public ChatBuddyAdapter(ChatBuddyViewModel chatBuddyViewModel, LifecycleOwner owner){
+        this.chatBuddyViewModel = chatBuddyViewModel;
+        chatBuddyViewModel.getMessagesLiveData().observe(owner, messageEntities -> {
+            messageList = messageEntities;
+            notifyDataSetChanged(); //TODO or call from fragment instead to use more specific methods
+        });
+    }
+
 
     @NonNull
     @Override
