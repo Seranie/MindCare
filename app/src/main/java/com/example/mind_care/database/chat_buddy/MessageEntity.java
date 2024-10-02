@@ -1,7 +1,5 @@
 package com.example.mind_care.database.chat_buddy;
 
-import android.net.Uri;
-
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -9,26 +7,12 @@ import androidx.room.PrimaryKey;
 public class MessageEntity {
     @PrimaryKey(autoGenerate = true)
     private int messageId;
-
     private boolean isFromAi;
     private String message;
-    private String imageUri;
-    public MessageEntity(boolean isFromAi, String message, String imageUri) {
+
+    public MessageEntity(boolean isFromAi, String message) {
         this.isFromAi = isFromAi;
         this.message = message;
-        this.imageUri = imageUri;
-    }
-
-    public String getImageUri() {
-        return imageUri;
-    }
-
-    public Uri getImageInUri() {
-        return Uri.parse(imageUri);
-    }
-
-    public void setImageUri(Uri imageUri) {
-        this.imageUri = imageUri.toString();
     }
 
     public boolean isFromAi() {

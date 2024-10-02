@@ -83,8 +83,10 @@ public class HomeFragment extends Fragment{
                 if(fragmentList.get(position) instanceof ChatBuddyFragment){
                     //Disable bottom app bar in chatbuddy so that editext can show
                     bottomAppBar.setVisibility(View.GONE);
+                    fab.setVisibility(View.GONE);
                 }else{
                     bottomAppBar.setVisibility(View.VISIBLE);
+                    fab.setVisibility(View.VISIBLE);
                 }
             }
         });
