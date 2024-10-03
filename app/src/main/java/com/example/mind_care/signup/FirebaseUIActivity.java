@@ -2,7 +2,6 @@ package com.example.mind_care.signup;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -11,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mind_care.MainActivity;
 import com.example.mind_care.R;
-import com.example.mind_care.home.reminders.model.RemindersGroupItem;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
@@ -19,13 +17,10 @@ import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.ktx.Firebase;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class FirebaseUIActivity extends AppCompatActivity {
@@ -51,16 +46,16 @@ public class FirebaseUIActivity extends AppCompatActivity {
         IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {
             //Add new user to database
-            if (response.isNewUser()){
+            if (response.isNewUser()) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 createNewUserDocument(user);
             }
 
-
-
             // Successfully signed in
             Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+            finish();
         } else {
             // Sign in failed. If response is null the user canceled the
             // sign-in flow using the back button. Otherwise check
@@ -79,14 +74,16 @@ public class FirebaseUIActivity extends AppCompatActivity {
 
         if (auth.getCurrentUser() != null) {
             Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+            finish();
         } else {
             signInIntent();
         }
 
     }
 
-    private void createNewUserDocument(FirebaseUser user){
+    private void createNewUserDocument(FirebaseUser user) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(user.getUid()).set(new HashMap<>());
     }

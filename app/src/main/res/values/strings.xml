@@ -6,6 +6,8 @@
     <string name="guide_tab_howto">How-to</string>
     <string name="guide_showcase_start_showcase">Show Me</string>
     <string name="guide_showcase_learn_more">Learn More</string>
+    <string name="nav_header_username">Username: %1$s</string>
+    <string name="nav_header_uid">UID: %1$s</string>
 
     <string name="drawer_menu_home">Home</string>
     <string name="drawer_menu_guide">Guide</string>

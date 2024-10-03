@@ -1,20 +1,29 @@
 package com.example.mind_care;
 
-import static androidx.core.app.AlarmManagerCompat.canScheduleExactAlarms;
-
+import android.Manifest.permission;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.transition.Fade;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -29,21 +38,29 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import android.Manifest.permission;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.mind_care.showcases.ShowcaseChangeViewModel;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private NavController navController;
+    private final String image_file_name = "user_avatar_image.png";
+    private ImageView navHeaderImage;
+    private final ActivityResultLauncher<PickVisualMediaRequest> pickMediaLauncher = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+        if (uri != null) {
+            saveImageToInternalStorage(uri);
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        getWindow().setEnterTransition( new Fade());
-        getWindow().setExitTransition( new Fade());
+        getWindow().setEnterTransition(new Fade());
+        getWindow().setExitTransition(new Fade());
 
         // Find Navigation Components
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
@@ -115,34 +132,35 @@ public class MainActivity extends AppCompatActivity {
 
         //Set up nav_header with relevant information
         View headerView = navigationView.getHeaderView(0);
-        headerView.findViewById(R.id.nav_header_image).setOnClickListener(v -> {
-            loadImageStored();
-        });
+        navHeaderImage = headerView.findViewById(R.id.nav_header_image);
+        navHeaderImage.setOnClickListener(v -> pickMediaLauncher.launch(new PickVisualMediaRequest.Builder().setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()));
+        loadImageStored();
 
         TextView username = headerView.findViewById(R.id.nav_header_username);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        try{
-            username.setText(user.getEmail());
-        } catch (NullPointerException e){
-            username.setText(user.getPhoneNumber());
+        try {
+            String usernameString = getString(R.string.nav_header_username, user.getEmail());
+            username.setText(usernameString);
+        } catch (NullPointerException e) {
+            String usernameString = getString(R.string.nav_header_username, user.getPhoneNumber());
+            username.setText(usernameString);
         }
 
         TextView uid = headerView.findViewById(R.id.nav_header_uid);
-        uid.setText(user.getUid());
-
-
+        String uidString = getString(R.string.nav_header_uid, user.getUid());
+        uid.setText(uidString);
 
 
     }
 
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         //Overrides default navigation button behavior and delegate to navController instead, else if navigateUp fails, use parent default method.
         return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
     }
 
-    public void switchToShowcase(int fragmentId){
+    public void switchToShowcase(int fragmentId) {
         Intent intent = new Intent(this, ShowcaseActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt("fragment_id", fragmentId);
@@ -151,12 +169,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @SuppressLint("InlinedApi")
-    public void checkAndRequestNotificationPermission(){
+    public void checkAndRequestNotificationPermission() {
         if (ContextCompat.checkSelfPermission(this, permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             // Request permission
-            ActivityCompat.requestPermissions(this,
-                    new String[]{permission.POST_NOTIFICATIONS},
-                    1);
+            ActivityCompat.requestPermissions(this, new String[]{permission.POST_NOTIFICATIONS}, 1);
         }
     }
 
@@ -170,7 +186,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadImageStored(){
+    private void loadImageStored() {
+        File directory = getFilesDir();
+        File[] files = directory.listFiles();
 
+        if (files != null) {
+            for (File file : files) {
+                if (file.getName().equals(image_file_name)) {
+                    String imagePath = new File(getFilesDir(), image_file_name).getAbsolutePath();
+                    Glide.with(this).load(new File(imagePath)).error(R.drawable.empty_avatar_placeholder).into(navHeaderImage);
+                    return;
+                }
+            }
+        }
+//        Glide.with(this).load(R.drawable.empty_avatar_placeholder).into(navHeaderImage);
     }
+
+    private void saveImageToInternalStorage(Uri uri) {
+        try { //Write Uri image to app's internal storage
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            FileOutputStream fileOutputStream = openFileOutput(image_file_name, Context.MODE_PRIVATE);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                fileOutputStream.write(buffer, 0, length);
+            }
+            fileOutputStream.close();
+            inputStream.close();
+            loadImageStored();
+        } catch (FileNotFoundException e) {
+            Log.e("Error", "File not found");
+        } catch (IOException e) {
+            Log.e("Error", "IOException");
+        }
+    }
+
 }

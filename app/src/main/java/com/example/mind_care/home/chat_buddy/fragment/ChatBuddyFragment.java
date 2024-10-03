@@ -62,7 +62,7 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
     private ChatBuddyViewModel chatBuddyViewModel;
     private boolean hasCheckedDatabase = false;
     private final String image_file_name = "ai_avatar_image.png";
-    private RecyclerView.Adapter chatBuddyAdapter;
+    private ChatBuddyAdapter chatBuddyAdapter;
     private final HashMap<String, String> imageHashmap = new HashMap<>();
 
     private final ActivityResultLauncher<PickVisualMediaRequest> pickMediaLauncher = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
@@ -268,8 +268,12 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
 
         if (files != null) {
             for (File file : files) {
-                if (file.getName().endsWith(".png")) {
+                String fileName = file.getName();
+                if (fileName.equals(image_file_name)) {
                     imageHashmap.put("ai_avatar", file.getAbsolutePath());
+                }
+                if(fileName.equals("user_avatar_image.png")){
+                    imageHashmap.put("user_avatar", file.getAbsolutePath());
                 }
             }
         }
