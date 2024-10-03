@@ -36,6 +36,9 @@ import com.google.ai.client.generativeai.java.GenerativeModelFutures;
 import com.google.ai.client.generativeai.type.Content;
 import com.google.ai.client.generativeai.type.GenerateContentResponse;
 import com.google.ai.client.generativeai.type.InvalidStateException;
+import com.google.ai.client.generativeai.type.QuotaExceededException;
+import com.google.ai.client.generativeai.type.RequestTimeoutException;
+import com.google.ai.client.generativeai.type.ResponseStoppedException;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -244,6 +247,15 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
 
                 @Override
                 public void onError(Throwable t) {
+                    if(t instanceof QuotaExceededException){
+                        Toast.makeText(getContext(), "Quota exceeded, please wait", Toast.LENGTH_SHORT).show();
+                    }
+                    if(t instanceof ResponseStoppedException){
+                        Toast.makeText(getContext(), "Response stopped", Toast.LENGTH_SHORT).show();
+                    }
+                    if(t instanceof RequestTimeoutException){
+                        Toast.makeText(getContext(), "Request timed out", Toast.LENGTH_SHORT).show();
+                    }
                     Log.i("INFO", t.getMessage());
                 }
 

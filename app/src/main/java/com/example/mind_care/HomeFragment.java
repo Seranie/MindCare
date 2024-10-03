@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,6 +45,8 @@ public class HomeFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
 
+
+
         //Fragment list to hold tool fragments
         ArrayList<Fragment> fragmentList = new ArrayList<>();
         BaseTools remindersFragment = new Reminders();
@@ -64,6 +67,19 @@ public class HomeFragment extends Fragment{
         viewPager.setAdapter(toolsFragmentStateAdapter);
 
         BottomNavigationView bottomNavigation = view.findViewById(R.id.home_bottom_navigation_view);
+
+//        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                //set height to - bottomappbar
+//                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//                ViewPager2.LayoutParams layoutParams = viewPager.getLayoutParams();
+//                int bottomHeight = bottomNavigation.getHeight();
+//                layoutParams.height = layoutParams.height - bottomHeight;
+//                viewPager.setLayoutParams(layoutParams);
+//                viewPager.requestLayout();
+//            }
+//        });
 
         // Set up viewpager2 swipe to change bottom nav selection
         new ViewpagerNavigationMediator(bottomNavigation, viewPager).attach();

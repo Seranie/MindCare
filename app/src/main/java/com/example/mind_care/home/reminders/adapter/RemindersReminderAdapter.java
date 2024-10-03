@@ -49,6 +49,7 @@ public class RemindersReminderAdapter extends RecyclerView.Adapter<RemindersRemi
             holder.note.setVisibility(View.GONE);
         }
         else{
+            holder.note.setVisibility(View.VISIBLE);
             holder.note.setText(note);
         }
     }

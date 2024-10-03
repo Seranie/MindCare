@@ -74,21 +74,23 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Make navhostfragment the size of the coordinatorlayout - actionbarsize.
-        CoordinatorLayout coordinator = findViewById(R.id.main_activity_coordinatorlayout);
-        coordinator.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                coordinator.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                int coordinatorHeight = coordinator.getHeight();
-                int toolbarHeight = findViewById(R.id.toolbar).getHeight();
-                FrameLayout frameLayout = findViewById(R.id.main_activity_frame_layout);
-                ViewGroup.LayoutParams layoutParams = frameLayout.getLayoutParams();
-                layoutParams.height = coordinatorHeight - toolbarHeight;
-                frameLayout.setLayoutParams(layoutParams);
-                frameLayout.requestLayout();
-            }
-        });
+//        CoordinatorLayout coordinator = findViewById(R.id.main_activity_coordinatorlayout);
+//        coordinator.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                coordinator.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//
+//                int coordinatorHeight = coordinator.getHeight();
+//                Log.i("INFO", String.valueOf(coordinatorHeight));
+//                int appbarHeight = findViewById(R.id.appbar).getHeight();
+//                Log.i("INFO", String.valueOf(appbarHeight));
+//                FrameLayout frameLayout = findViewById(R.id.main_activity_frame_layout);
+//                ViewGroup.LayoutParams layoutParams = frameLayout.getLayoutParams();
+//                layoutParams.height = coordinatorHeight - appbarHeight;
+//                frameLayout.setLayoutParams(layoutParams);
+//                frameLayout.requestLayout();
+//            }
+//        });
 
 
         getWindow().setEnterTransition(new Fade());

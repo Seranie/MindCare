@@ -20,8 +20,9 @@
         android:layout_gravity="bottom"
         app:fabAlignmentMode="center"
         app:fabAnchorMode="cradle"
-        app:hideOnScroll="true"
-        app:paddingBottomSystemWindowInsets="true">
+        app:hideOnScroll="false"
+        app:paddingBottomSystemWindowInsets="true"
+        >
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
