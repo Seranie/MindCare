@@ -12,7 +12,7 @@ import java.util.List;
 @Dao
 public interface MessageDao {
     @Insert
-    void insertMessage(MessageEntity messageEntity);
+    long insertMessage(MessageEntity messageEntity);
 
     @Query("DELETE FROM messages")
     void deleteMessages();

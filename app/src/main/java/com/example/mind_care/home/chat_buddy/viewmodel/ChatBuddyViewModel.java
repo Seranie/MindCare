@@ -11,6 +11,7 @@ import com.example.mind_care.home.chat_buddy.ChatBuddyRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ChatBuddyViewModel extends ViewModel {
     private LiveData<List<MessageEntity>> messagesLiveData;
@@ -26,8 +27,8 @@ public class ChatBuddyViewModel extends ViewModel {
         return messagesLiveData;
     }
 
-    public void insertMessage(MessageEntity message){
-        repo.insertMessage(message);
+    public CompletableFuture<Long> insertMessage(MessageEntity message){
+        return repo.insertMessage(message);
     }
 
     public void resetChat(){

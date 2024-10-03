@@ -10,6 +10,7 @@ import com.example.mind_care.database.chat_buddy.MessageDao;
 import com.example.mind_care.database.chat_buddy.MessageEntity;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ChatBuddyRepository {
     private MessageDao messageDao;
@@ -26,10 +27,12 @@ public class ChatBuddyRepository {
         return messagesLiveData;
     }
 
-    public void insertMessage(MessageEntity message){
+    public CompletableFuture<Long> insertMessage(MessageEntity message){
+        CompletableFuture<Long> completableFuture = new CompletableFuture<>();
         new Thread(()->{
-            messageDao.insertMessage(message);
+            completableFuture.complete(messageDao.insertMessage(message));
         }).start();
+        return completableFuture;
     }
 
     public void resetChat(){
