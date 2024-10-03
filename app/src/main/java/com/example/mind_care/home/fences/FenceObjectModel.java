@@ -5,10 +5,10 @@ import com.google.firebase.firestore.GeoPoint;
 
 public class FenceObjectModel {
     private String fenceId;
-
     private GeoPoint location;
     private double radius;
     private String fenceName;
+
     public FenceObjectModel(LatLng location, double radius, String fenceName) {
         this.location = new GeoPoint(location.latitude, location.longitude);
         this.radius = radius;
