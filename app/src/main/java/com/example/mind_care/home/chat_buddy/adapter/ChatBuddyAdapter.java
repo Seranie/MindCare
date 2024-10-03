@@ -34,7 +34,6 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.chatBuddyViewModel = chatBuddyViewModel;
         chatBuddyViewModel.getMessagesLiveData().observe(owner, messageEntities -> {
             messageList = messageEntities;
-
             notifyDataSetChanged(); //TODO or call from fragment instead to use more specific methods
         });
     }
@@ -112,8 +111,4 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    public void updateMessasge(int position, String newText){
-        messageList.get(position).setMessage(newText);
-        notifyItemChanged(position);
-    }
 }

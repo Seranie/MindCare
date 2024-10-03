@@ -53,6 +53,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class ChatBuddyFragment extends BaseTools implements View.OnClickListener {
     private TextInputLayout textInputLayout;
@@ -146,7 +147,6 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
 
         textInputLayout.setEndIconOnClickListener(this);
 
-
     }
 
     @Override
@@ -188,9 +188,9 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-        String message = editText.getText().toString();
+        String message = Objects.requireNonNull(editText.getText()).toString();
         if(message.isEmpty()){
-            textInputLayout.setError("Please enter a message");
+            Toast.makeText(requireContext(), "Message cannot be empty", Toast.LENGTH_SHORT).show();
             return;
         }
         chatBuddyViewModel.insertMessage(new MessageEntity(false, message));
@@ -218,8 +218,8 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
                 @Override
                 public void onSubscribe(Subscription s) {
                     s.request(Long.MAX_VALUE);
-//                    message = new MessageEntity(true, "");
-//                    chatBuddyViewModel.insertMessage(message);
+//                    messageEntity = new MessageEntity(true, "Typing...");
+//                    chatBuddyViewModel.insertMessage(messageEntity);
                 }
 
                 @Override
@@ -227,10 +227,10 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
                     String chunk = generateContentResponse.getText();
                     stringOutput.append(chunk);
 
-                    Log.i("INFO", chunk);
-
-//                    message.setMessage(stringOutput.toString());
-//                    chatBuddyViewModel.updateMessage(message);
+//                    Log.i("INFO", chunk);
+//
+//                    messageEntity.setMessage(stringOutput.toString());
+//                    chatBuddyViewModel.updateMessage(messageEntity);
                 }
 
                 @Override
@@ -240,8 +240,8 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
 
                 @Override
                 public void onComplete() {
-//                    message.setMessage(stringOutput.toString().trim());
-//                    chatBuddyViewModel.updateMessage(message);
+//                    messageEntity.setMessage(stringOutput.toString().trim());
+//                    chatBuddyViewModel.updateMessage(messageEntity);
                     chatBuddyViewModel.insertMessage(new MessageEntity(true, stringOutput.toString().trim()));
                     requireActivity().runOnUiThread(() -> textInputLayout.setEndIconOnClickListener(onSendClickListener));
                 }
