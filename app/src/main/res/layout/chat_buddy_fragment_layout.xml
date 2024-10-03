@@ -18,6 +18,7 @@
         android:id="@+id/chat_buddy_text_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="68dp"
         android:hint="@string/chat_buddy_send_message"
         android:visibility="visible"
         app:endIconDrawable="@drawable/outline_send_24"

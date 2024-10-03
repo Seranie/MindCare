@@ -30,12 +30,16 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import android.Manifest.permission;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.example.mind_care.showcases.ShowcaseChangeViewModel;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
@@ -52,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        //Make navhostfragment the size of the coordinatorlayout - actionbarsize.
         CoordinatorLayout coordinator = findViewById(R.id.main_activity_coordinatorlayout);
         coordinator.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -64,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams layoutParams = frameLayout.getLayoutParams();
                 layoutParams.height = coordinatorHeight - toolbarHeight;
                 frameLayout.setLayoutParams(layoutParams);
+                frameLayout.requestLayout();
             }
         });
 
@@ -107,6 +113,26 @@ public class MainActivity extends AppCompatActivity {
             checkAndRequestExactAlarmPermission();
         }
 
+        //Set up nav_header with relevant information
+        View headerView = navigationView.getHeaderView(0);
+        headerView.findViewById(R.id.nav_header_image).setOnClickListener(v -> {
+            loadImageStored();
+        });
+
+        TextView username = headerView.findViewById(R.id.nav_header_username);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        try{
+            username.setText(user.getEmail());
+        } catch (NullPointerException e){
+            username.setText(user.getPhoneNumber());
+        }
+
+        TextView uid = headerView.findViewById(R.id.nav_header_uid);
+        uid.setText(user.getUid());
+
+
+
+
     }
 
 
@@ -142,5 +168,9 @@ public class MainActivity extends AppCompatActivity {
             intent.setAction(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
             startActivity(intent);
         }
+    }
+
+    private void loadImageStored(){
+
     }
 }

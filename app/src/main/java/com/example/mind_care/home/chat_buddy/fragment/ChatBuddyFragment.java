@@ -1,14 +1,21 @@
 package com.example.mind_care.home.chat_buddy.fragment;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -29,6 +36,7 @@ import com.google.ai.client.generativeai.java.GenerativeModelFutures;
 import com.google.ai.client.generativeai.type.Content;
 import com.google.ai.client.generativeai.type.GenerateContentResponse;
 import com.google.ai.client.generativeai.type.InvalidStateException;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -37,9 +45,13 @@ import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class ChatBuddyFragment extends BaseTools implements View.OnClickListener {
@@ -49,6 +61,15 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
     private View.OnClickListener onSendClickListener;
     private ChatBuddyViewModel chatBuddyViewModel;
     private boolean hasCheckedDatabase = false;
+    private final String image_file_name = "ai_avatar_image.png";
+    private RecyclerView.Adapter chatBuddyAdapter;
+    private final HashMap<String, String> imageHashmap = new HashMap<>();
+
+    private final ActivityResultLauncher<PickVisualMediaRequest> pickMediaLauncher = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+        if (uri != null) {
+            saveImageToInternalStorage(uri);
+        }
+    });
 
     @Nullable
     @Override
@@ -60,6 +81,7 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        setHasOptionsMenu(true);
         this.onSendClickListener = this;
         ChatBuddyViewModelFactory factory = new ChatBuddyViewModelFactory(requireActivity().getApplication());
         chatBuddyViewModel = new ViewModelProvider(this, factory).get(ChatBuddyViewModel.class);
@@ -73,8 +95,8 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
         List<Content> history = new ArrayList<>();
 
         chatBuddyViewModel.getMessagesLiveData().observe(getViewLifecycleOwner(), messages -> {
-            if(hasCheckedDatabase == false){
-                if(messages.isEmpty()){
+            if (!hasCheckedDatabase) {
+                if (messages.isEmpty()) {
                     //No messages in database yet.
                     Content.Builder modelContentBuilder = new Content.Builder();
                     String introString = "Hello there how can I help you?";
@@ -85,14 +107,14 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
                     history.add(modelContent);
 
                     chatBuddyViewModel.insertMessage(new MessageEntity(true, introString));
-                }else{
+                } else {
                     //Messages in database.
                     Content.Builder tempContentBuilder = new Content.Builder();
 
-                    for(MessageEntity message : messages){
-                        if(message.isFromAi()){
+                    for (MessageEntity message : messages) {
+                        if (message.isFromAi()) {
                             tempContentBuilder.setRole("model");
-                        }else{
+                        } else {
                             tempContentBuilder.setRole("user");
                         }
                         tempContentBuilder.addText(message.getMessage());
@@ -102,7 +124,7 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
                 hasCheckedDatabase = true;
                 chat = model.startChat(history);
             }
-            for(MessageEntity message : messages){
+            for (MessageEntity message : messages) {
                 Log.i("INFO", "Message is" + message.getMessage());//TODO
             }
         });
@@ -112,8 +134,10 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
         editText = view.findViewById(R.id.chat_buddy_edit_text);
 
         RecyclerView recyclerView = view.findViewById(R.id.chat_buddy_recyclerview);
-        recyclerView.setAdapter(new ChatBuddyAdapter(chatBuddyViewModel, getViewLifecycleOwner()));
+        chatBuddyAdapter = new ChatBuddyAdapter(chatBuddyViewModel, getViewLifecycleOwner(), imageHashmap);
+        recyclerView.setAdapter(chatBuddyAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        loadImageFromInternalStorage();
 
         //TODO set up recycler view animations for items as well
 
@@ -122,6 +146,32 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
 
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.chat_buddy_options_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.chat_buddy_change_avatar) {
+            //Get image from image picker and add to internal storage for retrieval later
+            pickMediaLauncher.launch(new PickVisualMediaRequest.Builder().setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build());
+        } else if (itemId == R.id.chat_buddy_reset_chat) {
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.chat_buddy_reset_chat_dialog_title)
+                    .setMessage(R.string.chat_buddy_reset_chat_dialog_message)
+                    .setPositiveButton(R.string.chat_buddy_reset_chat_dialog_yes, (dialog, which) -> {
+                        chatBuddyViewModel.resetChat();
+                        dialog.dismiss();
+                    })
+                    .setNegativeButton(R.string.chat_buddy_reset_chat_dialog_no, (dialog, which) -> {
+                        dialog.dismiss();
+                    }).show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void setOnFabClickedDestination(FloatingActionButton fab, NavController navController) {
@@ -145,9 +195,9 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
         //resets text input
         editText.setText("");
         editText.clearFocus();
-        textInputLayout.postDelayed(()-> textInputLayout.setEndIconOnClickListener(null), 200);
+        textInputLayout.postDelayed(() -> textInputLayout.setEndIconOnClickListener(null), 200);
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if(imm != null){
+        if (imm != null) {
             imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
         }
 
@@ -155,7 +205,7 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
         messageBuilder.setRole("user");
         messageBuilder.addText(message);
         Content messageContent = messageBuilder.build();
-        try{
+        try {
             Publisher<GenerateContentResponse> streamingResponse = chat.sendMessageStream(messageContent);
             StringBuilder stringOutput = new StringBuilder();
             streamingResponse.subscribe(new Subscriber<GenerateContentResponse>() {
@@ -179,11 +229,50 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
                 public void onComplete() {
                     Log.i("INFO", "AI STRING IS:" + stringOutput);// TODO
                     chatBuddyViewModel.insertMessage(new MessageEntity(true, stringOutput.toString()));
-                    requireActivity().runOnUiThread(()-> textInputLayout.setEndIconOnClickListener(onSendClickListener));
+                    requireActivity().runOnUiThread(() -> textInputLayout.setEndIconOnClickListener(onSendClickListener));
                 }
             });
-        } catch (InvalidStateException e){
+        } catch (InvalidStateException e) {
             Toast.makeText(getContext(), "Please wait for the previous message to be sent", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void saveImageToInternalStorage(Uri uri) {
+        try { //Write Uri image to app's internal storage
+            InputStream inputStream = requireActivity().getContentResolver().openInputStream(uri);
+            FileOutputStream fileOutputStream = requireActivity().openFileOutput(image_file_name, Context.MODE_PRIVATE);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                fileOutputStream.write(buffer, 0, length);
+            }
+            fileOutputStream.close();
+            inputStream.close();
+
+            String imagePath = new File(requireActivity().getFilesDir(), image_file_name).getAbsolutePath();
+            imageHashmap.put("ai_avatar", imagePath);
+            Log.i("INFO", String.valueOf(imageHashmap));
+            chatBuddyAdapter.notifyDataSetChanged();
+
+        } catch (FileNotFoundException e) {
+            Toast.makeText(getContext(), "Image not found", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            Log.e("Error", "IOException");
+        }
+
+    }
+
+    private void loadImageFromInternalStorage() {
+        File directory = requireActivity().getFilesDir();
+        File[] files = directory.listFiles();
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.getName().endsWith(".png")) {
+                    imageHashmap.put("ai_avatar", file.getAbsolutePath());
+                }
+            }
+        }
+        chatBuddyAdapter.notifyDataSetChanged();
     }
 }

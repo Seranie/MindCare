@@ -205,5 +205,10 @@
 
     <string name="chat_buddy_send_message">Send message</string>
     <string name="perform_main_action">Perform main action</string>
+    <string name="change_avatar">Change Avatar</string>
+    <string name="chat_buddy_reset_chat_dialog_title">Reset Chat</string>
+    <string name="chat_buddy_reset_chat_dialog_message">Are you sure you want to reset the chat?</string>"
+    <string name="chat_buddy_reset_chat_dialog_yes">Yes</string>"
+    <string name="chat_buddy_reset_chat_dialog_no">No</string>"
 
 </resources>

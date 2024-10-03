@@ -1,5 +1,6 @@
 package com.example.mind_care.home.chat_buddy.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,14 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.mind_care.R;
 import com.example.mind_care.database.chat_buddy.MessageEntity;
 import com.example.mind_care.home.chat_buddy.viewmodel.ChatBuddyViewModel;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -22,9 +26,11 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int VIEW_TYPE_USER = 1;
     private static final int VIEW_TYPE_AI = 2;
     private ChatBuddyViewModel chatBuddyViewModel;
+    private HashMap<String,String> imageHashmap = new HashMap<>();
 
 
-    public ChatBuddyAdapter(ChatBuddyViewModel chatBuddyViewModel, LifecycleOwner owner){
+    public ChatBuddyAdapter(ChatBuddyViewModel chatBuddyViewModel, LifecycleOwner owner, HashMap<String,String> imageHashmap){
+        this.imageHashmap = imageHashmap;
         this.chatBuddyViewModel = chatBuddyViewModel;
         chatBuddyViewModel.getMessagesLiveData().observe(owner, messageEntities -> {
             messageList = messageEntities;
@@ -47,11 +53,29 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         MessageEntity message = messageList.get(position);
+
         if(message.isFromAi()){ //TODO set image also
             ((AiChatBuddyViewHolder) holder).message.setText(message.getMessage());
+            String imagePath = imageHashmap.get("ai_avatar");
+            try{
+                File imageFile = new File(imagePath);
+                Glide.with(holder.itemView.getContext()).load(imageFile).error(R.drawable.outline_image_not_supported_24).into(((AiChatBuddyViewHolder) holder).imageView);
+            } catch (NullPointerException e){
+                Log.e("Error", "Image not set yet");
+                Glide.with(holder.itemView.getContext()).load(R.drawable.outline_image_not_supported_24).into(((AiChatBuddyViewHolder) holder).imageView);
+            }
         }
         else {
             ((UserChatBuddyViewHolder) holder).message.setText(message.getMessage());
+            String imagePath = imageHashmap.get("user_avatar");
+            try{
+                File imageFile = new File(imagePath);
+                Glide.with(holder.itemView.getContext()).load(imageFile).error(R.drawable.outline_image_not_supported_24).into(((UserChatBuddyViewHolder) holder).imageView);
+            } catch (NullPointerException e){
+                Log.e("Error", "Image not set yet");
+                Glide.with(holder.itemView.getContext()).load(R.drawable.outline_image_not_supported_24).into(((UserChatBuddyViewHolder) holder).imageView);
+            }
+
         }
     }
 

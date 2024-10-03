@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="image_icons_size">150dp</dimen>
+    <dimen name="nav_header_image_icon_size">100dp</dimen>
 
     <dimen name="guide_docs_image_margin">12dp</dimen>
     <dimen name="guide_docs_image_padding">8dp</dimen>
