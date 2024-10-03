@@ -39,4 +39,10 @@ public class ChatBuddyRepository {
         }).start();
     }
 
+    public void updateMessage(MessageEntity message){
+        new Thread(()->{
+            messageDao.updateMessage(message);
+        }).start();
+    }
+
 }

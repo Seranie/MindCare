@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -21,4 +22,7 @@ public interface MessageDao {
 
     @Query("SELECT * FROM messages")
     LiveData<List<MessageEntity>> getAllMessages();
+
+    @Update
+    void updateMessage(MessageEntity messageEntity);
 }

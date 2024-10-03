@@ -10,9 +10,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ai_message_item_shape_overlay"
         android:orientation="horizontal"
-        android:padding="@dimen/chat_buddy_message_item_text_padding"
+        android:paddingVertical="@dimen/chat_buddy_message_item_text_padding"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -20,6 +19,7 @@
             android:id="@+id/ai_message_imageview"
             android:layout_width="@dimen/chat_buddy_message_item_image_size"
             android:layout_height="@dimen/chat_buddy_message_item_image_size"
+            android:layout_marginHorizontal="@dimen/chat_buddy_message_item_image_horizontal_margin"
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/customGroupImageShape"
             tools:srcCompat="@tools:sample/avatars" />
@@ -28,7 +28,9 @@
             android:id="@+id/ai_message_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/ai_message_item_shape_overlay"
             android:padding="@dimen/chat_buddy_message_item_text_padding"
+            android:elevation="@dimen/chat_buddy_message_item_elevation"
             android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             android:textColor="?attr/colorOnTertiaryContainer" />

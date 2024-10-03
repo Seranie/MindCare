@@ -94,6 +94,16 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
 
         List<Content> history = new ArrayList<>();
 
+
+        //get layouts and set up recyclerview
+        textInputLayout = view.findViewById(R.id.chat_buddy_text_input_layout);
+        editText = view.findViewById(R.id.chat_buddy_edit_text);
+
+        RecyclerView recyclerView = view.findViewById(R.id.chat_buddy_recyclerview);
+        chatBuddyAdapter = new ChatBuddyAdapter(chatBuddyViewModel, getViewLifecycleOwner(), imageHashmap);
+        recyclerView.setAdapter(chatBuddyAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         chatBuddyViewModel.getMessagesLiveData().observe(getViewLifecycleOwner(), messages -> {
             if (!hasCheckedDatabase) {
                 if (messages.isEmpty()) {
@@ -124,19 +134,11 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
                 hasCheckedDatabase = true;
                 chat = model.startChat(history);
             }
-            for (MessageEntity message : messages) {
-                Log.i("INFO", "Message is" + message.getMessage());//TODO
-            }
+            //scroll to newest message whenever message database is updated
+            recyclerView.smoothScrollToPosition(messages.size());
         });
 
-        //get layouts and set up recyclerview
-        textInputLayout = view.findViewById(R.id.chat_buddy_text_input_layout);
-        editText = view.findViewById(R.id.chat_buddy_edit_text);
 
-        RecyclerView recyclerView = view.findViewById(R.id.chat_buddy_recyclerview);
-        chatBuddyAdapter = new ChatBuddyAdapter(chatBuddyViewModel, getViewLifecycleOwner(), imageHashmap);
-        recyclerView.setAdapter(chatBuddyAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         loadImageFromInternalStorage();
 
         //TODO set up recycler view animations for items as well
@@ -209,15 +211,23 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
             Publisher<GenerateContentResponse> streamingResponse = chat.sendMessageStream(messageContent);
             StringBuilder stringOutput = new StringBuilder();
             streamingResponse.subscribe(new Subscriber<GenerateContentResponse>() {
+
+                private MessageEntity message;
+
                 @Override
                 public void onSubscribe(Subscription s) {
+                    message = new MessageEntity(true, "");
                     s.request(Long.MAX_VALUE);
+                    chatBuddyViewModel.insertMessage(message);
                 }
 
                 @Override
                 public void onNext(GenerateContentResponse generateContentResponse) {
                     String chunk = generateContentResponse.getText();
+                    Log.i("INFO", chunk);
                     stringOutput.append(chunk);
+                    message.setMessage(stringOutput.toString());
+                    chatBuddyViewModel.updateMessage(message);
                 }
 
                 @Override
@@ -227,8 +237,8 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
 
                 @Override
                 public void onComplete() {
-                    Log.i("INFO", "AI STRING IS:" + stringOutput);// TODO
-                    chatBuddyViewModel.insertMessage(new MessageEntity(true, stringOutput.toString()));
+                    message.setMessage(stringOutput.toString().trim());
+                    chatBuddyViewModel.updateMessage(message);
                     requireActivity().runOnUiThread(() -> textInputLayout.setEndIconOnClickListener(onSendClickListener));
                 }
             });

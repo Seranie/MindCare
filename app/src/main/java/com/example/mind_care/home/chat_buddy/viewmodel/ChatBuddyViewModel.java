@@ -1,6 +1,7 @@
 package com.example.mind_care.home.chat_buddy.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -31,5 +32,9 @@ public class ChatBuddyViewModel extends ViewModel {
 
     public void resetChat(){
         repo.resetChat();
+    }
+
+    public void updateMessage(MessageEntity message){
+        repo.updateMessage(message);
     }
 }

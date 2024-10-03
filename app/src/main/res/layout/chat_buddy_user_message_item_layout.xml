@@ -10,10 +10,9 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/user_message_item_shape_overlay"
         android:gravity="end"
         android:orientation="horizontal"
-        android:padding="@dimen/chat_buddy_message_item_text_padding"
+        android:paddingVertical="@dimen/chat_buddy_message_item_text_padding"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,6 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="@dimen/chat_buddy_message_item_text_padding"
+            android:background="@drawable/user_message_item_shape_overlay"
+            android:elevation="@dimen/chat_buddy_message_item_elevation"
             android:text="TextViewaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             android:textColor="?attr/colorOnPrimaryContainer" />
@@ -32,6 +33,7 @@
             android:id="@+id/user_message_imageview"
             android:layout_width="@dimen/chat_buddy_message_item_image_size"
             android:layout_height="@dimen/chat_buddy_message_item_image_size"
+            android:layout_marginHorizontal="@dimen/chat_buddy_message_item_image_horizontal_margin"
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/customGroupImageShape"
             tools:srcCompat="@tools:sample/avatars" />

@@ -43,6 +43,8 @@
 
     <dimen name="chat_buddy_message_item_image_size">50dp</dimen>
     <dimen name="chat_buddy_message_item_horizontal_margin">16dp</dimen>
-    <dimen name="chat_buddy_message_item_text_padding">4dp</dimen>
+    <dimen name="chat_buddy_message_item_text_padding">12dp</dimen>
+    <dimen name="chat_buddy_message_item_image_horizontal_margin">4dp</dimen>
+    <dimen name="chat_buddy_message_item_elevation">2dp</dimen>
 
 </resources>
