@@ -102,19 +102,20 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
         RecyclerView recyclerView = view.findViewById(R.id.chat_buddy_recyclerview);
 
         chatBuddyViewModel.getMessagesLiveData().observe(getViewLifecycleOwner(), messages -> {
+            if (messages.isEmpty()) {
+                //No messages in database yet.
+                Content.Builder modelContentBuilder = new Content.Builder();
+                String introString = "Hello there how can I help you?";
+                modelContentBuilder.addText(introString);
+                modelContentBuilder.setRole("model");
+                Content modelContent = modelContentBuilder.build();
+
+                history.add(modelContent);
+
+                chatBuddyViewModel.insertMessage(new MessageEntity(true, introString));
+            }
             if (!hasCheckedDatabase) {
-                if (messages.isEmpty()) {
-                    //No messages in database yet.
-                    Content.Builder modelContentBuilder = new Content.Builder();
-                    String introString = "Hello there how can I help you?";
-                    modelContentBuilder.addText(introString);
-                    modelContentBuilder.setRole("model");
-                    Content modelContent = modelContentBuilder.build();
-
-                    history.add(modelContent);
-
-                    chatBuddyViewModel.insertMessage(new MessageEntity(true, introString));
-                } else {
+                 if(!messages.isEmpty()) {
                     //Messages in database.
                     Content.Builder tempContentBuilder = new Content.Builder();
 
@@ -219,13 +220,16 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
             streamingResponse.subscribe(new Subscriber<GenerateContentResponse>() {
 
                 private MessageEntity messageEntity;
+                private CompletableFuture<Long> completableFuture;
 
                 @Override
                 public void onSubscribe(Subscription s) {
                     s.request(Long.MAX_VALUE);
 
                     messageEntity = new MessageEntity(true, "Typing...");
-                    CompletableFuture<Long> completableFuture = chatBuddyViewModel.insertMessage(messageEntity);
+                    //Add empty message to database to emulate ai typing,
+                    completableFuture = chatBuddyViewModel.insertMessage(messageEntity);
+                    //get back the rowid once the insertion is done and update messagenentity's id
                     completableFuture.thenAccept(aLong -> messageEntity.setMessageId(aLong.intValue()));
                 }
 
@@ -235,7 +239,7 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
                     stringOutput.append(chunk);
 
                     messageEntity.setMessage(stringOutput.toString());
-                    chatBuddyViewModel.updateMessage(messageEntity);
+                    completableFuture.thenAccept(mlong -> chatBuddyViewModel.updateMessage(messageEntity));
                 }
 
                 @Override
@@ -246,7 +250,7 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
                 @Override
                 public void onComplete() {
                     messageEntity.setMessage(stringOutput.toString().trim());
-                    chatBuddyViewModel.updateMessage(messageEntity);
+                    completableFuture.thenAccept(mLong -> chatBuddyViewModel.updateMessage(messageEntity));
 //                    chatBuddyViewModel.insertMessage(new MessageEntity(true, stringOutput.toString().trim()));
                     requireActivity().runOnUiThread(() -> textInputLayout.setEndIconOnClickListener(onSendClickListener));
                 }

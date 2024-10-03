@@ -54,7 +54,7 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         MessageEntity message = messageList.get(position);
 
-        if(message.isFromAi()){ //TODO set image also
+        if(message.isFromAi()){
             ((AiChatBuddyViewHolder) holder).message.setText(message.getMessage());
             String imagePath = imageHashmap.get("ai_avatar");
             try{
