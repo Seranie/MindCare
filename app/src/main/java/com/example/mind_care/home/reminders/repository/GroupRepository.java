@@ -139,6 +139,8 @@ public class GroupRepository {
                     dateTime = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 
                     ReminderItemModel reminderItem = new ReminderItemModel(groupId, (String) map.get("title"), (String) map.get("note"), dateTime, alertItemList);
+                    Timestamp createdDate = (Timestamp) map.get("createdDate");
+                    reminderItem.setCreatedDate(createdDate);
                     reminderItem.setReminderId(doc.getId());
                     tempList.add(reminderItem);
                 }

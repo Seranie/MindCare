@@ -27,6 +27,7 @@ import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 import com.example.mind_care.home.reminders.viewModel.ReminderItemViewModel;
 import com.example.mind_care.home.reminders.viewModel.ReminderScheduleDateTimeViewModel;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -71,6 +72,7 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
 //        ringtone = view.findViewById(R.id.create_reminder_ringtone);
         confirmButton = view.findViewById(R.id.create_reminder_confirm_button);
         cancelButton = view.findViewById(R.id.create_reminder_cancel_button);
+        TextInputLayout titleLayout = view.findViewById(R.id.create_reminder_title_layout);
 
         //Viewmodels for holding alert item date/times
         alertDateTimeViewModel = new ViewModelProvider(this).get(ReminderAlertDateTimeViewModel.class);
@@ -111,8 +113,8 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
 //            String reminderRingtone = ringtone.getText() != null ? ringtone.getText().toString() : "";
 
             //Check if at least title is filled and groupID must be selected.
-            if(reminderTitle.isEmpty()){ // TODO use textinputlayout.seterror instead
-                Toast.makeText(getContext(), "Please fill in title", Toast.LENGTH_SHORT).show();
+            if(reminderTitle.isEmpty()){
+                titleLayout.setError(getString(R.string.please_enter_a_title));
             }
             else if (currentGroupSelectedId.isEmpty()){
                 Toast.makeText(getContext(), "Please select a group", Toast.LENGTH_SHORT).show();

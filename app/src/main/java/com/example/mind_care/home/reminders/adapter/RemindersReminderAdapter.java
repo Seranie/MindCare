@@ -1,6 +1,7 @@
 package com.example.mind_care.home.reminders.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class RemindersReminderAdapter extends RecyclerView.Adapter<RemindersReminderAdapter.ReminderItemViewHolder>{
@@ -28,6 +30,9 @@ public class RemindersReminderAdapter extends RecyclerView.Adapter<RemindersRemi
         this.groupViewModel = groupViewModel;
         this.activityContext = activityContext;
         groupViewModel.getRemindersLiveData().observe(fragment, reminders -> {
+            if(!reminders.isEmpty()){
+                reminders.sort(Comparator.comparing(ReminderItemModel::getCreatedDate).reversed());
+            }
             this.remindersReminderItems = reminders;
             notifyDataSetChanged();
         });

@@ -35,6 +35,7 @@ public class ReminderItemRepository {
         HashMap<String, Object> map = new HashMap<>();
         map.put("title", reminderItem.getTitle());
         map.put("note", reminderItem.getNote());
+        map.put("createdDate", FieldValue.serverTimestamp());
 
         Timestamp timestamp = new Timestamp(Date.from(reminderItem.getSchedule().atZone(ZoneId.systemDefault()).toInstant()));
         map.put("schedule", timestamp);
