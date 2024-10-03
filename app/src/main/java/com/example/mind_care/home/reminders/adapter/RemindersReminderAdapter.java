@@ -1,6 +1,8 @@
 package com.example.mind_care.home.reminders.adapter;
 
 import android.content.Context;
+import android.media.AudioAttributes;
+import android.media.SoundPool;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +27,17 @@ public class RemindersReminderAdapter extends RecyclerView.Adapter<RemindersRemi
     private List<ReminderItemModel> remindersReminderItems = new ArrayList<>();
     private ReminderGroupViewModel groupViewModel;
     private Context activityContext;
+    private SoundPool soundPool;
+    private int soundId;
 
-    public RemindersReminderAdapter(ReminderGroupViewModel groupViewModel, Fragment fragment, Context activityContext){
+    private final int MAX_STREAMS = 5;
+    private final float LEFT_VOLUME = 1.0f;
+    private final float RIGHT_VOLUME = 1.0f;
+    private final int PRIORITY = 0;
+    private final int LOOP = 0;
+    private final float RATE = 1.0f;
+
+    public RemindersReminderAdapter(ReminderGroupViewModel groupViewModel, Fragment fragment, Context activityContext, Context fragmentContext){
         this.groupViewModel = groupViewModel;
         this.activityContext = activityContext;
         groupViewModel.getRemindersLiveData().observe(fragment, reminders -> {
@@ -36,6 +47,16 @@ public class RemindersReminderAdapter extends RecyclerView.Adapter<RemindersRemi
             this.remindersReminderItems = reminders;
             notifyDataSetChanged();
         });
+
+        soundPool = new SoundPool.Builder()
+                .setAudioAttributes(
+                        new AudioAttributes.Builder()
+                                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                                .build()
+                ).setMaxStreams(MAX_STREAMS)
+                .build();
+        soundId = soundPool.load(fragmentContext, R.raw.complete_reminder, 1);
     }
 
     @NonNull
@@ -73,6 +94,7 @@ public class RemindersReminderAdapter extends RecyclerView.Adapter<RemindersRemi
             chip = itemView.findViewById(R.id.reminders_chip);
             note = itemView.findViewById(R.id.reminder_note_textview);
             chip.setOnCloseIconClickListener(view -> {
+                soundPool.play(soundId, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY, LOOP, RATE);
                 String groupId = remindersReminderItems.get(getAdapterPosition()).getGroupId();
                 String reminderId = remindersReminderItems.get(getAdapterPosition()).getId();
                 groupViewModel.getAllAlertItemIdsFromReminder(groupId, reminderId, this);

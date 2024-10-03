@@ -212,6 +212,11 @@
     <string name="chat_buddy_reset_chat_dialog_message">Are you sure you want to reset the chat?</string>"
     <string name="chat_buddy_reset_chat_dialog_yes">Yes</string>"
     <string name="chat_buddy_reset_chat_dialog_no">No</string>
-    <string name="please_enter_a_title">Please enter a title</string>"
+    <string name="please_enter_a_title">Please enter a title</string>
+    <string name="delete_contacts_dialog_no">No</string>
+    <string name="delete_contacts_dialog_yes">Yes</string>
+    <string name="delete_contacts_dialog_message">Are you sure you want to delete this contact?</string>
+    <string name="delete_contacts_dialog_title">Delete Contact</string>
+    "
 
 </resources>

@@ -57,7 +57,7 @@ public class Reminders extends BaseTools implements RemindersGroupAdapter.OnGrou
         //adapter observes if fragment pauses, causing all cureently selected group to be deselected
         getLifecycle().addObserver(groupAdapter);
 
-        reminderItemsRecyclerView.setAdapter(new RemindersReminderAdapter(groupViewModel, this, requireActivity()));
+        reminderItemsRecyclerView.setAdapter(new RemindersReminderAdapter(groupViewModel, this, requireActivity(), getContext()));
         reminderItemsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
 

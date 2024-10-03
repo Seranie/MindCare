@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.AudioAttributes;
+import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.GestureDetector;
@@ -28,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.example.mind_care.R;
 import com.example.mind_care.database.contacts.ContactEntity;
 import com.example.mind_care.home.contacts.viewmodel.ContactsViewModel;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
@@ -38,8 +41,17 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     private final Context context;
     private final Fragment fragment;
     private List<ContactEntity> contactsList = new ArrayList<>();
-    private NavController navController;
-    private ContactsViewModel contactsViewModel;
+    private final NavController navController;
+    private final ContactsViewModel contactsViewModel;
+    private SoundPool soundPool;
+    private int soundId;
+
+    private final int MAX_STREAMS = 5;
+    private final float LEFT_VOLUME = 1.0f;
+    private final float RIGHT_VOLUME = 1.0f;
+    private final int PRIORITY = 0;
+    private final int LOOP = 0;
+    private final float RATE = 1.0f;
 
     public ContactsAdapter(ContactsViewModel contactsViewModel, Context context, Fragment fragment, NavController navController) {
         this.context = context;
@@ -50,6 +62,15 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             this.contactsList = queryContactsList;
             notifyDataSetChanged();
         });
+        soundPool = new SoundPool.Builder()
+                .setAudioAttributes(
+                        new AudioAttributes.Builder()
+                                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                                .build()
+                ).setMaxStreams(MAX_STREAMS)
+                .build();
+        soundId = soundPool.load(context, R.raw.contacts_transition, 1);
     }
 
     @NonNull
@@ -83,6 +104,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             GestureDetector gesture = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onDoubleTap(MotionEvent e) {
+                    soundPool.play(soundId, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY, LOOP, RATE);
                     makePhoneCall();
                     return super.onDoubleTap(e);
                 }
@@ -129,7 +151,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
                 navController.navigate(R.id.createNewContactFragment, bundle);
                 return true;
             } else if (itemId == R.id.deleteContactMenu) {
-                contactsViewModel.deleteContact(entity.getContactId());
+                new MaterialAlertDialogBuilder(context).setTitle(R.string.delete_contacts_dialog_title).setMessage(R.string.delete_contacts_dialog_message).setPositiveButton(R.string.delete_contacts_dialog_yes, (dialog, which) -> {
+                    contactsViewModel.deleteContact(entity.getContactId());
+                }).setNegativeButton(R.string.delete_contacts_dialog_no, (dialog, which) -> dialog.dismiss());
+
                 return true;
             }
             return false;
