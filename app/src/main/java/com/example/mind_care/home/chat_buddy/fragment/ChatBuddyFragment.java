@@ -94,15 +94,10 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
 
         List<Content> history = new ArrayList<>();
 
-
         //get layouts and set up recyclerview
         textInputLayout = view.findViewById(R.id.chat_buddy_text_input_layout);
         editText = view.findViewById(R.id.chat_buddy_edit_text);
-
         RecyclerView recyclerView = view.findViewById(R.id.chat_buddy_recyclerview);
-        chatBuddyAdapter = new ChatBuddyAdapter(chatBuddyViewModel, getViewLifecycleOwner(), imageHashmap);
-        recyclerView.setAdapter(chatBuddyAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         chatBuddyViewModel.getMessagesLiveData().observe(getViewLifecycleOwner(), messages -> {
             if (!hasCheckedDatabase) {
@@ -137,6 +132,12 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
             //scroll to newest message whenever message database is updated
             recyclerView.smoothScrollToPosition(messages.size());
         });
+
+
+        chatBuddyAdapter = new ChatBuddyAdapter(chatBuddyViewModel, getViewLifecycleOwner(), imageHashmap);
+        recyclerView.setAdapter(chatBuddyAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
 
 
         loadImageFromInternalStorage();
@@ -188,10 +189,10 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
     @Override
     public void onClick(View view) {
         String message = editText.getText().toString();
-//        if(message.isEmpty()){
-//            textInputLayout.setError("Please enter a message");
-//            return;
-//        }
+        if(message.isEmpty()){
+            textInputLayout.setError("Please enter a message");
+            return;
+        }
         chatBuddyViewModel.insertMessage(new MessageEntity(false, message));
 
         //resets text input
@@ -212,33 +213,36 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
             StringBuilder stringOutput = new StringBuilder();
             streamingResponse.subscribe(new Subscriber<GenerateContentResponse>() {
 
-                private MessageEntity message;
+                private MessageEntity messageEntity;
 
                 @Override
                 public void onSubscribe(Subscription s) {
-                    message = new MessageEntity(true, "");
                     s.request(Long.MAX_VALUE);
-                    chatBuddyViewModel.insertMessage(message);
+//                    message = new MessageEntity(true, "");
+//                    chatBuddyViewModel.insertMessage(message);
                 }
 
                 @Override
                 public void onNext(GenerateContentResponse generateContentResponse) {
                     String chunk = generateContentResponse.getText();
-                    Log.i("INFO", chunk);
                     stringOutput.append(chunk);
-                    message.setMessage(stringOutput.toString());
-                    chatBuddyViewModel.updateMessage(message);
+
+                    Log.i("INFO", chunk);
+
+//                    message.setMessage(stringOutput.toString());
+//                    chatBuddyViewModel.updateMessage(message);
                 }
 
                 @Override
                 public void onError(Throwable t) {
-
+                    Log.i("INFO", t.getMessage());
                 }
 
                 @Override
                 public void onComplete() {
-                    message.setMessage(stringOutput.toString().trim());
-                    chatBuddyViewModel.updateMessage(message);
+//                    message.setMessage(stringOutput.toString().trim());
+//                    chatBuddyViewModel.updateMessage(message);
+                    chatBuddyViewModel.insertMessage(new MessageEntity(true, stringOutput.toString().trim()));
                     requireActivity().runOnUiThread(() -> textInputLayout.setEndIconOnClickListener(onSendClickListener));
                 }
             });
