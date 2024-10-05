@@ -234,7 +234,7 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
                 public void onSubscribe(Subscription s) {
                     s.request(Long.MAX_VALUE);
 
-                    messageEntity = new MessageEntity(true, "Typing...");
+                    messageEntity = new MessageEntity(true, "");
                     //Add empty message to database to emulate ai typing,
                     completableFuture = chatBuddyViewModel.insertMessage(messageEntity);
                     //get back the rowid once the insertion is done and update messagenentity's id
@@ -291,7 +291,6 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
 
             String imagePath = new File(requireActivity().getFilesDir(), image_file_name).getAbsolutePath();
             imageHashmap.put("ai_avatar", imagePath);
-            Log.i("INFO", String.valueOf(imageHashmap));
             chatBuddyAdapter.notifyDataSetChanged();
 
         } catch (FileNotFoundException e) {
