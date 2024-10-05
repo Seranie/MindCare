@@ -14,9 +14,6 @@ import android.provider.Settings;
 import android.transition.Fade;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,7 +23,6 @@ import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -40,6 +36,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.mind_care.showcases.ShowcaseChangeViewModel;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,10 +49,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
+    private final String image_file_name = "user_avatar_image.png";
     private AppBarConfiguration appBarConfiguration;
     private NavController navController;
-    private final String image_file_name = "user_avatar_image.png";
     private ImageView navHeaderImage;
+
     private final ActivityResultLauncher<PickVisualMediaRequest> pickMediaLauncher = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
         if (uri != null) {
             saveImageToInternalStorage(uri);
@@ -196,31 +194,33 @@ public class MainActivity extends AppCompatActivity {
             for (File file : files) {
                 if (file.getName().equals(image_file_name)) {
                     String imagePath = new File(getFilesDir(), image_file_name).getAbsolutePath();
-                    Glide.with(this).load(new File(imagePath)).error(R.drawable.empty_avatar_placeholder).into(navHeaderImage);
+                    runOnUiThread(()->Glide.with(this).load(new File(imagePath)).error(R.drawable.empty_avatar_placeholder).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(navHeaderImage));
                     return;
                 }
             }
         }
-//        Glide.with(this).load(R.drawable.empty_avatar_placeholder).into(navHeaderImage);
+        runOnUiThread(()-> Glide.with(this).load(R.drawable.empty_avatar_placeholder).into(navHeaderImage));
     }
 
     private void saveImageToInternalStorage(Uri uri) {
-        try { //Write Uri image to app's internal storage
-            InputStream inputStream = getContentResolver().openInputStream(uri);
-            FileOutputStream fileOutputStream = openFileOutput(image_file_name, Context.MODE_PRIVATE);
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = inputStream.read(buffer)) > 0) {
-                fileOutputStream.write(buffer, 0, length);
+        new Thread(() -> {
+            try { //Write Uri image to app's internal storage
+                InputStream inputStream = getContentResolver().openInputStream(uri);
+                FileOutputStream fileOutputStream = openFileOutput(image_file_name, Context.MODE_PRIVATE);
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = inputStream.read(buffer)) > 0) {
+                    fileOutputStream.write(buffer, 0, length);
+                }
+                fileOutputStream.close();
+                inputStream.close();
+                loadImageStored();
+            } catch (FileNotFoundException e) {
+                Log.e("Error", "File not found");
+            } catch (IOException e) {
+                Log.e("Error", "IOException");
             }
-            fileOutputStream.close();
-            inputStream.close();
-            loadImageStored();
-        } catch (FileNotFoundException e) {
-            Log.e("Error", "File not found");
-        } catch (IOException e) {
-            Log.e("Error", "IOException");
-        }
+        }).start();
     }
 
 }

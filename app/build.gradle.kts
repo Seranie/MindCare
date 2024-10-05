@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.taptargetview)
     implementation(libs.showcaseview)
     implementation(libs.materiashowcaseview)
+    implementation (libs.recyclerview.animators)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

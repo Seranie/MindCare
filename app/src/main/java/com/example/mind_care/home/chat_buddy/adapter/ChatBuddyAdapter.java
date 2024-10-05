@@ -1,5 +1,8 @@
 package com.example.mind_care.home.chat_buddy.adapter;
 
+import android.app.Activity;
+import android.os.Build;
+import android.os.FileObserver;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.mind_care.R;
 import com.example.mind_care.database.chat_buddy.MessageEntity;
 import com.example.mind_care.home.chat_buddy.viewmodel.ChatBuddyViewModel;
@@ -27,15 +33,22 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int VIEW_TYPE_AI = 2;
     private ChatBuddyViewModel chatBuddyViewModel;
     private HashMap<String,String> imageHashmap = new HashMap<>();
+    private final String IMAGE_FILE_NAME = "user_avatar_image.png";
+    private FileChangeObserver observer;
+    private Activity mainActivity;
 
 
-    public ChatBuddyAdapter(ChatBuddyViewModel chatBuddyViewModel, LifecycleOwner owner, HashMap<String,String> imageHashmap){
+    public ChatBuddyAdapter(ChatBuddyViewModel chatBuddyViewModel, LifecycleOwner owner, HashMap<String,String> imageHashmap, Activity mainActivity){
         this.imageHashmap = imageHashmap;
         this.chatBuddyViewModel = chatBuddyViewModel;
         chatBuddyViewModel.getMessagesLiveData().observe(owner, messageEntities -> {
-            messageList = messageEntities;
-            notifyDataSetChanged(); //TODO or call from fragment instead to use more specific methods
+            updateReminders(messageEntities);
         });
+        this.mainActivity = mainActivity;
+        File file = new File(mainActivity.getFilesDir(), IMAGE_FILE_NAME);
+        Log.i("INFO", file.getAbsolutePath());
+        observer = new FileChangeObserver(file.getAbsolutePath());
+        observer.startWatching();
     }
 
 
@@ -55,11 +68,11 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         MessageEntity message = messageList.get(position);
 
         if(message.isFromAi()){
-            ((AiChatBuddyViewHolder) holder).message.setText(message.getMessage());
+            ((AiChatBuddyViewHolder) holder).message.setText(message.getMessage().trim());
             String imagePath = imageHashmap.get("ai_avatar");
             try{
                 File imageFile = new File(imagePath);
-                Glide.with(holder.itemView.getContext()).load(imageFile).error(R.drawable.outline_image_not_supported_24).into(((AiChatBuddyViewHolder) holder).imageView);
+                Glide.with(holder.itemView.getContext()).load(imageFile).error(R.drawable.outline_image_not_supported_24).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(((AiChatBuddyViewHolder) holder).imageView);
             } catch (NullPointerException e){
                 Log.e("Error", "Image not set yet");
                 Glide.with(holder.itemView.getContext()).load(R.drawable.outline_image_not_supported_24).into(((AiChatBuddyViewHolder) holder).imageView);
@@ -70,7 +83,7 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             String imagePath = imageHashmap.get("user_avatar");
             try{
                 File imageFile = new File(imagePath);
-                Glide.with(holder.itemView.getContext()).load(imageFile).error(R.drawable.outline_image_not_supported_24).into(((UserChatBuddyViewHolder) holder).imageView);
+                Glide.with(holder.itemView.getContext()).load(imageFile).error(R.drawable.outline_image_not_supported_24).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(((UserChatBuddyViewHolder) holder).imageView);
             } catch (NullPointerException e){
                 Log.e("Error", "Image not set yet");
                 Glide.with(holder.itemView.getContext()).load(R.drawable.outline_image_not_supported_24).into(((UserChatBuddyViewHolder) holder).imageView);
@@ -87,6 +100,12 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public int getItemCount() {
         return messageList.size();
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        observer.stopWatching();
     }
 
     public class UserChatBuddyViewHolder extends RecyclerView.ViewHolder{
@@ -109,6 +128,68 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             message = itemView.findViewById(R.id.ai_message_textview);
             imageView = itemView.findViewById(R.id.ai_message_imageview);
         }
+    }
+
+    private class FileChangeObserver extends FileObserver {
+        private final String filePath;
+
+        public FileChangeObserver(String path) {
+            super(path);
+            this.filePath = path;
+        }
+
+        @Override
+        public void onEvent(int event, @Nullable String s) {
+            switch (event){
+                case FileObserver.MODIFY:
+                    new Thread(()->{
+                        for(int i = 0; i < messageList.size(); i++){
+                            if(!messageList.get(i).isFromAi()){
+                                int finalI = i;
+                                mainActivity.runOnUiThread(()->notifyItemChanged(finalI));
+                            }
+                        }
+                    }).start();
+            }
+        }
+    }
+
+    private class MessageDiffCallback extends DiffUtil.Callback{
+        private List<MessageEntity> oldList;
+        private List<MessageEntity> newList;
+
+        MessageDiffCallback(List<MessageEntity> oldList, List<MessageEntity> newList){
+            this.oldList = oldList;
+            this.newList = newList;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldList.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newList.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            return (oldList.get(oldItemPosition).getMessageId() == newList.get(newItemPosition).getMessageId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            return (oldList.get(oldItemPosition).getMessage().equals(newList.get(newItemPosition).getMessage()));
+        }
+    }
+
+    private void updateReminders(List<MessageEntity> newMessageList){
+        MessageDiffCallback diffCallback = new MessageDiffCallback(messageList, newMessageList);
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(diffCallback);
+        messageList.clear();
+        messageList.addAll(newMessageList);
+        result.dispatchUpdatesTo(this);
     }
 
 }

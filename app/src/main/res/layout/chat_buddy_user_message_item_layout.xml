@@ -19,13 +19,13 @@
 
         <TextView
             android:id="@+id/user_message_textview"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="@dimen/chat_buddy_message_item_text_padding"
             android:background="@drawable/user_message_item_shape_overlay"
             android:elevation="@dimen/chat_buddy_message_item_elevation"
-            android:text="TextViewaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            android:padding="@dimen/chat_buddy_message_item_text_padding"
+            android:text="Text"
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             android:textColor="?attr/colorOnPrimaryContainer" />
 

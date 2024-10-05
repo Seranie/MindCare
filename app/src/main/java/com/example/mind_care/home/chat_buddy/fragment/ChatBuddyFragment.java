@@ -59,6 +59,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
+import jp.wasabeef.recyclerview.animators.ScaleInBottomAnimator;
+import jp.wasabeef.recyclerview.animators.ScaleInLeftAnimator;
+
 public class ChatBuddyFragment extends BaseTools implements View.OnClickListener {
     private TextInputLayout textInputLayout;
     private TextInputEditText editText;
@@ -140,9 +143,11 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
         });
 
 
-        chatBuddyAdapter = new ChatBuddyAdapter(chatBuddyViewModel, getViewLifecycleOwner(), imageHashmap);
+        chatBuddyAdapter = new ChatBuddyAdapter(chatBuddyViewModel, getViewLifecycleOwner(), imageHashmap, requireActivity());
         recyclerView.setAdapter(chatBuddyAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        ScaleInBottomAnimator animator = new ScaleInBottomAnimator();
+        recyclerView.setItemAnimator(animator);
 
 
 
