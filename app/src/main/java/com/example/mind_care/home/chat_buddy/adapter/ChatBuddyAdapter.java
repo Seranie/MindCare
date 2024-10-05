@@ -150,7 +150,7 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private void updateReminders(List<MessageEntity> newMessageList) {
         MessageDiffCallback diffCallback = new MessageDiffCallback(messageList, newMessageList);
         DiffUtil.DiffResult result = DiffUtil.calculateDiff(diffCallback);
-        messageList = newMessageList;
+        messageList = new ArrayList<>(newMessageList);
         result.dispatchUpdatesTo(myListUpdateCallback);
     }
 
@@ -166,7 +166,9 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private final int LOOP = 0;
         private final float RATE = 1.0f;
 
-        public MyListUpdateCallback(RecyclerView.Adapter adapter, Context context) {
+        private ChatBuddyAdapter adapter;
+
+        public MyListUpdateCallback(ChatBuddyAdapter adapter, Context context) {
             adapterListUpdateCallback = new AdapterListUpdateCallback(adapter);
             soundPool = new SoundPool.Builder()
                     .setAudioAttributes(
@@ -177,14 +179,15 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     ).setMaxStreams(MAX_STREAMS)
                     .build();
             soundId = soundPool.load(context, R.raw.message_pop, 1);
+            this.adapter = adapter;
         }
 
         @Override
         public void onInserted(int position, int count) {
-            if(count <= 2){
+            adapterListUpdateCallback.onInserted(position, count);
+            if(count == 2){
                 soundPool.play(soundId, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY, LOOP, RATE);
             }
-            adapterListUpdateCallback.onInserted(position, count);
         }
 
         @Override

@@ -3,6 +3,8 @@ package com.example.mind_care.home.fences.fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.media.AudioAttributes;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -61,6 +63,15 @@ public class ShareLocationFragment extends Fragment {
 
     private final ActivityResultLauncher<IntentSenderRequest> gpsSettingsLauncher = gpsPermissionLauncher();
 
+    private SoundPool soundPool;
+    private int soundId;
+    private final int MAX_STREAMS = 5;
+    private final float LEFT_VOLUME = 1.0f;
+    private final float RIGHT_VOLUME = 1.0f;
+    private final int PRIORITY = 0;
+    private final int LOOP = 0;
+    private final float RATE = 1.0f;
+
 
     @Nullable
     @Override
@@ -73,6 +84,16 @@ public class ShareLocationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         shareLocationSwitch = view.findViewById(R.id.share_location_switch);
         checkLocationSwitch = view.findViewById(R.id.check_location_switch);
+
+        soundPool = new SoundPool.Builder()
+                .setAudioAttributes(
+                        new AudioAttributes.Builder()
+                                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                                .setUsage(AudioAttributes.USAGE_MEDIA)
+                                .build()
+                ).setMaxStreams(MAX_STREAMS)
+                .build();
+        soundId = soundPool.load(requireContext(), R.raw.share_location_toggle, 1);
 
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Handle permission request here if needed
@@ -90,6 +111,7 @@ public class ShareLocationFragment extends Fragment {
         shareLocationListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                soundPool.play(soundId, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY, LOOP, RATE);
                 if (isChecked) {
                     //check gps is enabled, Switch is checked
                     LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, LOCATION_REQUEST_INTERVAL).build();
@@ -124,6 +146,7 @@ public class ShareLocationFragment extends Fragment {
         checkLocationListener = new CompoundButton.OnCheckedChangeListener(){
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                soundPool.play(soundId, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY, LOOP, RATE);
                 if (isChecked) {
                     if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED){
                         requestNotificationPermission();

@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -61,6 +63,7 @@ import java.util.concurrent.CompletableFuture;
 
 import jp.wasabeef.recyclerview.animators.ScaleInBottomAnimator;
 import jp.wasabeef.recyclerview.animators.ScaleInLeftAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
 public class ChatBuddyFragment extends BaseTools implements View.OnClickListener {
     private TextInputLayout textInputLayout;
@@ -72,6 +75,7 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
     private final String image_file_name = "ai_avatar_image.png";
     private ChatBuddyAdapter chatBuddyAdapter;
     private final HashMap<String, String> imageHashmap = new HashMap<>();
+    private RecyclerView recyclerView;
 
     private final ActivityResultLauncher<PickVisualMediaRequest> pickMediaLauncher = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
         if (uri != null) {
@@ -105,7 +109,12 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
         //get layouts and set up recyclerview
         textInputLayout = view.findViewById(R.id.chat_buddy_text_input_layout);
         editText = view.findViewById(R.id.chat_buddy_edit_text);
-        RecyclerView recyclerView = view.findViewById(R.id.chat_buddy_recyclerview);
+        recyclerView = view.findViewById(R.id.chat_buddy_recyclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        SlideInLeftAnimator animator = new SlideInLeftAnimator(new AccelerateDecelerateInterpolator());
+//        DefaultItemAnimator animator = new DefaultItemAnimator();
+        animator.setAddDuration(500);
+        recyclerView.setItemAnimator(animator);
 
         chatBuddyViewModel.getMessagesLiveData().observe(getViewLifecycleOwner(), messages -> {
             if (messages.isEmpty()) {
@@ -145,11 +154,6 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
 
         chatBuddyAdapter = new ChatBuddyAdapter(chatBuddyViewModel, getViewLifecycleOwner(), imageHashmap, requireActivity(), recyclerView, getContext());
         recyclerView.setAdapter(chatBuddyAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        ScaleInBottomAnimator animator = new ScaleInBottomAnimator();
-        recyclerView.setItemAnimator(animator);
-
-
 
         loadImageFromInternalStorage();
 
@@ -157,6 +161,14 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
 
         textInputLayout.setEndIconOnClickListener(this);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DefaultItemAnimator animator = new DefaultItemAnimator();
+        animator.setAddDuration(500);
+        recyclerView.setItemAnimator(animator);
     }
 
     @Override
