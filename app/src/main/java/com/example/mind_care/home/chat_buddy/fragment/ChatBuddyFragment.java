@@ -139,11 +139,11 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
                 chat = model.startChat(history);
             }
             //scroll to newest message whenever message database is updated
-            recyclerView.post(() -> recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1));
+            recyclerView.post(() -> recyclerView.smoothScrollToPosition(messages.size()));
         });
 
 
-        chatBuddyAdapter = new ChatBuddyAdapter(chatBuddyViewModel, getViewLifecycleOwner(), imageHashmap, requireActivity());
+        chatBuddyAdapter = new ChatBuddyAdapter(chatBuddyViewModel, getViewLifecycleOwner(), imageHashmap, requireActivity(), recyclerView, getContext());
         recyclerView.setAdapter(chatBuddyAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         ScaleInBottomAnimator animator = new ScaleInBottomAnimator();

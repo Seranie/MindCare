@@ -1,6 +1,9 @@
 package com.example.mind_care.home.chat_buddy.adapter;
 
 import android.app.Activity;
+import android.content.Context;
+import android.media.AudioAttributes;
+import android.media.SoundPool;
 import android.os.FileObserver;
 import android.os.Handler;
 import android.util.Log;
@@ -13,9 +16,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.recyclerview.widget.AdapterListUpdateCallback;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.util.StringUtil;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -24,6 +28,9 @@ import com.example.mind_care.database.chat_buddy.MessageEntity;
 import com.example.mind_care.home.chat_buddy.viewmodel.ChatBuddyViewModel;
 
 import org.apache.commons.lang3.StringUtils;
+import org.commonmark.node.Node;
+import org.commonmark.node.Text;
+import org.commonmark.renderer.text.TextContentRenderer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,6 +39,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+
+import io.noties.markwon.Markwon;
 
 public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_USER = 1;
@@ -43,9 +52,12 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private final FileChangeObserver observer;
     private final Activity mainActivity;
     private TextAnimator animator = new TextAnimator();
+    private RecyclerView recyclerView;
+    private MyListUpdateCallback myListUpdateCallback;
+    final Markwon markwon;
 
 
-    public ChatBuddyAdapter(ChatBuddyViewModel chatBuddyViewModel, LifecycleOwner owner, HashMap<String, String> imageHashmap, Activity mainActivity) {
+    public ChatBuddyAdapter(ChatBuddyViewModel chatBuddyViewModel, LifecycleOwner owner, HashMap<String, String> imageHashmap, Activity mainActivity, RecyclerView recyclerView, Context context) {
         this.imageHashmap = imageHashmap;
         this.chatBuddyViewModel = chatBuddyViewModel;
         chatBuddyViewModel.getMessagesLiveData().observe(owner, messageEntities -> {
@@ -55,6 +67,9 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         File file = new File(mainActivity.getFilesDir(), IMAGE_FILE_NAME);
         observer = new FileChangeObserver(file.getAbsolutePath());
         observer.startWatching();
+        this.recyclerView = recyclerView;
+        myListUpdateCallback = new MyListUpdateCallback(this, context);
+        markwon = Markwon.create(context);
     }
 
 
@@ -73,7 +88,11 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         MessageEntity message = messageList.get(position);
 
         if (message.isFromAi()) {
-            ((AiChatBuddyViewHolder) holder).message.setText(message.getMessage().trim());
+            //Use AI generated string which contains markdown and convert to format usable by textview.
+            String text = message.getMessage();
+            AiChatBuddyViewHolder aiChatBuddyViewHolder = (AiChatBuddyViewHolder) holder;
+            markwon.setMarkdown(aiChatBuddyViewHolder.message, text);
+
             String imagePath = imageHashmap.get("ai_avatar");
             try {
                 File imageFile = new File(imagePath);
@@ -104,7 +123,9 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             if(messageList.get(position).isFromAi()){
                 Object payload = payloads.get(payloads.size() - 1);
                 if(payload instanceof MessageDiff){
-                    animator.queueTextChange(((AiChatBuddyViewHolder) holder).message, ((MessageDiff) payload).getMessageDiff());
+                    MessageDiff messageDiff = (MessageDiff) payload;
+                    animator.queueTextChange(((AiChatBuddyViewHolder) holder).message, messageDiff.getMessageDiff(), messageDiff.getNewMessage());
+//                    ((AiChatBuddyViewHolder) holder).message.setText(((MessageDiff) payload).newMessage);
                 }
             }
         }
@@ -130,7 +151,56 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         MessageDiffCallback diffCallback = new MessageDiffCallback(messageList, newMessageList);
         DiffUtil.DiffResult result = DiffUtil.calculateDiff(diffCallback);
         messageList = newMessageList;
-        result.dispatchUpdatesTo(this);
+        result.dispatchUpdatesTo(myListUpdateCallback);
+    }
+
+    private static class MyListUpdateCallback implements ListUpdateCallback {
+        private final AdapterListUpdateCallback adapterListUpdateCallback;
+
+        private SoundPool soundPool;
+        private int soundId;
+        private final int MAX_STREAMS = 5;
+        private final float LEFT_VOLUME = 1.0f;
+        private final float RIGHT_VOLUME = 1.0f;
+        private final int PRIORITY = 0;
+        private final int LOOP = 0;
+        private final float RATE = 1.0f;
+
+        public MyListUpdateCallback(RecyclerView.Adapter adapter, Context context) {
+            adapterListUpdateCallback = new AdapterListUpdateCallback(adapter);
+            soundPool = new SoundPool.Builder()
+                    .setAudioAttributes(
+                            new AudioAttributes.Builder()
+                                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                                    .build()
+                    ).setMaxStreams(MAX_STREAMS)
+                    .build();
+            soundId = soundPool.load(context, R.raw.message_pop, 1);
+        }
+
+        @Override
+        public void onInserted(int position, int count) {
+            if(count <= 2){
+                soundPool.play(soundId, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY, LOOP, RATE);
+            }
+            adapterListUpdateCallback.onInserted(position, count);
+        }
+
+        @Override
+        public void onRemoved(int position, int count) {
+            adapterListUpdateCallback.onRemoved(position, count);
+        }
+
+        @Override
+        public void onMoved(int fromPosition, int toPosition) {
+            adapterListUpdateCallback.onMoved(fromPosition, toPosition);
+        }
+
+        @Override
+        public void onChanged(int position, int count, @Nullable Object payload) {
+            adapterListUpdateCallback.onChanged(position, count, payload);
+        }
     }
 
     public class UserChatBuddyViewHolder extends RecyclerView.ViewHolder {
@@ -234,6 +304,8 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public String getMessageDiff(){
             return StringUtils.difference(oldMessage, newMessage);
         }
+
+        public String getNewMessage() { return newMessage; }
     }
 
     private class TextAnimator{
@@ -242,20 +314,21 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private boolean isRunning = false;
         private final long TEXT_SPEED = 10;
 
-        public void queueTextChange(final TextView textView, final String newText) {
+        public void queueTextChange(final TextView textView, final String textDiff, final String newText) {
             Runnable runnable = new Runnable() {
                 final int[] index = {0};
 
                 @Override
                 public void run() {
-                    if (index[0] < newText.length()) {
-                        textView.append(String.valueOf(newText.charAt(index[0])));
+                    if (index[0] < textDiff.length()) {
+                        textView.append(String.valueOf(textDiff.charAt(index[0])));
                         index[0]++;
+                        recyclerView.post(() -> recyclerView.smoothScrollToPosition(messageList.size()));
                         handler.postDelayed(this, TEXT_SPEED);
                     } else {
                         // When this Runnable finishes, start the next one
                         isRunning = false;
-                        executeNextRunnable();
+                        executeNextRunnable(textView, newText);
                     }
                 }
             };
@@ -265,17 +338,19 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             // If no task is currently running, execute the next one in the queue
             if (!isRunning) {
-                executeNextRunnable();
+                executeNextRunnable(textView, newText);
             }
         }
-        private void executeNextRunnable() {
+        private void executeNextRunnable(TextView textView, String newText) {
             Runnable nextRunnable = runnableQueue.poll();
             if (nextRunnable != null) {
                 isRunning = true;
                 handler.post(nextRunnable);
+            }else{
+                markwon.setMarkdown(textView, newText);
             }
         }
     }
-    
+
 
 }
