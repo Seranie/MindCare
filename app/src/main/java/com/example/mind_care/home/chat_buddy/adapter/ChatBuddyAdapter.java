@@ -29,7 +29,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_USER = 1;
@@ -40,6 +42,7 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private HashMap<String, String> imageHashmap = new HashMap<>();
     private final FileChangeObserver observer;
     private final Activity mainActivity;
+    private TextAnimator animator = new TextAnimator();
 
 
     public ChatBuddyAdapter(ChatBuddyViewModel chatBuddyViewModel, LifecycleOwner owner, HashMap<String, String> imageHashmap, Activity mainActivity) {
@@ -101,7 +104,7 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             if(messageList.get(position).isFromAi()){
                 Object payload = payloads.get(payloads.size() - 1);
                 if(payload instanceof MessageDiff){
-                    animateTextChange(((AiChatBuddyViewHolder) holder).message, ((MessageDiff) payload).getMessageDiff());
+                    animator.queueTextChange(((AiChatBuddyViewHolder) holder).message, ((MessageDiff) payload).getMessageDiff());
                 }
             }
         }
@@ -128,23 +131,6 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         DiffUtil.DiffResult result = DiffUtil.calculateDiff(diffCallback);
         messageList = newMessageList;
         result.dispatchUpdatesTo(this);
-    }
-
-    private void animateTextChange(final TextView textView, final String newText) {
-        final Handler handler = new Handler();
-        final int[] index = {0};
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (index[0] < newText.length()) {
-                    textView.append(String.valueOf(newText.charAt(index[0])));
-                    index[0]++;
-                    handler.postDelayed(this, 20);
-                }
-            }
-        };
-        handler.post(runnable);
     }
 
     public class UserChatBuddyViewHolder extends RecyclerView.ViewHolder {
@@ -219,21 +205,19 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         @Override
         public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-           if (!oldList.get(oldItemPosition).getMessage().equals(newList.get(newItemPosition).getMessage())){
-               Log.i("INFO", "CONTENTS DIFF: " + oldList.get(oldItemPosition).getMessage() + newList.get(newItemPosition).getMessage());
-           }
-            return (oldList.get(oldItemPosition).getMessage().equals(newList.get(newItemPosition).getMessage()));
+            String oldMessage = oldList.get(oldItemPosition).getMessage().trim();
+            String newMessage = newList.get(newItemPosition).getMessage().trim();
+            return (oldMessage.equals(newMessage));
         }
 
         @Nullable
         @Override
         public Object getChangePayload(int oldItemPosition, int newItemPosition) {
-            String oldMessage = oldList.get(oldItemPosition).getMessage();
-            String newMessage = newList.get(newItemPosition).getMessage();
+            String oldMessage = oldList.get(oldItemPosition).getMessage().trim();
+            String newMessage = newList.get(newItemPosition).getMessage().trim();
+
             if(!oldMessage.equals(newMessage)){
-                Log.i("INFO", "OLD " + oldMessage);
-                Log.i("INFO", "NEW " + newMessage);
-                return new MessageDiff(oldList.get(oldItemPosition).getMessage(), newList.get(newItemPosition).getMessage());
+                return new MessageDiff(oldMessage, newMessage);
             }else { return null; }
         }
     }
@@ -249,6 +233,47 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         public String getMessageDiff(){
             return StringUtils.difference(oldMessage, newMessage);
+        }
+    }
+
+    private class TextAnimator{
+        private final Queue<Runnable> runnableQueue = new LinkedList<>();
+        private final Handler handler = new Handler();
+        private boolean isRunning = false;
+        private final long TEXT_SPEED = 10;
+
+        public void queueTextChange(final TextView textView, final String newText) {
+            Runnable runnable = new Runnable() {
+                final int[] index = {0};
+
+                @Override
+                public void run() {
+                    if (index[0] < newText.length()) {
+                        textView.append(String.valueOf(newText.charAt(index[0])));
+                        index[0]++;
+                        handler.postDelayed(this, TEXT_SPEED);
+                    } else {
+                        // When this Runnable finishes, start the next one
+                        isRunning = false;
+                        executeNextRunnable();
+                    }
+                }
+            };
+
+            // Add the runnable to the queue
+            runnableQueue.add(runnable);
+
+            // If no task is currently running, execute the next one in the queue
+            if (!isRunning) {
+                executeNextRunnable();
+            }
+        }
+        private void executeNextRunnable() {
+            Runnable nextRunnable = runnableQueue.poll();
+            if (nextRunnable != null) {
+                isRunning = true;
+                handler.post(nextRunnable);
+            }
         }
     }
     
