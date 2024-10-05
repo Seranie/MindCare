@@ -1,5 +1,6 @@
 package com.example.mind_care.home.chat_buddy.fragment;
 
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.mikepenz.itemanimators.SlideUpAlphaAnimator;
 
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
@@ -61,9 +63,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-import jp.wasabeef.recyclerview.animators.ScaleInBottomAnimator;
-import jp.wasabeef.recyclerview.animators.ScaleInLeftAnimator;
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
 public class ChatBuddyFragment extends BaseTools implements View.OnClickListener {
     private TextInputLayout textInputLayout;
@@ -111,9 +110,12 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
         editText = view.findViewById(R.id.chat_buddy_edit_text);
         recyclerView = view.findViewById(R.id.chat_buddy_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        SlideInLeftAnimator animator = new SlideInLeftAnimator(new AccelerateDecelerateInterpolator());
+
+
 //        DefaultItemAnimator animator = new DefaultItemAnimator();
-        animator.setAddDuration(500);
+
+        SlideUpAlphaAnimator animator = new SlideUpAlphaAnimator();
+        animator.setAddDuration(300);
         recyclerView.setItemAnimator(animator);
 
         chatBuddyViewModel.getMessagesLiveData().observe(getViewLifecycleOwner(), messages -> {
@@ -148,7 +150,13 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
                 chat = model.startChat(history);
             }
             //scroll to newest message whenever message database is updated
-            recyclerView.post(() -> recyclerView.smoothScrollToPosition(messages.size()));
+//            recyclerView.post(() -> recyclerView.smoothScrollToPosition(messages.size()));
+            recyclerView.getItemAnimator().isRunning(new RecyclerView.ItemAnimator.ItemAnimatorFinishedListener() {
+                @Override
+                public void onAnimationsFinished() {
+                    recyclerView.smoothScrollToPosition(messages.size());
+                }
+            });
         });
 
 
@@ -161,14 +169,6 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
 
         textInputLayout.setEndIconOnClickListener(this);
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        DefaultItemAnimator animator = new DefaultItemAnimator();
-        animator.setAddDuration(500);
-        recyclerView.setItemAnimator(animator);
     }
 
     @Override
@@ -329,5 +329,13 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
             }
         }
         chatBuddyAdapter.notifyDataSetChanged();
+    }
+
+    private class MyDefaultAddAnimatorListener extends AnimatorListenerAdapter {
+        private final RecyclerView.ViewHolder viewHolder;
+
+        public MyDefaultAddAnimatorListener(RecyclerView.ViewHolder viewHolder) {
+            this.viewHolder = viewHolder;
+        }
     }
 }

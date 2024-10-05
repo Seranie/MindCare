@@ -166,8 +166,6 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private final int LOOP = 0;
         private final float RATE = 1.0f;
 
-        private ChatBuddyAdapter adapter;
-
         public MyListUpdateCallback(ChatBuddyAdapter adapter, Context context) {
             adapterListUpdateCallback = new AdapterListUpdateCallback(adapter);
             soundPool = new SoundPool.Builder()
@@ -179,7 +177,6 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     ).setMaxStreams(MAX_STREAMS)
                     .build();
             soundId = soundPool.load(context, R.raw.message_pop, 1);
-            this.adapter = adapter;
         }
 
         @Override

@@ -61,7 +61,7 @@ dependencies {
     implementation(libs.taptargetview)
     implementation(libs.showcaseview)
     implementation(libs.materiashowcaseview)
-    implementation (libs.recyclerview.animators)
+    implementation (libs.itemanimators)
     implementation (libs.commons.lang3)
     implementation (libs.core)
     testImplementation(libs.junit)
