@@ -19,6 +19,7 @@ import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -52,26 +53,21 @@ public class ShareLocationFragment extends Fragment {
     private final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private final int BACKGROUND_LOCATION_PERMISSION_REQUEST_CODE = 2;
     private final int LOCATION_REQUEST_INTERVAL = 15000;
-
-    MaterialSwitch shareLocationSwitch;
-    MaterialSwitch checkLocationSwitch;
-
-    CompoundButton.OnCheckedChangeListener shareLocationListener;
-    CompoundButton.OnCheckedChangeListener checkLocationListener;
-    PeriodicWorkRequest locationCheckRequest;
-    OneTimeWorkRequest oneTimeLocationCheckRequest;
-
-    private final ActivityResultLauncher<IntentSenderRequest> gpsSettingsLauncher = gpsPermissionLauncher();
-
-    private SoundPool soundPool;
-    private int soundId;
     private final int MAX_STREAMS = 5;
     private final float LEFT_VOLUME = 1.0f;
     private final float RIGHT_VOLUME = 1.0f;
     private final int PRIORITY = 0;
     private final int LOOP = 0;
     private final float RATE = 1.0f;
-
+    MaterialSwitch shareLocationSwitch;
+    MaterialSwitch checkLocationSwitch;
+    CompoundButton.OnCheckedChangeListener shareLocationListener;
+    private final ActivityResultLauncher<IntentSenderRequest> gpsSettingsLauncher = gpsPermissionLauncher();
+    CompoundButton.OnCheckedChangeListener checkLocationListener;
+    PeriodicWorkRequest locationCheckRequest;
+    OneTimeWorkRequest oneTimeLocationCheckRequest;
+    private SoundPool soundPool;
+    private int soundId;
 
     @Nullable
     @Override
@@ -85,23 +81,19 @@ public class ShareLocationFragment extends Fragment {
         shareLocationSwitch = view.findViewById(R.id.share_location_switch);
         checkLocationSwitch = view.findViewById(R.id.check_location_switch);
 
-        soundPool = new SoundPool.Builder()
-                .setAudioAttributes(
-                        new AudioAttributes.Builder()
-                                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                                .setUsage(AudioAttributes.USAGE_MEDIA)
-                                .build()
-                ).setMaxStreams(MAX_STREAMS)
-                .build();
+        soundPool = new SoundPool.Builder().setAudioAttributes(new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).setUsage(AudioAttributes.USAGE_MEDIA).build()).setMaxStreams(MAX_STREAMS).build();
         soundId = soundPool.load(requireContext(), R.raw.share_location_toggle, 1);
 
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Handle permission request here if needed
+            Toast.makeText(requireContext(), R.string.please_grant_location_permission, Toast.LENGTH_SHORT).show();
             requestPermission();
-            return;
         }
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestBackgroundPermission();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                Toast.makeText(requireContext(), R.string.please_grant_background_location_permission, Toast.LENGTH_SHORT).show();
+                requestBackgroundPermission();
+            }
         }
 
         //Changes switch check state based on worker state
@@ -143,31 +135,33 @@ public class ShareLocationFragment extends Fragment {
 
         shareLocationSwitch.setOnCheckedChangeListener(shareLocationListener);
 
-        checkLocationListener = new CompoundButton.OnCheckedChangeListener(){
+        checkLocationListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 soundPool.play(soundId, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY, LOOP, RATE);
                 if (isChecked) {
-                    if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED){
+                    if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(requireContext(), R.string.cannot_use_this_feature_without_notification_permission, Toast.LENGTH_SHORT).show();
                         requestNotificationPermission();
-                    }else{
+                    } else {
                         startCheckLocationWorker();
                     }
                 } else {
                     stopCheckLocationWorker();
                 }
-            }};
+            }
+        };
         checkLocationSwitch.setOnCheckedChangeListener(checkLocationListener);
+
     }
 
     private void requestPermission() {
         ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     private void requestBackgroundPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, BACKGROUND_LOCATION_PERMISSION_REQUEST_CODE);
-        }
+        ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, BACKGROUND_LOCATION_PERMISSION_REQUEST_CODE);
     }
 
     private void startLocationWorker() {
@@ -175,8 +169,8 @@ public class ShareLocationFragment extends Fragment {
 
         // Start the location worker
         PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(ShareLocationWorker.class, 15, TimeUnit.MINUTES).setConstraints(constraints).build();
-//        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueueUniquePeriodicWork(SHARE_LOCATION_WORKER_TAG, ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
-        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueue(new OneTimeWorkRequest.Builder(ShareLocationWorker.class).build());
+        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueueUniquePeriodicWork(SHARE_LOCATION_WORKER_TAG, ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
+//        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueue(new OneTimeWorkRequest.Builder(ShareLocationWorker.class).build()); //TODO for debug
     }
 
     private void stopLocationWorker() {
@@ -206,7 +200,7 @@ public class ShareLocationFragment extends Fragment {
         // Enqueue the work request
         WorkManager.getInstance(requireActivity().getApplicationContext()).enqueueUniquePeriodicWork(CHECK_LOCATION_WORKER_TAG, ExistingPeriodicWorkPolicy.REPLACE, locationCheckRequest);
 
-//        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueue(oneTimeLocationCheckRequest);
+//        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueue(oneTimeLocationCheckRequest); //TODO for debug
 
     }
 
@@ -240,12 +234,12 @@ public class ShareLocationFragment extends Fragment {
 
     }
 
-    private void observeForCheckLocationChange(UUID uid){
+    private void observeForCheckLocationChange(UUID uid) {
         WorkManager.getInstance(requireActivity().getApplicationContext()).getWorkInfoByIdLiveData(uid).observe(getViewLifecycleOwner(), workInfo -> {
-            if(workInfo != null){
-                if(workInfo.getState() == WorkInfo.State.FAILED){
+            if (workInfo != null) {
+                if (workInfo.getState() == WorkInfo.State.FAILED) {
                     String errorMessage = workInfo.getOutputData().getString("message");
-                    if (errorMessage != null){
+                    if (errorMessage != null) {
                         Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -253,7 +247,7 @@ public class ShareLocationFragment extends Fragment {
         });
     }
 
-    private void requestNotificationPermission(){
+    private void requestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
         }

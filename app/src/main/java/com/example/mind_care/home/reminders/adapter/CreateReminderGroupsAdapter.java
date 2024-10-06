@@ -25,6 +25,7 @@ import com.example.mind_care.R;
 import com.example.mind_care.home.reminders.fragment.CreateNewReminderFragment;
 import com.example.mind_care.home.reminders.model.RemindersGroupItem;
 import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 
@@ -37,6 +38,7 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
     private GroupItemViewHolder selectedGroupViewHolder = null;
     private final Context context;
     private ArrayList<RemindersGroupItem> groupItems = new ArrayList<>();
+    private CreateNewReminderFragment fragment;
 
     public CreateReminderGroupsAdapter(ReminderGroupViewModel groupViewModel, Context context, CreateNewReminderFragment fragment) {
         this.groupViewModel = groupViewModel;
@@ -46,6 +48,7 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
             groupItems = (ArrayList<RemindersGroupItem>) remindersGroupItems;
             notifyDataSetChanged();
         });
+        this.fragment = fragment;
     }
 
     public String getSelectedGroupId() {
@@ -146,7 +149,16 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
         public boolean onMenuItemClick(MenuItem menuItem) {
             int itemId = menuItem.getItemId();
             if (itemId == R.id.delete_group_menu_item) {
-                groupViewModel.deleteGroup(groupItems.get(getBindingAdapterPosition()));
+                new MaterialAlertDialogBuilder(context)
+                        .setTitle(R.string.delete_group_dialog_title)
+                        .setMessage(R.string.delete_group_dialog_message)
+                        .setPositiveButton(context.getString(R.string.delete_group_dialog_yes), (dialogInterface, i) -> {
+                            groupViewModel.deleteGroup(fragment.requireActivity(),groupItems.get(getBindingAdapterPosition()));
+                        })
+                        .setNegativeButton(context.getString(R.string.delete_group_dialog_no), (dialogInterface, i) -> {
+                            dialogInterface.dismiss();
+                        })
+                        .show();
                 return true;
             }
             return false;

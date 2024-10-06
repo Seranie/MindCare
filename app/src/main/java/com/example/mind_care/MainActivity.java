@@ -1,5 +1,6 @@
 package com.example.mind_care;
 
+import android.Manifest;
 import android.Manifest.permission;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -171,6 +173,11 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("InlinedApi")
     public void checkAndRequestNotificationPermission() {
         if (ContextCompat.checkSelfPermission(this, permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.POST_NOTIFICATIONS)) {
+                // The user checked "Don't ask again". You should handle this case accordingly.
+                Toast.makeText(this, "Please enable notifications permission", Toast.LENGTH_SHORT).show();
+            }
+
             // Request permission
             ActivityCompat.requestPermissions(this, new String[]{permission.POST_NOTIFICATIONS}, 1);
         }

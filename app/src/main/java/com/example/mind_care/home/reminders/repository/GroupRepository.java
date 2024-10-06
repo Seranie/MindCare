@@ -50,7 +50,7 @@ public class GroupRepository {
         });
     }
 
-    public CompletableFuture<Boolean> deleteGroup(RemindersGroupItem groupItem) {
+    public CompletableFuture<Boolean> deleteGroup(Context activityContext, RemindersGroupItem groupItem) {
         CompletableFuture<Boolean> completableFuture = new CompletableFuture<>();
 
         db.collection(collection)
@@ -72,6 +72,20 @@ public class GroupRepository {
 
                                         // Delete each reminder in the subcollection
                                         for (DocumentSnapshot reminderDoc : reminderTask.getResult()) {
+                                            //Unschedule alarms for each reminder.
+                                            reminderDoc.getReference().collection("alertItems").get().addOnCompleteListener(alertItemTask -> {
+                                               if(alertItemTask.isSuccessful()) {
+                                                   List<String> alertItemIds = new ArrayList<>();
+                                                   for (DocumentSnapshot alertItemDoc : alertItemTask.getResult()) {
+                                                       alertItemIds.add(alertItemDoc.getId());
+                                                       alertItemDoc.getReference().delete();
+                                                   }
+                                                   ScheduleNotification.cancelNotification(activityContext, reminderDoc.getId(), alertItemIds);
+                                               }
+                                            });
+
+
+
                                             CompletableFuture<Void> deletionFuture = new CompletableFuture<>();
                                             reminderDoc.getReference().delete().addOnCompleteListener(deleteTask -> {
                                                 if (deleteTask.isSuccessful()) {

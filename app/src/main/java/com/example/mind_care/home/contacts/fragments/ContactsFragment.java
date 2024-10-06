@@ -1,22 +1,21 @@
 package com.example.mind_care.home.contacts.fragments;
 
+import android.Manifest;
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +27,7 @@ import com.example.mind_care.home.contacts.viewmodel.ContactsViewModel;
 import com.example.mind_care.home.contacts.viewmodel.ContactsViewModelFactory;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class ContactsFragment extends BaseTools{
+public class ContactsFragment extends BaseTools {
     private final int GRID_SPAN = 2;
     ContactsViewModel contactsViewModel;
     RecyclerView contactsRecyclerview;
@@ -52,14 +51,15 @@ public class ContactsFragment extends BaseTools{
         contactsRecyclerview.setLayoutManager(new GridLayoutManager(getContext(), GRID_SPAN));
 
         contactsViewModel.getAllContacts();
+
     }
-
-
 
 
     @Override
     public void setOnFabClickedDestination(FloatingActionButton fab, NavController navController) {
-        fab.setOnClickListener(v -> {navController.navigate(R.id.createNewContactFragment);});
+        fab.setOnClickListener(v -> {
+            navController.navigate(R.id.createNewContactFragment);
+        });
     }
 
     @Override

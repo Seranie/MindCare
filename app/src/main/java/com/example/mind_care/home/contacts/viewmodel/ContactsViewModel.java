@@ -21,7 +21,7 @@ public class ContactsViewModel extends ViewModel {
 
 
     public ContactsViewModel(Application application) {
-        db = Room.databaseBuilder(application, AppDatabase.class, "contacts_database").build();
+        db = Room.databaseBuilder(application, AppDatabase.class, "contacts_database").fallbackToDestructiveMigration().build();
         contactDao = db.contactDao();
     }
 

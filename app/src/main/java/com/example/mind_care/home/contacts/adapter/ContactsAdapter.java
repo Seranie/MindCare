@@ -129,7 +129,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                 // You can request permission here if needed
-                Toast.makeText(context, "Permission not granted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getString(R.string.dial_permission_not_granted), Toast.LENGTH_SHORT).show();
                 ActivityCompat.requestPermissions(fragment.requireActivity(), new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL_PERMISSION);
             } else {
                 context.startActivity(callIntent);

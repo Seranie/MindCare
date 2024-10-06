@@ -1,6 +1,14 @@
 package com.example.mind_care.home.reminders.fragment;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +20,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -121,6 +132,15 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
                 Toast.makeText(getContext(), "Please select a group", Toast.LENGTH_SHORT).show();
             }
             else {
+                //Check permissions again
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    checkAndRequestNotificationPermission();
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    checkAndRequestExactAlarmPermission();
+                }
+
                 //send to database
                 ReminderItemModel reminderItem = new ReminderItemModel(currentGroupSelectedId, reminderTitle, reminderNote, reminderSchedule, reminderAlertItemList);
                 reminderItemViewModel.addReminderItem(reminderItem);
@@ -145,5 +165,28 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
         scheduleDateTime = scheduleDateTime.withHour(hourOfDay).withMinute(minute);
         scheduleDateTimeViewModel.changeDateTime(scheduleDateTime);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    public void checkAndRequestNotificationPermission() {
+
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.POST_NOTIFICATIONS)) {
+                // The user checked "Don't ask again". You should handle this case accordingly.
+                Toast.makeText(getContext(), "Please enable notifications permission", Toast.LENGTH_SHORT).show();
+            }
+            // Request permission
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 2);
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private void checkAndRequestExactAlarmPermission() {
+        AlarmManager alarmManager = (AlarmManager) requireActivity().getSystemService(Context.ALARM_SERVICE);
+        if (!alarmManager.canScheduleExactAlarms()) {
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+            startActivity(intent);
+        }
     }
 }

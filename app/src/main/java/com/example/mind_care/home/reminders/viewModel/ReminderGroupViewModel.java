@@ -34,9 +34,9 @@ public class ReminderGroupViewModel extends ViewModel{
         groupRepository.addNewGroup(groupItem);
     }
 
-    public void deleteGroup(RemindersGroupItem groupItem){
+    public void deleteGroup(Context context,RemindersGroupItem groupItem){
         new Thread(() -> {
-            CompletableFuture<Boolean> result = groupRepository.deleteGroup(groupItem);
+            CompletableFuture<Boolean> result = groupRepository.deleteGroup(context, groupItem);
             result.thenApply(deleted -> {
                 if(deleted){
                     getGroupListFromRepository();
