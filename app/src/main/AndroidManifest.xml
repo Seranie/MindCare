@@ -17,6 +17,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -29,9 +32,17 @@
         tools:targetApi="31">
 
         <service
-            android:name=".home.fences.LocationService"
+            android:name=".home.fences.service.LocationService"
             android:foregroundServiceType="location"
             android:exported="false"/>
+
+        <service
+            android:name=".home.fences.service.CheckLocationService"
+            android:foregroundServiceType="specialUse"
+            android:exported="false">
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="used for checking database for location updates"/>
+        </service>
 
         <activity android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan"
@@ -60,6 +71,8 @@
         </receiver>
 
         <receiver android:name=".notification.LocationShareReceiver" />
+        <receiver android:name=".notification.CheckLocationReceiver" />
+
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

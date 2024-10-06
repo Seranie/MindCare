@@ -132,6 +132,13 @@ public class MainActivity extends AppCompatActivity {
             checkAndRequestExactAlarmPermission();
         }
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{permission.READ_EXTERNAL_STORAGE},
+                    3);
+        }
+
         //Set up nav_header with relevant information
         View headerView = navigationView.getHeaderView(0);
         navHeaderImage = headerView.findViewById(R.id.nav_header_image);

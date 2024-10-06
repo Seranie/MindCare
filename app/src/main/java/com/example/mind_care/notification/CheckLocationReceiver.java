@@ -4,13 +4,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.example.mind_care.home.fences.service.CheckLocationService;
 import com.example.mind_care.home.fences.service.LocationService;
 
-public class LocationShareReceiver extends BroadcastReceiver {
+public class CheckLocationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        // Stop the service when the notification is dismissed
-        Intent serviceIntent = new Intent(context, LocationService.class);
+        Intent serviceIntent = new Intent(context, CheckLocationService.class);
         context.stopService(serviceIntent);
     }
 }

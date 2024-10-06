@@ -3,6 +3,7 @@ package com.example.mind_care.home.reminders.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,8 @@ import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class RemindersGroupAdapter extends RecyclerView.Adapter<RemindersGroupAdapter.GroupItemViewHolder> implements DefaultLifecycleObserver {
     private final Context context;
@@ -55,7 +58,12 @@ public class RemindersGroupAdapter extends RecyclerView.Adapter<RemindersGroupAd
     @Override
     public void onBindViewHolder(@NonNull GroupItemViewHolder holder, int position) {
         RemindersGroupItem groupItem = remindersGroupItems.get(position);
-        Glide.with(context).load(groupItem.getImageSource()).error(R.drawable.outline_image_not_supported_24).into(holder.groupItemImage);
+        try{
+            Glide.with(context).load(groupItem.getImageSource()).error(R.drawable.outline_image_not_supported_24).into(holder.groupItemImage);
+
+        }catch (Exception e){
+            Log.e("ERROR", Objects.requireNonNull(e.getMessage()));
+        }
         holder.groupItemName.setText(groupItem.getName());
     }
 

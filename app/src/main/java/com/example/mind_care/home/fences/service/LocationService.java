@@ -1,4 +1,4 @@
-package com.example.mind_care.home.fences;
+package com.example.mind_care.home.fences.service;
 
 import static androidx.core.location.LocationManagerCompat.requestLocationUpdates;
 
@@ -11,10 +11,8 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;

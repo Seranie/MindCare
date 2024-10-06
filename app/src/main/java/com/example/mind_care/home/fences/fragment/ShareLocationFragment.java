@@ -1,5 +1,10 @@
 package com.example.mind_care.home.fences.fragment;
 
+import static android.app.ProgressDialog.show;
+
+import static androidx.core.content.ContextCompat.getSystemService;
+import static androidx.core.content.ContextCompat.startForegroundService;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -29,13 +34,14 @@ import androidx.fragment.app.Fragment;
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
-import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import com.example.mind_care.R;
-import com.example.mind_care.home.fences.LocationService;
+import com.example.mind_care.home.fences.service.CheckLocationService;
+import com.example.mind_care.home.fences.service.LocationService;
+import com.example.mind_care.home.fences.repository.LocationCheckRepository;
 import com.example.mind_care.home.fences.worker.LocationCheckWorker;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
@@ -47,7 +53,6 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class ShareLocationFragment extends Fragment {
@@ -69,12 +74,10 @@ public class ShareLocationFragment extends Fragment {
     MaterialSwitch shareLocationSwitch;
     MaterialSwitch checkLocationSwitch;
     CompoundButton.OnCheckedChangeListener shareLocationListener;
-
     CompoundButton.OnCheckedChangeListener checkLocationListener;
-    PeriodicWorkRequest locationCheckRequest;
+
     private final ActivityResultLauncher<IntentSenderRequest> gpsSettingsLauncher = gpsPermissionLauncher();
     private ActivityResultLauncher<String> foregroundServicePermissionLauncher;
-//    OneTimeWorkRequest oneTimeLocationCheckRequest;
 
     @Nullable
     @Override
@@ -107,7 +110,7 @@ public class ShareLocationFragment extends Fragment {
 
         //Changes switch check state based on worker state
         isLocationServiceRunning();
-        isCheckLocationWorkerRunning();
+        isCheckLocationServiceRunning();
 
 
         shareLocationListener = new CompoundButton.OnCheckedChangeListener() {
@@ -171,10 +174,23 @@ public class ShareLocationFragment extends Fragment {
                         Toast.makeText(requireContext(), R.string.cannot_use_this_feature_without_notification_permission, Toast.LENGTH_SHORT).show();
                         requestNotificationPermission();
                     } else {
-                        startCheckLocationWorker();
+                        LocationCheckRepository locationCheckRepository = new LocationCheckRepository();
+                        locationCheckRepository.checkIfLinkedToPatient().handle((isLinked, throwable) -> {
+                            if(throwable != null){
+                                Toast.makeText(requireContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                            }else {
+                                if(isLinked){
+                                    startCheckLocationService();
+                                }else{
+                                    Toast.makeText(requireContext(), R.string.no_patient_linked_yet, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            return null;
+                        });
+
                     }
                 } else {
-                    stopCheckLocationWorker();
+                    stopCheckLocationService();
                 }
             }
         };
@@ -210,7 +226,7 @@ public class ShareLocationFragment extends Fragment {
         requireContext().stopService(serviceIntent);
     }
 
-    private boolean isLocationServiceRunning(){
+    private void isLocationServiceRunning(){
         ActivityManager manager = (ActivityManager) requireActivity().getSystemService(Context.ACTIVITY_SERVICE);
         shareLocationSwitch.setOnCheckedChangeListener(null);
         if (manager != null) {
@@ -218,13 +234,12 @@ public class ShareLocationFragment extends Fragment {
                 if (LocationService.class.getName().equals(service.service.getClassName())) {
                     shareLocationSwitch.setChecked(true);
                     shareLocationSwitch.setOnCheckedChangeListener(shareLocationListener);
-                    return true;
+                    return;
                 }
             }
         }
         shareLocationSwitch.setChecked(false);
         shareLocationSwitch.setOnCheckedChangeListener(shareLocationListener);
-        return false;
     }
 
 //    private void stopLocationWorker() {
@@ -243,36 +258,36 @@ public class ShareLocationFragment extends Fragment {
 //        });
 //    }
 
-    private void startCheckLocationWorker() {
-        Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
+//    private void startCheckLocationWorker() {
+//        Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
+//
+//        locationCheckRequest = new PeriodicWorkRequest.Builder(LocationCheckWorker.class, 15, TimeUnit.MINUTES).setConstraints(constraints).build();
+////        oneTimeLocationCheckRequest = new OneTimeWorkRequest.Builder(LocationCheckWorker.class).build();
+//
+////        observeForCheckLocationChange(locationCheckRequest.getId());
+//
+//        // Enqueue the work request
+//        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueueUniquePeriodicWork(CHECK_LOCATION_WORKER_TAG, ExistingPeriodicWorkPolicy.REPLACE, locationCheckRequest);
+//
+////        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueue(oneTimeLocationCheckRequest); //TODO for debug
+//
+//    }
 
-        locationCheckRequest = new PeriodicWorkRequest.Builder(LocationCheckWorker.class, 15, TimeUnit.MINUTES).setConstraints(constraints).build();
-//        oneTimeLocationCheckRequest = new OneTimeWorkRequest.Builder(LocationCheckWorker.class).build();
+//    private void stopCheckLocationWorker() {
+//        WorkManager.getInstance(requireActivity().getApplicationContext()).cancelUniqueWork(CHECK_LOCATION_WORKER_TAG);
+//    }
 
-        observeForCheckLocationChange(locationCheckRequest.getId());
-
-        // Enqueue the work request
-        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueueUniquePeriodicWork(CHECK_LOCATION_WORKER_TAG, ExistingPeriodicWorkPolicy.REPLACE, locationCheckRequest);
-
-//        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueue(oneTimeLocationCheckRequest); //TODO for debug
-
-    }
-
-    private void stopCheckLocationWorker() {
-        WorkManager.getInstance(requireActivity().getApplicationContext()).cancelUniqueWork(CHECK_LOCATION_WORKER_TAG);
-    }
-
-    private void isCheckLocationWorkerRunning() {
-        WorkManager workManager = WorkManager.getInstance(requireContext());
-        workManager.getWorkInfosForUniqueWorkLiveData(CHECK_LOCATION_WORKER_TAG).observe(getViewLifecycleOwner(), workInfos -> {
-            if (workInfos != null && !workInfos.isEmpty()) {
-                WorkInfo workInfo = workInfos.get(0);
-                checkLocationSwitch.setOnCheckedChangeListener(null);
-                checkLocationSwitch.setChecked(workInfo.getState() == WorkInfo.State.RUNNING || workInfo.getState() == WorkInfo.State.ENQUEUED);
-                checkLocationSwitch.setOnCheckedChangeListener(checkLocationListener);
-            }
-        });
-    }
+//    private void isCheckLocationWorkerRunning() {
+//        WorkManager workManager = WorkManager.getInstance(requireContext());
+//        workManager.getWorkInfosForUniqueWorkLiveData(CHECK_LOCATION_WORKER_TAG).observe(getViewLifecycleOwner(), workInfos -> {
+//            if (workInfos != null && !workInfos.isEmpty()) {
+//                WorkInfo workInfo = workInfos.get(0);
+//                checkLocationSwitch.setOnCheckedChangeListener(null);
+//                checkLocationSwitch.setChecked(workInfo.getState() == WorkInfo.State.RUNNING || workInfo.getState() == WorkInfo.State.ENQUEUED);
+//                checkLocationSwitch.setOnCheckedChangeListener(checkLocationListener);
+//            }
+//        });
+//    }
 
     private ActivityResultLauncher<IntentSenderRequest> gpsPermissionLauncher() {
         return registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), result -> {
@@ -288,18 +303,18 @@ public class ShareLocationFragment extends Fragment {
 
     }
 
-    private void observeForCheckLocationChange(UUID uid) {
-        WorkManager.getInstance(requireActivity().getApplicationContext()).getWorkInfoByIdLiveData(uid).observe(getViewLifecycleOwner(), workInfo -> {
-            if (workInfo != null) {
-                if (workInfo.getState() == WorkInfo.State.FAILED) {
-                    String errorMessage = workInfo.getOutputData().getString("message");
-                    if (errorMessage != null) {
-                        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
-    }
+//    private void observeForCheckLocationChange(UUID uid) {
+//        WorkManager.getInstance(requireActivity().getApplicationContext()).getWorkInfoByIdLiveData(uid).observe(getViewLifecycleOwner(), workInfo -> {
+//            if (workInfo != null) {
+//                if (workInfo.getState() == WorkInfo.State.FAILED) {
+//                    String errorMessage = workInfo.getOutputData().getString("message");
+//                    if (errorMessage != null) {
+//                        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            }
+//        });
+//    }
 
     private void requestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -315,5 +330,31 @@ public class ShareLocationFragment extends Fragment {
             // Permission already granted
             startLocationService();
         }
+    }
+
+    private void startCheckLocationService() {
+        Intent serviceIntent = new Intent(requireContext(), CheckLocationService.class);
+        requireContext().startForegroundService(serviceIntent);
+    }
+
+    private void stopCheckLocationService(){
+        Intent serviceIntent = new Intent(requireContext(), CheckLocationService.class);
+        requireContext().stopService(serviceIntent);
+    }
+
+    private void isCheckLocationServiceRunning(){
+        checkLocationSwitch.setOnCheckedChangeListener(null);
+        ActivityManager manager = (ActivityManager) requireActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        if (manager != null) {
+            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                if (CheckLocationService.class.getName().equals(service.service.getClassName())) {
+                    checkLocationSwitch.setChecked(true);
+                    checkLocationSwitch.setOnCheckedChangeListener(checkLocationListener);
+                    return;
+                }
+            }
+        }
+        checkLocationSwitch.setChecked(false);
+        checkLocationSwitch.setOnCheckedChangeListener(checkLocationListener);
     }
 }

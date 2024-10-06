@@ -227,6 +227,7 @@
     <string name="cannot_use_this_feature_without_notification_permission">Cannot use this feature without notification permission</string>
     <string name="please_grant_background_location_permission">Please grant background location permission</string>
     <string name="please_grant_location_permission">Please grant location permission</string>
+    <string name="no_patient_linked_yet">No patient linked yet</string>
     "
 
 </resources>
