@@ -63,9 +63,9 @@
             android:layout_marginTop="52dp"
             app:ccp_autoDetectCountry="true"
             app:ccp_defaultNameCode="SG"
-            app:ccpDialog_backgroundColor="?attr/colorPrimaryContainer"
-            app:ccp_contentColor="?attr/colorOnPrimaryContainer"
-            app:ccpDialog_textColor="?attr/colorOnPrimaryContainer"
+            app:ccpDialog_backgroundColor="?attr/colorSurface"
+            app:ccp_contentColor="?attr/colorOnSurface"
+            app:ccpDialog_textColor="?attr/colorOnSurfaceVariant"
             app:layout_constraintEnd_toStartOf="@+id/create_contact_number_layout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/create_contact_name_layout" />

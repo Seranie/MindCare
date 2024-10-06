@@ -79,7 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="3dp"
-        android:layout_marginBottom="184dp"
+        android:layout_marginBottom="@dimen/create_fence_layout_bottom_margin"
         android:text="@string/create_fence_cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/create_fences_confirm_button"

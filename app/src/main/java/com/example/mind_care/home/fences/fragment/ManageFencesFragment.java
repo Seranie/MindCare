@@ -27,7 +27,7 @@ public class ManageFencesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ManageFencesViewModel manageFencesViewModel = new ViewModelProvider(this).get(ManageFencesViewModel.class);
+        ManageFencesViewModel manageFencesViewModel = new ViewModelProvider(requireActivity()).get(ManageFencesViewModel.class);
 
         RecyclerView recyclerView = view.findViewById(R.id.manage_fences_recyclerview);
         ManageFencesAdapter adapter = new ManageFencesAdapter(manageFencesViewModel, this);

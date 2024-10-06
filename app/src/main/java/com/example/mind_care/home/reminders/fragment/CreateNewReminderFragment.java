@@ -115,8 +115,9 @@ public class CreateNewReminderFragment extends Fragment implements DatePickerFra
             //Check if at least title is filled and groupID must be selected.
             if(reminderTitle.isEmpty()){
                 titleLayout.setError(getString(R.string.please_enter_a_title));
-            }
-            else if (currentGroupSelectedId.isEmpty()){
+                return;
+            }else{ titleLayout.setError(null); }
+            if (currentGroupSelectedId.isEmpty()){
                 Toast.makeText(getContext(), "Please select a group", Toast.LENGTH_SHORT).show();
             }
             else {

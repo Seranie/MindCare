@@ -1,15 +1,12 @@
 package com.example.mind_care.home.reminders.fragment;
 
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,14 +16,9 @@ import com.example.mind_care.R;
 import com.example.mind_care.home.BaseTools;
 import com.example.mind_care.home.reminders.adapter.RemindersGroupAdapter;
 import com.example.mind_care.home.reminders.adapter.RemindersReminderAdapter;
-import com.example.mind_care.home.reminders.model.RemindersGroupItem;
-import com.example.mind_care.home.reminders.model.RemindersReminderItem;
 import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 import com.example.mind_care.home.reminders.viewModel.ReminderItemViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Reminders extends BaseTools implements RemindersGroupAdapter.OnGroupItemClickListener {
     RecyclerView reminderItemsRecyclerView;
@@ -63,25 +55,7 @@ public class Reminders extends BaseTools implements RemindersGroupAdapter.OnGrou
 
         groupViewModel.getGroupListFromRepository();
 
-
-
-
-//        MenuHost menuHost = requireActivity();
-//        menuHost.addMenuProvider(new MenuProvider() {
-//            @Override
-//            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-//                menuInflater.inflate(R.menu.reminders_options_menu, menu);
-//            }
-//
-//            @Override
-//            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-//                return false;
-//            }
-//        });
-
-
     }
-
 
 
     @Override
@@ -92,7 +66,9 @@ public class Reminders extends BaseTools implements RemindersGroupAdapter.OnGrou
 
     @Override
     public void setOnFabClickedDestination(FloatingActionButton fab, NavController navController) {
-        fab.setOnClickListener(v -> {navController.navigate(R.id.createNewReminderFragment);});
+        fab.setOnClickListener(v -> {
+            navController.navigate(R.id.createNewReminderFragment);
+        });
     }
 
     @Override

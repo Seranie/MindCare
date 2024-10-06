@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:clickable="true">
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/create_reminder_add_group_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-
         android:layout_marginTop="@dimen/reminders_group_icon_top_margin"
         android:clickable="false"
         android:focusable="false"

@@ -31,13 +31,13 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class CreateFencesFragment extends Fragment implements OnMapReadyCallback {
-    private final float ZOOM_LEVEL = 11;
+    private final float ZOOM_LEVEL = 10.8f;
     private final long UPDATE_INTERVAL = 20;
     private SeekBar radiusBar;
     private GoogleMap mMap;
     private LatLng circleCenter;
     private CircleOptions circleOptions;
-    private double circleRadius = 500;
+    private double circleRadius = 100;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private Runnable circleUpdateRunnable;
     private Circle circle;
@@ -103,7 +103,7 @@ public class CreateFencesFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng defaultLocation = new LatLng(1.290270, 103.851959);
+        LatLng defaultLocation = new LatLng(1.366667, 103.8);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, ZOOM_LEVEL));
 
         circleCenter = defaultLocation;

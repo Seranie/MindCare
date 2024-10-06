@@ -8,6 +8,8 @@ import com.example.mind_care.notification.ScheduleNotification;
 import com.example.mind_care.home.reminders.model.ReminderItemModel;
 import com.example.mind_care.home.reminders.model.RemindersGroupItem;
 import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -15,6 +17,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -22,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class GroupRepository {
     private final FirebaseFirestore db;
@@ -46,9 +50,67 @@ public class GroupRepository {
         });
     }
 
-//    public void deleteGroup(RemindersGroupItem groupItem) {
-//        db.collection(collection).document(user.getUid()).update("groups", FieldValue.arrayRemove(groupItem));
-//    }
+    public CompletableFuture<Boolean> deleteGroup(RemindersGroupItem groupItem) {
+        CompletableFuture<Boolean> completableFuture = new CompletableFuture<>();
+
+        db.collection(collection)
+                .document(user.getUid())
+                .collection("groups")
+                .document(groupItem.getGroupId())
+                .get()
+                .addOnCompleteListener(groupTask -> {
+                    if (groupTask.isSuccessful() && groupTask.getResult() != null) {
+                        DocumentReference groupDoc = groupTask.getResult().getReference();
+
+                        // Fetch all reminders before deletion
+                        groupDoc.collection("reminders")
+                                .get()
+                                .addOnCompleteListener(reminderTask -> {
+                                    if (reminderTask.isSuccessful()) {
+                                        // Track deletions
+                                        List<CompletableFuture<Void>> deletionFutures = new ArrayList<>();
+
+                                        // Delete each reminder in the subcollection
+                                        for (DocumentSnapshot reminderDoc : reminderTask.getResult()) {
+                                            CompletableFuture<Void> deletionFuture = new CompletableFuture<>();
+                                            reminderDoc.getReference().delete().addOnCompleteListener(deleteTask -> {
+                                                if (deleteTask.isSuccessful()) {
+                                                    deletionFuture.complete(null);
+                                                } else {
+                                                    deletionFuture.completeExceptionally(deleteTask.getException());
+                                                }
+                                            });
+                                            deletionFutures.add(deletionFuture);
+                                        }
+
+                                        // After all reminders are deleted, delete the group document
+                                        CompletableFuture.allOf(deletionFutures.toArray(new CompletableFuture[0]))
+                                                .thenRun(() -> {
+                                                    groupDoc.delete().addOnCompleteListener(groupDeleteTask -> {
+                                                        if (groupDeleteTask.isSuccessful()) {
+                                                            completableFuture.complete(true);
+                                                        } else {
+                                                            completableFuture.complete(false);
+                                                        }
+                                                    });
+                                                }).exceptionally(ex -> {
+                                                    // If any deletion fails, complete with false
+                                                    completableFuture.complete(false);
+                                                    return null;
+                                                });
+
+                                    } else {
+                                        completableFuture.complete(false); // Could not fetch reminders
+                                    }
+                                });
+
+                    } else {
+                        completableFuture.complete(false); // Could not fetch group
+                    }
+                });
+
+        return completableFuture;
+    }
 
     public void retrieveGroupList(OnCompleteCallback callback) {
         db.collection(collection).document(user.getUid()).collection("groups").get().addOnCompleteListener(task -> {
@@ -57,66 +119,175 @@ public class GroupRepository {
 
                 if (!docs.isEmpty()) {
                     List<RemindersGroupItem> tempList = new ArrayList<>();
+                    List<Task<?>> allTasks = new ArrayList<>(); // Collect all Firestore tasks
+
                     for (DocumentSnapshot shot : docs) {
-                        //Query all group under groups, and create new GroupItem. groups -> group
-                        //TODO change groupitem to have a list of reminders under them.
                         Uri uri = Uri.parse(String.valueOf(shot.get("imageSource")));
                         String name = String.valueOf(shot.get("name"));
                         RemindersGroupItem groupItem = new RemindersGroupItem(uri, name);
                         groupItem.setGroupId(shot.getId());
 
-                        //Further query group for reminders. group -> reminders
+                        // Query for reminders under the group
                         CollectionReference colRef = shot.getReference().collection("reminders");
-                        List<ReminderItemModel> reminders = new ArrayList<>();
-                        colRef.get().addOnCompleteListener(reminderTask -> {
-                            if (reminderTask.isSuccessful()){
-                                for (DocumentSnapshot reminderShot : reminderTask.getResult()) {
+                        Task<QuerySnapshot> reminderTask = colRef.get();
+                        allTasks.add(reminderTask);
+
+                        reminderTask.addOnCompleteListener(reminderTaskResult -> {
+                            if (reminderTaskResult.isSuccessful()) {
+                                List<ReminderItemModel> reminders = new ArrayList<>();
+                                for (DocumentSnapshot reminderShot : reminderTaskResult.getResult()) {
                                     String groupId = shot.getId();
                                     String title = (String) reminderShot.get("title");
                                     String note = (String) reminderShot.get("note");
                                     Timestamp timestamp = reminderShot.getTimestamp("schedule");
                                     LocalDateTime dateTime = LocalDateTime.now();
-                                    if(timestamp != null){
+                                    if (timestamp != null) {
                                         Date date = timestamp.toDate();
                                         dateTime = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
                                     }
 
-
-                                    //For each reminder, query for alert items reminder -> datetime
+                                    // Query for alert items under each reminder
                                     CollectionReference alertRef = reminderShot.getReference().collection("alertItems");
-                                    List<LocalDateTime> alertItemList = new ArrayList<>();
-                                    alertRef.get().addOnCompleteListener(alertTask -> {
-                                        if (alertTask.isSuccessful()){
-                                            for (DocumentSnapshot alertShot : alertTask.getResult()) {
+                                    Task<QuerySnapshot> alertTask = alertRef.get();
+                                    allTasks.add(alertTask);
+
+                                    LocalDateTime finalDateTime = dateTime;
+                                    alertTask.addOnCompleteListener(alertTaskResult -> {
+                                        if (alertTaskResult.isSuccessful()) {
+                                            List<LocalDateTime> alertItemList = new ArrayList<>();
+                                            for (DocumentSnapshot alertShot : alertTaskResult.getResult()) {
                                                 Date alertDate = new Date();
                                                 Timestamp alertTimestamp = alertShot.getTimestamp("dateTime");
-                                                if (alertTimestamp != null){
-                                                 alertDate= alertTimestamp.toDate();
-
+                                                if (alertTimestamp != null) {
+                                                    alertDate = alertTimestamp.toDate();
                                                 }
                                                 LocalDateTime alertDateTime = LocalDateTime.ofInstant(alertDate.toInstant(), ZoneId.systemDefault());
                                                 alertItemList.add(alertDateTime);
                                             }
+
+                                            // Create reminder item after alert items have been fetched
+                                            ReminderItemModel reminderItem = new ReminderItemModel(groupId, title, note, finalDateTime, alertItemList);
+                                            reminders.add(reminderItem);
                                         }
                                     });
-
-                                    ReminderItemModel reminderItem = new ReminderItemModel(groupId, title, note, dateTime, alertItemList);
-                                    reminders.add(reminderItem);
                                 }
+
+                                groupItem.setReminderList(reminders);
+                                tempList.add(groupItem);
                             }
                         });
-
-                        groupItem.setReminderList(reminders);
-                        tempList.add(groupItem);
                     }
-                    groupList = tempList;
+
+                    // Wait for all asynchronous Firestore tasks to complete
+                    Tasks.whenAllComplete(allTasks).addOnCompleteListener(finalTask -> {
+                        groupList = tempList;  // Update groupList only after all tasks are completed
+                        callback.onComplete(groupList);  // Call the callback
+                    });
+
+                } else {
+                    callback.onComplete(new ArrayList<>());  // Empty list if no documents
                 }
-                callback.onComplete(groupList);
             } else {
                 Log.i("INFO", String.valueOf(task.getException()));
             }
         });
     }
+
+
+//    public CompletableFuture<Boolean> deleteGroup(RemindersGroupItem groupItem){
+//        CompletableFuture<Boolean> completableFuture = new CompletableFuture<>();
+//        db.collection(collection).document(user.getUid()).collection("groups").document(groupItem.getGroupId()).get().addOnCompleteListener(groupTask ->{
+//            if(groupTask.isSuccessful()){
+//                DocumentReference groupDoc = groupTask.getResult().getReference();
+//                groupDoc.collection("reminders").get().addOnCompleteListener(reminderTask -> {
+//                    if(reminderTask.isSuccessful()){
+//                        for(DocumentSnapshot reminderDoc : reminderTask.getResult()){
+//                            reminderDoc.getReference().delete();
+//                        }
+//                    }
+//                });
+//                groupDoc.delete().addOnCompleteListener(deleteGroupTask -> {
+//                    Log.i("INFO", "HUH");
+//                    completableFuture.complete(true);
+//                });
+//            }else{
+//                completableFuture.completeExceptionally(groupTask.getException());
+//            }
+//        });
+//        return completableFuture;
+//    }
+
+//    public void deleteGroup(RemindersGroupItem groupItem) {
+//        db.collection(collection).document(user.getUid()).update("groups", FieldValue.arrayRemove(groupItem));
+//    }
+
+//    public void retrieveGroupList(OnCompleteCallback callback) {
+//        db.collection(collection).document(user.getUid()).collection("groups").get().addOnCompleteListener(task -> {
+//            if (task.isSuccessful()) {
+//                List<DocumentSnapshot> docs = task.getResult().getDocuments();
+//
+//                if (!docs.isEmpty()) {
+//                    List<RemindersGroupItem> tempList = new ArrayList<>();
+//                    for (DocumentSnapshot shot : docs) {
+//                        //Query all group under groups, and create new GroupItem. groups -> group
+//                        //TODO change groupitem to have a list of reminders under them.
+//                        Uri uri = Uri.parse(String.valueOf(shot.get("imageSource")));
+//                        String name = String.valueOf(shot.get("name"));
+//                        RemindersGroupItem groupItem = new RemindersGroupItem(uri, name);
+//                        groupItem.setGroupId(shot.getId());
+//
+//                        //Further query group for reminders. group -> reminders
+//                        CollectionReference colRef = shot.getReference().collection("reminders");
+//                        List<ReminderItemModel> reminders = new ArrayList<>();
+//                        colRef.get().addOnCompleteListener(reminderTask -> {
+//                            if (reminderTask.isSuccessful()){
+//                                for (DocumentSnapshot reminderShot : reminderTask.getResult()) {
+//                                    String groupId = shot.getId();
+//                                    String title = (String) reminderShot.get("title");
+//                                    String note = (String) reminderShot.get("note");
+//                                    Timestamp timestamp = reminderShot.getTimestamp("schedule");
+//                                    LocalDateTime dateTime = LocalDateTime.now();
+//                                    if(timestamp != null){
+//                                        Date date = timestamp.toDate();
+//                                        dateTime = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+//                                    }
+//
+//
+//                                    //For each reminder, query for alert items reminder -> datetime
+//                                    CollectionReference alertRef = reminderShot.getReference().collection("alertItems");
+//                                    List<LocalDateTime> alertItemList = new ArrayList<>();
+//                                    alertRef.get().addOnCompleteListener(alertTask -> {
+//                                        if (alertTask.isSuccessful()){
+//                                            for (DocumentSnapshot alertShot : alertTask.getResult()) {
+//                                                Date alertDate = new Date();
+//                                                Timestamp alertTimestamp = alertShot.getTimestamp("dateTime");
+//                                                if (alertTimestamp != null){
+//                                                 alertDate= alertTimestamp.toDate();
+//
+//                                                }
+//                                                LocalDateTime alertDateTime = LocalDateTime.ofInstant(alertDate.toInstant(), ZoneId.systemDefault());
+//                                                alertItemList.add(alertDateTime);
+//                                            }
+//                                        }
+//                                    });
+//
+//                                    ReminderItemModel reminderItem = new ReminderItemModel(groupId, title, note, dateTime, alertItemList);
+//                                    reminders.add(reminderItem);
+//                                }
+//                            }
+//                        });
+//
+//                        groupItem.setReminderList(reminders);
+//                        tempList.add(groupItem);
+//                    }
+//                    groupList = tempList;
+//                }
+//                callback.onComplete(groupList);
+//            } else {
+//                Log.i("INFO", String.valueOf(task.getException()));
+//            }
+//        });
+//    }
 
     public void retrieveRemindersFromGroup(String groupId, OnReminderCompleteCallback callback) {
         List<ReminderItemModel> tempList = new ArrayList<>();

@@ -153,8 +153,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             } else if (itemId == R.id.deleteContactMenu) {
                 new MaterialAlertDialogBuilder(context).setTitle(R.string.delete_contacts_dialog_title).setMessage(R.string.delete_contacts_dialog_message).setPositiveButton(R.string.delete_contacts_dialog_yes, (dialog, which) -> {
                     contactsViewModel.deleteContact(entity.getContactId());
-                }).setNegativeButton(R.string.delete_contacts_dialog_no, (dialog, which) -> dialog.dismiss());
-
+                }).setNegativeButton(R.string.delete_contacts_dialog_no, (dialog, which) -> dialog.dismiss()).show();
                 return true;
             }
             return false;

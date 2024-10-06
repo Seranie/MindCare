@@ -31,29 +31,29 @@
     <fragment
         android:id="@+id/createNewReminderFragment"
         android:name="com.example.mind_care.home.reminders.fragment.CreateNewReminderFragment"
-        android:label="CreateNewReminderFragment" />
+        android:label="Create Reminder" />
     <fragment
         android:id="@+id/createGroupFragment"
         android:name="com.example.mind_care.home.reminders.fragment.CreateGroupFragment"
-        android:label="CreateGroupFragment" />
+        android:label="Create Group" />
     <fragment
         android:id="@+id/createNewContactFragment"
         android:name="com.example.mind_care.home.contacts.fragments.CreateNewContactFragment"
-        android:label="CreateNewContactFragment" />
+        android:label="Create New Contact" />
     <fragment
         android:id="@+id/createFencesFragment"
         android:name="com.example.mind_care.home.fences.fragment.CreateFencesFragment"
-        android:label="CreateFencesFragment" />
+        android:label="Create Fences" />
     <fragment
         android:id="@+id/linkAccountFragment"
         android:name="com.example.mind_care.home.fences.fragment.LinkAccountFragment"
-        android:label="LinkAccountFragment" />
+        android:label="Link Account" />
     <fragment
         android:id="@+id/shareLocationFragment"
         android:name="com.example.mind_care.home.fences.fragment.ShareLocationFragment"
-        android:label="ShareLocationFragment" />
+        android:label="Location Settings" />
     <fragment
         android:id="@+id/manageFencesFragment"
         android:name="com.example.mind_care.home.fences.fragment.ManageFencesFragment"
-        android:label="ManageFencesFragment" />
+        android:label="Manage Fences" />
 </navigation>

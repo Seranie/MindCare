@@ -24,6 +24,7 @@ import com.example.mind_care.R;
 import com.example.mind_care.home.BaseTools;
 import com.example.mind_care.home.fences.FenceObjectModel;
 import com.example.mind_care.home.fences.viewmodel.FencesViewModel;
+import com.example.mind_care.home.fences.viewmodel.ManageFencesViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -33,12 +34,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.Objects;
+
 
 public class FencesFragment extends BaseTools implements OnMapReadyCallback {
     private NavController navController;
     private SupportMapFragment mapFragment;
-    private final float ZOOM_LEVEL = 11;
-    private FencesViewModel fencesViewModel;
+    private final float ZOOM_LEVEL = 10.8f;
+    private ManageFencesViewModel fencesViewModel;
 
     @Nullable
     @Override
@@ -51,10 +54,11 @@ public class FencesFragment extends BaseTools implements OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
 
-        fencesViewModel = new ViewModelProvider(requireActivity()).get(FencesViewModel.class);
+        fencesViewModel = new ViewModelProvider(requireActivity()).get(ManageFencesViewModel.class);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fences_map);
-        mapFragment.getMapAsync(this);
+        Objects.requireNonNull(mapFragment).getMapAsync(this);
 
+        assert getParentFragment() != null;
         navController = NavHostFragment.findNavController(getParentFragment());
     }
 
@@ -66,7 +70,7 @@ public class FencesFragment extends BaseTools implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        LatLng sg = new LatLng(1.290270, 103.851959);
+        LatLng sg = new LatLng(1.366667, 	103.8);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sg, ZOOM_LEVEL));
 
         CircleOptions circleOptions = new CircleOptions()
@@ -74,7 +78,8 @@ public class FencesFragment extends BaseTools implements OnMapReadyCallback {
                 .fillColor(Color.argb(50, 255, 0, 0)) // Fill color with transparency
                 .strokeWidth(5);
 
-        fencesViewModel.getFencesLiveData().observe(getViewLifecycleOwner(), fences -> {
+        fencesViewModel.getManageFenceLiveData().observe(getViewLifecycleOwner(), fences -> {
+            googleMap.clear();
             for (FenceObjectModel fence : fences) {
                 GeoPoint location = fence.getLocation();
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
@@ -85,7 +90,7 @@ public class FencesFragment extends BaseTools implements OnMapReadyCallback {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         // Inflate the menu resource
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fences_menu, menu);

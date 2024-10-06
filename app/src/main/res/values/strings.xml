@@ -217,6 +217,7 @@
     <string name="delete_contacts_dialog_yes">Yes</string>
     <string name="delete_contacts_dialog_message">Are you sure you want to delete this contact?</string>
     <string name="delete_contacts_dialog_title">Delete Contact</string>
+    <string name="delete_group">Delete group</string>
     "
 
 </resources>

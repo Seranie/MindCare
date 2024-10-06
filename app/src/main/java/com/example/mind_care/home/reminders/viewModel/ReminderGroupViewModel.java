@@ -2,6 +2,7 @@ package com.example.mind_care.home.reminders.viewModel;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -13,6 +14,7 @@ import com.example.mind_care.home.reminders.repository.GroupRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ReminderGroupViewModel extends ViewModel{
     private final GroupRepository groupRepository = new GroupRepository();
@@ -30,6 +32,19 @@ public class ReminderGroupViewModel extends ViewModel{
     public void createGroup(Uri uri, String name) {
         RemindersGroupItem groupItem = new RemindersGroupItem(uri, name);
         groupRepository.addNewGroup(groupItem);
+    }
+
+    public void deleteGroup(RemindersGroupItem groupItem){
+        new Thread(() -> {
+            CompletableFuture<Boolean> result = groupRepository.deleteGroup(groupItem);
+            result.thenApply(deleted -> {
+                if(deleted){
+                    getGroupListFromRepository();
+                }
+                return null;
+            });
+        }).start();
+
     }
 
     public int getSize() {
@@ -61,7 +76,6 @@ public class ReminderGroupViewModel extends ViewModel{
     public void scheduleAllNotifications(Context context){
         new Thread(() -> groupRepository.getAllRemindersAndSetNotifications(context)).start();
     }
-
 
     public void getAllAlertItemIdsFromReminder(String groupId, String reminderId, OnAlertItemIdQueryComplete callback){
         groupRepository.getAllAlertItemIds(groupId, reminderId, callback);

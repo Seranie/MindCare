@@ -5,11 +5,14 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +42,7 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
         this.groupViewModel = groupViewModel;
         this.context = context;
         groupViewModel.getRemindersGroupLiveData().observe(fragment, remindersGroupItems -> {
+            Log.i("INFO", String.valueOf(remindersGroupItems));
             groupItems = (ArrayList<RemindersGroupItem>) remindersGroupItems;
             notifyDataSetChanged();
         });
@@ -92,7 +96,7 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
         return groupViewModel.getSize() + NUMBER_OF_EXTRA_ITEMS;
     }
 
-    public class GroupItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class GroupItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
         private final ImageView groupImage;
         private final TextView groupName;
 
@@ -101,6 +105,13 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
             groupImage = itemView.findViewById(R.id.group_item_image);
             groupName = itemView.findViewById(R.id.group_item_name);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(v -> {
+                PopupMenu popupMenu = new PopupMenu(context, v);
+                popupMenu.getMenuInflater().inflate(R.menu.reminders_group_item_menu, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(this);
+                popupMenu.show();
+                return true;
+            });
         }
 
         @Override
@@ -129,6 +140,16 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
 
         private Drawable getPrimaryColor(View v) {
             return ContextCompat.getDrawable(v.getContext(), R.drawable.group_icon_drawable);
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+            int itemId = menuItem.getItemId();
+            if (itemId == R.id.delete_group_menu_item) {
+                groupViewModel.deleteGroup(groupItems.get(getBindingAdapterPosition()));
+                return true;
+            }
+            return false;
         }
     }
 

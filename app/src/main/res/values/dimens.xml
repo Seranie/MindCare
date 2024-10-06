@@ -26,7 +26,7 @@
     <dimen name="reminders_home_page_recyclerview_margins">8dp</dimen>
     <dimen name="reminders_divider_margin">16dp</dimen>
     <dimen name="reminders_item_notes_horizontal_margin">16dp</dimen>
-    <dimen name="reminders_item_notes_horizontal_padding">6dp</dimen>
+    <dimen name="reminders_item_notes_horizontal_padding">12dp</dimen>
     <dimen name="reminders_item_notes_vertical_margin">6dp</dimen>
 
     <dimen name="create_group_image_marginTop">8dp</dimen>
@@ -47,5 +47,8 @@
     <dimen name="chat_buddy_message_item_text_padding">12dp</dimen>
     <dimen name="chat_buddy_message_item_image_horizontal_margin">4dp</dimen>
     <dimen name="chat_buddy_message_item_elevation">2dp</dimen>
+    <dimen name="reminders_reminder_item_chip_min_height">40dp</dimen>
+    <dimen name="reminders_item_notes_vertical_padding">4dp</dimen>
+    <dimen name="create_fence_layout_bottom_margin">40dp</dimen>
 
 </resources>

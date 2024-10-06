@@ -73,6 +73,7 @@ public class CreateNewContactFragment extends Fragment {
         Button cancelButton = view.findViewById(R.id.create_contact_cancel_button);
         CountryCodePicker countryCodePicker = view.findViewById(R.id.create_contact_countryCodePicker);
         phoneNumberLayout = view.findViewById(R.id.create_contact_number_layout);
+        TextInputLayout layout = view.findViewById(R.id.create_contact_name_layout);
 
         if (isEdit){
             nameField.setText(bundle.getString("contactName"));
@@ -91,16 +92,18 @@ public class CreateNewContactFragment extends Fragment {
 
         confirmButton.setOnClickListener(v -> {
             if (nameField.getText().toString().isEmpty()){
-                TextInputLayout layout = view.findViewById(R.id.create_contact_name_layout);
                 layout.setError(getResources().getText(R.string.create_contact_empty_name));
-            }
-            else if (numberField.getText().toString().isEmpty()){
+                return;
+            } else { layout.setError(null); }
+            if (numberField.getText().toString().isEmpty()){
                 phoneNumberLayout.setError(getResources().getText(R.string.create_contact_empty_number));
-            }
-            else if (validatePhoneNumber(numberField.getText().toString(), countryCodePicker)){
+                return;
+            } else { phoneNumberLayout.setError(null); }
+            if (validatePhoneNumber(numberField.getText().toString(), countryCodePicker)){
                 phoneNumberLayout.setError(getResources().getText(R.string.create_contact_invalid_number));
             }
             else{
+                phoneNumberLayout.setError(null);
                 if (imageUri == null){
                     imageUri = Uri.parse("");
                 }

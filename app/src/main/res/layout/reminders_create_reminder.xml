@@ -85,6 +85,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/create_reminder_schedule_layout"
             style="?attr/textInputFilledStyle"
+            android:foreground="?attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/reminders_create_reminder_item_margin"
