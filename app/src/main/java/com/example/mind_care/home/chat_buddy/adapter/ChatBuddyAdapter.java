@@ -6,6 +6,7 @@ import android.media.AudioAttributes;
 import android.media.SoundPool;
 import android.os.FileObserver;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +47,9 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int VIEW_TYPE_USER = 1;
     private static final int VIEW_TYPE_AI = 2;
     private final String IMAGE_FILE_NAME = "user_avatar_image.png";
-    private List<MessageEntity> messageList = Collections.unmodifiableList(new ArrayList<>());
+
+    protected List<MessageEntity> messageList = Collections.unmodifiableList(new ArrayList<>());
+
     private final ChatBuddyViewModel chatBuddyViewModel;
     private HashMap<String, String> imageHashmap = new HashMap<>();
     private final FileChangeObserver observer;
@@ -55,7 +58,6 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private RecyclerView recyclerView;
     private MyListUpdateCallback myListUpdateCallback;
     final Markwon markwon;
-
 
     public ChatBuddyAdapter(ChatBuddyViewModel chatBuddyViewModel, LifecycleOwner owner, HashMap<String, String> imageHashmap, Activity mainActivity, RecyclerView recyclerView, Context context) {
         this.imageHashmap = imageHashmap;
@@ -155,9 +157,11 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private static class MyListUpdateCallback implements ListUpdateCallback {
-        private final AdapterListUpdateCallback adapterListUpdateCallback;
 
+        private final AdapterListUpdateCallback adapterListUpdateCallback;
         private SoundPool soundPool;
+        private ChatBuddyAdapter adapter;
+
         private int soundId;
         private final int MAX_STREAMS = 5;
         private final float LEFT_VOLUME = 1.0f;
@@ -167,6 +171,7 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private final float RATE = 1.0f;
 
         public MyListUpdateCallback(ChatBuddyAdapter adapter, Context context) {
+            this.adapter = adapter;
             adapterListUpdateCallback = new AdapterListUpdateCallback(adapter);
             soundPool = new SoundPool.Builder()
                     .setAudioAttributes(
@@ -182,8 +187,14 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         @Override
         public void onInserted(int position, int count) {
             adapterListUpdateCallback.onInserted(position, count);
-            if(count == 2){
-                soundPool.play(soundId, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY, LOOP, RATE);
+            if(count <= 2) {
+                //Ignore the initial message loading, and play sound if the newly inserted bubble is from the user
+                List<MessageEntity> messageList = adapter.getMessageList();
+                for (int i = position; i < position + count; i++) {
+                    if (!messageList.get(i).isFromAi()) {
+                        soundPool.play(soundId, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY, LOOP, RATE);
+                    }
+                }
             }
         }
 
@@ -201,9 +212,15 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public void onChanged(int position, int count, @Nullable Object payload) {
             adapterListUpdateCallback.onChanged(position, count, payload);
         }
+
+    }
+
+    private List<MessageEntity> getMessageList() {
+        return messageList;
     }
 
     public class UserChatBuddyViewHolder extends RecyclerView.ViewHolder {
+
         TextView message;
         ImageView imageView;
 
@@ -215,6 +232,7 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public class AiChatBuddyViewHolder extends RecyclerView.ViewHolder {
+
         TextView message;
         ImageView imageView;
 
@@ -224,8 +242,8 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             imageView = itemView.findViewById(R.id.ai_message_imageview);
         }
     }
-
     private class FileChangeObserver extends FileObserver {
+
         private final String filePath;
 
         public FileChangeObserver(String path) {
@@ -250,6 +268,7 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private class MessageDiffCallback extends DiffUtil.Callback {
+
         private final List<MessageEntity> oldList;
         private final List<MessageEntity> newList;
 
@@ -293,6 +312,7 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private class MessageDiff{
+
         private String oldMessage;
         private String newMessage;
 
@@ -309,6 +329,7 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private class TextAnimator{
+
         private final Queue<Runnable> runnableQueue = new LinkedList<>();
         private final Handler handler = new Handler();
         private boolean isRunning = false;

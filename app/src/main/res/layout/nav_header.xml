@@ -48,7 +48,7 @@
             android:layout_marginTop="28dp"
             android:fontFamily="@font/nav_header_title_and_subtitle"
             android:text="UID: 1234"
-            android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/nav_header_image"

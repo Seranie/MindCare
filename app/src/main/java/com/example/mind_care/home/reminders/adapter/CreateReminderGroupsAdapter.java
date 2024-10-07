@@ -28,6 +28,7 @@ import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final ReminderGroupViewModel groupViewModel;
@@ -46,6 +47,7 @@ public class CreateReminderGroupsAdapter extends RecyclerView.Adapter<RecyclerVi
         groupViewModel.getRemindersGroupLiveData().observe(fragment, remindersGroupItems -> {
             Log.i("INFO", String.valueOf(remindersGroupItems));
             groupItems = (ArrayList<RemindersGroupItem>) remindersGroupItems;
+            groupItems.sort(Comparator.comparing(RemindersGroupItem::getName, String.CASE_INSENSITIVE_ORDER));
             notifyDataSetChanged();
         });
         this.fragment = fragment;

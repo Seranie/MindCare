@@ -50,5 +50,6 @@
     <dimen name="reminders_reminder_item_chip_min_height">40dp</dimen>
     <dimen name="reminders_item_notes_vertical_padding">4dp</dimen>
     <dimen name="create_fence_layout_bottom_margin">40dp</dimen>
+    <dimen name="manage_fences_item_min_height">50dp</dimen>
 
 </resources>

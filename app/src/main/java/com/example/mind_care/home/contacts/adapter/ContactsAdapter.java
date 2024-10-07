@@ -9,6 +9,7 @@ import android.media.AudioAttributes;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -66,11 +67,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
                 .setAudioAttributes(
                         new AudioAttributes.Builder()
                                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                                .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
                                 .build()
                 ).setMaxStreams(MAX_STREAMS)
                 .build();
-        soundId = soundPool.load(context, R.raw.contacts_transition, 1);
+        soundId = soundPool.load(context, R.raw.dial_number2, 1);
     }
 
     @NonNull
@@ -95,6 +96,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     public class ContactsViewHolder extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
         ShapeableImageView contactImage;
         TextView contactName;
+        final long MAKE_CALL_DELAY = 1000;
 
         @SuppressLint("ClickableViewAccessibility")
         public ContactsViewHolder(@NonNull View itemView) {
@@ -105,7 +107,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
                 @Override
                 public boolean onDoubleTap(MotionEvent e) {
                     soundPool.play(soundId, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY, LOOP, RATE);
-                    makePhoneCall();
+                    new Handler().postDelayed(()->makePhoneCall(), MAKE_CALL_DELAY);
                     return super.onDoubleTap(e);
                 }
             });

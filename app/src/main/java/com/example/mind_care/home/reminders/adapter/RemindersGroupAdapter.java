@@ -28,6 +28,7 @@ import com.example.mind_care.home.reminders.model.RemindersGroupItem;
 import com.example.mind_care.home.reminders.viewModel.ReminderGroupViewModel;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -44,6 +45,7 @@ public class RemindersGroupAdapter extends RecyclerView.Adapter<RemindersGroupAd
         this.fragment = (Reminders) fragment;
         groupViewModel.getRemindersGroupLiveData().observe(fragment, groupItems -> {
             remindersGroupItems = groupItems;
+            remindersGroupItems.sort(Comparator.comparing(RemindersGroupItem::getName, String.CASE_INSENSITIVE_ORDER));
             notifyDataSetChanged();
         });
     }

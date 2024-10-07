@@ -6,9 +6,14 @@
 
     <com.google.android.material.chip.Chip
         android:id="@+id/manage_fences_chip"
+        style="@style/Widget.Material3.Chip.Input.Elevated"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/manage_fence_chip_horizontal_margin"
+        android:checkable="false"
+        app:chipBackgroundColor="?attr/colorPrimaryContainer"
+        app:chipStrokeColor="?attr/colorSurfaceContainer"
+        android:minHeight="@dimen/manage_fences_item_min_height"
         android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
         app:closeIconVisible="true"
         app:layout_constraintEnd_toEndOf="parent"

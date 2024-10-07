@@ -5,13 +5,20 @@ import android.Manifest.permission;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.app.AlarmManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.style.ClickableSpan;
 import android.transition.Fade;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +30,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -55,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private NavController navController;
     private ImageView navHeaderImage;
+    private FirebaseUser user;
 
     private final ActivityResultLauncher<PickVisualMediaRequest> pickMediaLauncher = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
         if (uri != null) {
@@ -146,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         loadImageStored();
 
         TextView username = headerView.findViewById(R.id.nav_header_username);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         try {
             String usernameString = getString(R.string.nav_header_username, user.getEmail());
             username.setText(usernameString);
@@ -155,13 +164,40 @@ public class MainActivity extends AppCompatActivity {
             username.setText(usernameString);
         }
 
-        TextView uid = headerView.findViewById(R.id.nav_header_uid);
-        String uidString = getString(R.string.nav_header_uid, user.getUid());
-        uid.setText(uidString);
-
-
+        TextView uidTextView = headerView.findViewById(R.id.nav_header_uid);
+        setUidText(uidTextView);
     }
 
+    private void setUidText(TextView textView){
+        String uid = user.getUid();
+        String uidText = getString(R.string.nav_header_uid, uid);
+
+        SpannableString spannableString = new SpannableString(uidText);
+
+        int uidStartIndex = uidText.indexOf(uid);
+        int uidEndIndex = uidStartIndex + uid.length();
+
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+                // Copy the UID to clipboard when clicked
+                ClipboardManager clipboard = (ClipboardManager) widget.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("UID", uid);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(widget.getContext(), "UID copied!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void updateDrawState(@NonNull TextPaint ds) {
+                super.updateDrawState(ds);
+//                ds.setUnderlineText(false); // disable underline for the UID part
+            }
+        };
+
+        spannableString.setSpan(clickableSpan, uidStartIndex, uidEndIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        textView.setText(spannableString);
+        textView.setMovementMethod(android.text.method.LinkMovementMethod.getInstance());
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
