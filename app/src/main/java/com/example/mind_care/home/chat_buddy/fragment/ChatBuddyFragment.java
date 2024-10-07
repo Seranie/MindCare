@@ -159,7 +159,6 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
             });
         });
 
-
         chatBuddyAdapter = new ChatBuddyAdapter(chatBuddyViewModel, getViewLifecycleOwner(), imageHashmap, requireActivity(), recyclerView, getContext());
         recyclerView.setAdapter(chatBuddyAdapter);
 
@@ -210,6 +209,9 @@ public class ChatBuddyFragment extends BaseTools implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
+        if(chatBuddyAdapter.isTextStillAnimating()){
+            return;
+        }
         String message = Objects.requireNonNull(editText.getText()).toString();
         if(message.isEmpty()){
             textInputLayout.setError("Message cannot be empty");

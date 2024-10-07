@@ -205,70 +205,6 @@ public class ShareLocationFragment extends Fragment {
     }
 
 
-//    private void registerShareLocationNetworkCallback(){
-//        shareLocationNetworkCallback = new ConnectivityManager.NetworkCallback(){
-//
-//            @Override
-//            public void onAvailable(@NonNull Network network) {
-//                super.onAvailable(network);
-//                startLocationService();
-//            }
-//
-//            @Override
-//            public void onLost(@NonNull Network network) {
-//                super.onLost(network);
-//                if(isAdded()){
-//                    requireActivity().runOnUiThread(()-> Toast.makeText(requireContext(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show());
-//                }
-//                stopLocationService();
-//            }
-//        };
-//        try{
-//            connectivityManager.registerDefaultNetworkCallback(shareLocationNetworkCallback);
-//        } catch(IllegalArgumentException e){
-//            Log.i("INFO", "Network callback already registered");
-//        }
-//    }
-
-//    private void unregisterShareLocationNetworkCallback(){
-//        if(connectivityManager != null && shareLocationNetworkCallback != null){
-//            connectivityManager.unregisterNetworkCallback(shareLocationNetworkCallback);
-//        }
-//    }
-
-//    private void registerCheckLocationNetworkCallback(){
-//        //On newer API's might need to change because notification swiping can uncheck the switch, meaning the previous network callback is still registered whilst setting a new one.??)
-//        checkLocationNetworkCallback = new ConnectivityManager.NetworkCallback(){
-//
-//            @Override
-//            public void onAvailable(@NonNull Network network) {
-//                super.onAvailable(network);
-//                    startCheckLocationService();
-//            }
-//
-//            @Override
-//            public void onLost(@NonNull Network network) {
-//                super.onLost(network);
-//                if(isAdded()){
-//                    requireActivity().runOnUiThread(()->{
-//                        Toast.makeText(requireContext(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
-//                    });
-//                }
-//                stopCheckLocationService();
-//            }
-//        };
-//        try{
-//            connectivityManager.registerDefaultNetworkCallback(checkLocationNetworkCallback);
-//        } catch (IllegalArgumentException e){
-//            Log.i("INFO", "Network callback already registered");
-//        }
-//    }
-
-//    private void unregisterCheckLocationNetworkCallback(){
-//        if(connectivityManager != null && checkLocationNetworkCallback != null){
-//            connectivityManager.unregisterNetworkCallback(checkLocationNetworkCallback);
-//        }
-//    }
 
     private void requestFineLocationPermission() {
         ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
@@ -279,14 +215,6 @@ public class ShareLocationFragment extends Fragment {
         ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, BACKGROUND_LOCATION_PERMISSION_REQUEST_CODE);
     }
 
-//    private void startLocationWorker() {
-//        Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
-//
-//        // Start the location worker
-//        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(ShareLocationWorker.class, 15, TimeUnit.MINUTES).setConstraints(constraints).build();
-//        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueueUniquePeriodicWork(SHARE_LOCATION_WORKER_TAG, ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
-////        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueue(new OneTimeWorkRequest.Builder(ShareLocationWorker.class).build()); //TODO for debug
-//    }
 
     private void startLocationService(){
         Intent serviceIntent = new Intent(requireContext(), LocationService.class);
@@ -314,52 +242,7 @@ public class ShareLocationFragment extends Fragment {
         shareLocationSwitch.setOnCheckedChangeListener(shareLocationListener);
     }
 
-//    private void stopLocationWorker() {
-//        WorkManager.getInstance(requireActivity().getApplicationContext()).cancelUniqueWork(SHARE_LOCATION_WORKER_TAG);
-//    }
 
-//    private void isLocationWorkerRunning() {
-//        WorkManager workManager = WorkManager.getInstance(requireContext());
-//        workManager.getWorkInfosForUniqueWorkLiveData(SHARE_LOCATION_WORKER_TAG).observe(getViewLifecycleOwner(), workInfos -> {
-//            if (workInfos != null && !workInfos.isEmpty()) {
-//                WorkInfo workInfo = workInfos.get(0);
-//                shareLocationSwitch.setOnCheckedChangeListener(null);
-//                shareLocationSwitch.setChecked(workInfo.getState() == WorkInfo.State.RUNNING || workInfo.getState() == WorkInfo.State.ENQUEUED);
-//                shareLocationSwitch.setOnCheckedChangeListener(shareLocationListener);
-//            }
-//        });
-//    }
-
-//    private void startCheckLocationWorker() {
-//        Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
-//
-//        locationCheckRequest = new PeriodicWorkRequest.Builder(LocationCheckWorker.class, 15, TimeUnit.MINUTES).setConstraints(constraints).build();
-////        oneTimeLocationCheckRequest = new OneTimeWorkRequest.Builder(LocationCheckWorker.class).build();
-//
-////        observeForCheckLocationChange(locationCheckRequest.getId());
-//
-//        // Enqueue the work request
-//        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueueUniquePeriodicWork(CHECK_LOCATION_WORKER_TAG, ExistingPeriodicWorkPolicy.REPLACE, locationCheckRequest);
-//
-////        WorkManager.getInstance(requireActivity().getApplicationContext()).enqueue(oneTimeLocationCheckRequest); //TODO for debug
-//
-//    }
-
-//    private void stopCheckLocationWorker() {
-//        WorkManager.getInstance(requireActivity().getApplicationContext()).cancelUniqueWork(CHECK_LOCATION_WORKER_TAG);
-//    }
-
-//    private void isCheckLocationWorkerRunning() {
-//        WorkManager workManager = WorkManager.getInstance(requireContext());
-//        workManager.getWorkInfosForUniqueWorkLiveData(CHECK_LOCATION_WORKER_TAG).observe(getViewLifecycleOwner(), workInfos -> {
-//            if (workInfos != null && !workInfos.isEmpty()) {
-//                WorkInfo workInfo = workInfos.get(0);
-//                checkLocationSwitch.setOnCheckedChangeListener(null);
-//                checkLocationSwitch.setChecked(workInfo.getState() == WorkInfo.State.RUNNING || workInfo.getState() == WorkInfo.State.ENQUEUED);
-//                checkLocationSwitch.setOnCheckedChangeListener(checkLocationListener);
-//            }
-//        });
-//    }
 
     private ActivityResultLauncher<IntentSenderRequest> gpsPermissionLauncher() {
         return registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), result -> {
@@ -375,18 +258,6 @@ public class ShareLocationFragment extends Fragment {
 
     }
 
-//    private void observeForCheckLocationChange(UUID uid) {
-//        WorkManager.getInstance(requireActivity().getApplicationContext()).getWorkInfoByIdLiveData(uid).observe(getViewLifecycleOwner(), workInfo -> {
-//            if (workInfo != null) {
-//                if (workInfo.getState() == WorkInfo.State.FAILED) {
-//                    String errorMessage = workInfo.getOutputData().getString("message");
-//                    if (errorMessage != null) {
-//                        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }
-//        });
-//    }
 
     private void requestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

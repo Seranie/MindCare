@@ -106,8 +106,14 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             GestureDetector gesture = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onDoubleTap(MotionEvent e) {
-                    soundPool.play(soundId, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY, LOOP, RATE);
-                    new Handler().postDelayed(()->makePhoneCall(), MAKE_CALL_DELAY);
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        // You can request permission here if needed
+                        Toast.makeText(context, context.getString(R.string.dial_permission_not_granted), Toast.LENGTH_SHORT).show();
+                        ActivityCompat.requestPermissions(fragment.requireActivity(), new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL_PERMISSION);
+                    }else{
+                        soundPool.play(soundId, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY, LOOP, RATE);
+                        new Handler().postDelayed(()->makePhoneCall(), MAKE_CALL_DELAY);
+                    }
                     return super.onDoubleTap(e);
                 }
             });
@@ -128,14 +134,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         public void makePhoneCall() {
             Intent callIntent = new Intent(Intent.ACTION_CALL);
             callIntent.setData(Uri.parse("tel:" + contactsList.get(getAdapterPosition()).contactNumber));
-
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                // You can request permission here if needed
-                Toast.makeText(context, context.getString(R.string.dial_permission_not_granted), Toast.LENGTH_SHORT).show();
-                ActivityCompat.requestPermissions(fragment.requireActivity(), new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL_PERMISSION);
-            } else {
-                context.startActivity(callIntent);
-            }
+            context.startActivity(callIntent);
         }
 
 

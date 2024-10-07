@@ -47,17 +47,17 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int VIEW_TYPE_USER = 1;
     private static final int VIEW_TYPE_AI = 2;
     private final String IMAGE_FILE_NAME = "user_avatar_image.png";
-
-    protected List<MessageEntity> messageList = Collections.unmodifiableList(new ArrayList<>());
-
     private final ChatBuddyViewModel chatBuddyViewModel;
-    private HashMap<String, String> imageHashmap = new HashMap<>();
     private final FileChangeObserver observer;
     private final Activity mainActivity;
+    final Markwon markwon;
+
+    protected List<MessageEntity> messageList = Collections.unmodifiableList(new ArrayList<>());
+    private HashMap<String, String> imageHashmap = new HashMap<>();
     private TextAnimator animator = new TextAnimator();
     private RecyclerView recyclerView;
     private MyListUpdateCallback myListUpdateCallback;
-    final Markwon markwon;
+    static boolean isTextAnimating = false;
 
     public ChatBuddyAdapter(ChatBuddyViewModel chatBuddyViewModel, LifecycleOwner owner, HashMap<String, String> imageHashmap, Activity mainActivity, RecyclerView recyclerView, Context context) {
         this.imageHashmap = imageHashmap;
@@ -329,7 +329,6 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private class TextAnimator{
-
         private final Queue<Runnable> runnableQueue = new LinkedList<>();
         private final Handler handler = new Handler();
         private boolean isRunning = false;
@@ -366,12 +365,16 @@ public class ChatBuddyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             Runnable nextRunnable = runnableQueue.poll();
             if (nextRunnable != null) {
                 isRunning = true;
+                isTextAnimating = true;
                 handler.post(nextRunnable);
             }else{
+                isTextAnimating = false;
                 markwon.setMarkdown(textView, newText);
             }
         }
     }
 
-
+    public boolean isTextStillAnimating(){
+        return isTextAnimating;
+    }
 }
