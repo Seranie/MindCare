@@ -18,6 +18,7 @@ import com.example.mind_care.R;
 import com.example.mind_care.home.fences.viewmodel.UserUidViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LinkAccountFragment extends Fragment {
 
@@ -45,8 +46,10 @@ public class LinkAccountFragment extends Fragment {
             String userInput = uidField.getText().toString();
             if(userInput.isEmpty()){
                 textInputLayout.setError("UID cannot be empty");
-                return;
-            } else{
+            }else if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(userInput)){
+                textInputLayout.setError("UID must be from another user");
+            }
+            else{
                 userUidViewModel.validateUid(userInput);
                 userUidViewModel.getIsValidLiveData().observe(getViewLifecycleOwner(), (isValid) -> {
                     if(isValid){

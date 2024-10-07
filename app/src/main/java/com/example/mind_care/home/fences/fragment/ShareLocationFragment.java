@@ -58,8 +58,8 @@ import com.google.android.material.materialswitch.MaterialSwitch;
 import java.util.concurrent.TimeUnit;
 
 public class ShareLocationFragment extends Fragment {
-    private final String SHARE_LOCATION_WORKER_TAG = "ShareLocation";
-    private final String CHECK_LOCATION_WORKER_TAG = "CheckLocation";
+//    private final String SHARE_LOCATION_WORKER_TAG = "ShareLocation";
+//    private final String CHECK_LOCATION_WORKER_TAG = "CheckLocation";
 
     private final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private final int BACKGROUND_LOCATION_PERMISSION_REQUEST_CODE = 2;
@@ -78,9 +78,9 @@ public class ShareLocationFragment extends Fragment {
     CompoundButton.OnCheckedChangeListener shareLocationListener;
     CompoundButton.OnCheckedChangeListener checkLocationListener;
 
-    private ConnectivityManager connectivityManager;
-    private ConnectivityManager.NetworkCallback checkLocationNetworkCallback;
-    private ConnectivityManager.NetworkCallback shareLocationNetworkCallback;
+//    private ConnectivityManager connectivityManager;
+//    private ConnectivityManager.NetworkCallback checkLocationNetworkCallback;
+//    private ConnectivityManager.NetworkCallback shareLocationNetworkCallback;
 
     private final ActivityResultLauncher<IntentSenderRequest> gpsSettingsLauncher = gpsPermissionLauncher();
     private ActivityResultLauncher<String> foregroundServicePermissionLauncher;
@@ -96,7 +96,6 @@ public class ShareLocationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         shareLocationSwitch = view.findViewById(R.id.share_location_switch);
         checkLocationSwitch = view.findViewById(R.id.check_location_switch);
-        connectivityManager = (ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         soundPool = new SoundPool.Builder().setAudioAttributes(new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).setUsage(AudioAttributes.USAGE_MEDIA).build()).setMaxStreams(MAX_STREAMS).build();
         soundId = soundPool.load(requireContext(), R.raw.share_location_toggle, 1);
@@ -165,7 +164,6 @@ public class ShareLocationFragment extends Fragment {
 
                 } else {
                     // Switch is unchecked
-                    unregisterShareLocationNetworkCallback();
                     stopLocationService();
                 }
             }
@@ -188,7 +186,7 @@ public class ShareLocationFragment extends Fragment {
                                 Toast.makeText(requireContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
                             }else {
                                 if(isLinked){
-                                    registerCheckLocationNetworkCallback();
+                                    startCheckLocationService();
                                 }else{
                                     Toast.makeText(requireContext(), R.string.no_patient_linked_yet, Toast.LENGTH_SHORT).show();
                                 }
@@ -198,7 +196,6 @@ public class ShareLocationFragment extends Fragment {
 
                     }
                 } else {
-                    unregisterCheckLocationNetworkCallback();
                     stopCheckLocationService();
                 }
             }
@@ -207,70 +204,71 @@ public class ShareLocationFragment extends Fragment {
 
     }
 
-    private void registerShareLocationNetworkCallback(){
-        shareLocationNetworkCallback = new ConnectivityManager.NetworkCallback(){
 
-            @Override
-            public void onAvailable(@NonNull Network network) {
-                super.onAvailable(network);
-                startLocationService();
-            }
+//    private void registerShareLocationNetworkCallback(){
+//        shareLocationNetworkCallback = new ConnectivityManager.NetworkCallback(){
+//
+//            @Override
+//            public void onAvailable(@NonNull Network network) {
+//                super.onAvailable(network);
+//                startLocationService();
+//            }
+//
+//            @Override
+//            public void onLost(@NonNull Network network) {
+//                super.onLost(network);
+//                if(isAdded()){
+//                    requireActivity().runOnUiThread(()-> Toast.makeText(requireContext(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show());
+//                }
+//                stopLocationService();
+//            }
+//        };
+//        try{
+//            connectivityManager.registerDefaultNetworkCallback(shareLocationNetworkCallback);
+//        } catch(IllegalArgumentException e){
+//            Log.i("INFO", "Network callback already registered");
+//        }
+//    }
 
-            @Override
-            public void onLost(@NonNull Network network) {
-                super.onLost(network);
-                if(isAdded()){
-                    requireActivity().runOnUiThread(()-> Toast.makeText(requireContext(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show());
-                }
-                stopLocationService();
-            }
-        };
-        try{
-            connectivityManager.registerDefaultNetworkCallback(shareLocationNetworkCallback);
-        } catch(IllegalArgumentException e){
-            Log.i("INFO", "Network callback already registered");
-        }
-    }
+//    private void unregisterShareLocationNetworkCallback(){
+//        if(connectivityManager != null && shareLocationNetworkCallback != null){
+//            connectivityManager.unregisterNetworkCallback(shareLocationNetworkCallback);
+//        }
+//    }
 
-    private void unregisterShareLocationNetworkCallback(){
-        if(connectivityManager != null && shareLocationNetworkCallback != null){
-            connectivityManager.unregisterNetworkCallback(shareLocationNetworkCallback);
-        }
-    }
+//    private void registerCheckLocationNetworkCallback(){
+//        //On newer API's might need to change because notification swiping can uncheck the switch, meaning the previous network callback is still registered whilst setting a new one.??)
+//        checkLocationNetworkCallback = new ConnectivityManager.NetworkCallback(){
+//
+//            @Override
+//            public void onAvailable(@NonNull Network network) {
+//                super.onAvailable(network);
+//                    startCheckLocationService();
+//            }
+//
+//            @Override
+//            public void onLost(@NonNull Network network) {
+//                super.onLost(network);
+//                if(isAdded()){
+//                    requireActivity().runOnUiThread(()->{
+//                        Toast.makeText(requireContext(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
+//                    });
+//                }
+//                stopCheckLocationService();
+//            }
+//        };
+//        try{
+//            connectivityManager.registerDefaultNetworkCallback(checkLocationNetworkCallback);
+//        } catch (IllegalArgumentException e){
+//            Log.i("INFO", "Network callback already registered");
+//        }
+//    }
 
-    private void registerCheckLocationNetworkCallback(){
-        //On newer API's might need to change because notification swiping can uncheck the switch, meaning the previous network callback is still registered whilst setting a new one.??)
-        checkLocationNetworkCallback = new ConnectivityManager.NetworkCallback(){
-
-            @Override
-            public void onAvailable(@NonNull Network network) {
-                super.onAvailable(network);
-                    startCheckLocationService();
-            }
-
-            @Override
-            public void onLost(@NonNull Network network) {
-                super.onLost(network);
-                if(isAdded()){
-                    requireActivity().runOnUiThread(()->{
-                        Toast.makeText(requireContext(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
-                    });
-                }
-                stopCheckLocationService();
-            }
-        };
-        try{
-            connectivityManager.registerDefaultNetworkCallback(checkLocationNetworkCallback);
-        } catch (IllegalArgumentException e){
-            Log.i("INFO", "Network callback already registered");
-        }
-    }
-
-    private void unregisterCheckLocationNetworkCallback(){
-        if(connectivityManager != null && checkLocationNetworkCallback != null){
-            connectivityManager.unregisterNetworkCallback(checkLocationNetworkCallback);
-        }
-    }
+//    private void unregisterCheckLocationNetworkCallback(){
+//        if(connectivityManager != null && checkLocationNetworkCallback != null){
+//            connectivityManager.unregisterNetworkCallback(checkLocationNetworkCallback);
+//        }
+//    }
 
     private void requestFineLocationPermission() {
         ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
@@ -402,7 +400,7 @@ public class ShareLocationFragment extends Fragment {
             foregroundServicePermissionLauncher.launch(Manifest.permission.FOREGROUND_SERVICE);
         } else {
             // Permission already granted
-            registerShareLocationNetworkCallback();
+            startLocationService();
         }
     }
 

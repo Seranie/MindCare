@@ -56,4 +56,8 @@
         android:id="@+id/manageFencesFragment"
         android:name="com.example.mind_care.home.fences.fragment.ManageFencesFragment"
         android:label="Manage Fences" />
+    <fragment
+        android:id="@+id/fencesFragment"
+        android:name="com.example.mind_care.home.fences.fragment.FencesFragment"
+        android:label="FencesFragment" />
 </navigation>

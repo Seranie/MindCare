@@ -15,10 +15,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.GravityCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.mind_care.MainActivity;
 import com.example.mind_care.R;
 import com.example.mind_care.home.BaseTools;
 import com.example.mind_care.home.fences.FenceObjectModel;
@@ -95,6 +97,12 @@ public class FencesFragment extends BaseTools implements OnMapReadyCallback {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // Open the navigation drawer
+            ((MainActivity) requireActivity()).getDrawerLayout().openDrawer(GravityCompat.START);
+            return true;
+        }
+
         ConnectivityManager connectivityManager = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         if(connectivityManager != null){
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();

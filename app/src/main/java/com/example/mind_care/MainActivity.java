@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private NavController navController;
     private ImageView navHeaderImage;
     private FirebaseUser user;
+    private DrawerLayout drawerLayout;
 
     private final ActivityResultLauncher<PickVisualMediaRequest> pickMediaLauncher = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
         if (uri != null) {
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         // Find Navigation Components
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
         navController = navHostFragment.getNavController();
-        DrawerLayout drawerLayout = findViewById(R.id.main);
+        drawerLayout = findViewById(R.id.main);
         NavigationView navigationView = findViewById(R.id.navigation_view);
 
         //Set toolbar as default actionbar
@@ -271,6 +272,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("Error", "IOException");
             }
         }).start();
+    }
+
+    public DrawerLayout getDrawerLayout(){
+        return drawerLayout;
     }
 
 }
